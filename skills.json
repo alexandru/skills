@@ -1,0 +1,19 @@
+{
+  "name": "alexandru-skills",
+  "version": "1.0.0",
+  "description": "Collection of reusable code skills",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/alexandru/skills"
+  },
+  "author": "alexandru",
+  "skills": [
+    {
+      "name": "hello-world",
+      "path": "skills/hello-world",
+      "description": "A simple Hello World skill demonstrating the basic structure",
+      "tags": ["example", "hello-world", "javascript", "beginner"]
+    }
+  ],
+  "indexedBy": "https://skills.sh"
+}
