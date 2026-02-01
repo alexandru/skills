@@ -10,10 +10,14 @@ This repository contains curated code snippets, utilities, and functions that ca
 
 ```
 skills/
-├── hello-world/          # Example skill
-│   ├── skill.json       # Skill metadata
-│   ├── README.md        # Skill documentation
-│   └── index.js         # Skill implementation
+|-- arrow-resource/
+|   |-- SKILL.md
+|   `-- references/
+|       `-- resource.md
+`-- arrow-typed-errors/
+    |-- SKILL.md
+    `-- references/
+        `-- typed-errors.md
 ```
 
 ## Usage
@@ -25,7 +29,8 @@ Each skill is contained in its own directory with:
 
 ## Skills
 
-- [hello-world](./skills/hello-world/): A simple "Hello World" example skill
+- [arrow-resource](./skills/arrow-resource/): Resource lifecycle management patterns with Arrow
+- [arrow-typed-errors](./skills/arrow-typed-errors/): Typed error modeling and Raise DSL guidance
 
 ## Contributing
 
