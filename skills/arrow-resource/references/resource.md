@@ -2,6 +2,14 @@
 
 Concise reference for Arrow `Resource` and `resourceScope`, based on Arrow docs and common usage patterns.
 
+## Table of Contents
+- [Core model](#core-model)
+- [Core APIs](#core-apis)
+- [When to use Resource](#when-to-use-resource)
+- [Patterns](#patterns)
+- [Typed errors integration](#typed-errors-integration)
+- [Checklist](#checklist)
+
 ## Core model
 - `typealias Resource<A> = suspend ResourceScope.() -> A`
 - Three phases: acquire -> use -> release.

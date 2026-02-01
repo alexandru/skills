@@ -17,6 +17,10 @@ skills/
 |   |-- SKILL.md
 |   `-- references/
 |       `-- typed-errors.md
+|-- cats-effect-io/
+|   |-- SKILL.md
+|   `-- references/
+|       `-- cats-effect-io.md
 |-- cats-mtl-typed-errors/
 |   |-- SKILL.md
 |   `-- references/
@@ -37,6 +41,7 @@ npx skills add https://github.com/alexandru/skills --skill <skill-name>
 
 - [arrow-resource](./skills/arrow-resource/): Resource lifecycle management patterns with Arrow
 - [arrow-typed-errors](./skills/arrow-typed-errors/): Typed error modeling and Raise DSL guidance
+- [cats-effect-io](./skills/cats-effect-io/): Cats Effect IO usage patterns and typeclass guidance
 - [cats-mtl-typed-errors](./skills/cats-mtl-typed-errors/): Scala typed errors using Cats MTL Raise/Handle and allow/rescue
 - [compose-state-hoisting](./skills/compose-state-hoisting/): Compose state hoisting and state ownership guidance
 

@@ -1,5 +1,14 @@
 # Compose State Quick Reference
 
+## Table of Contents
+- [Decision Tree: Where to Hoist State?](#decision-tree-where-to-hoist-state)
+- [Lifespan API Comparison](#lifespan-api-comparison)
+- [State Hoisting Checklist](#state-hoisting-checklist)
+- [Common Patterns](#common-patterns)
+- [Examples](#examples)
+- [Observable Conversion](#observable-conversion)
+- [Quick Rules](#quick-rules)
+
 ## Decision Tree: Where to Hoist State?
 
 ```
@@ -73,6 +82,135 @@ val total by remember(items) { derivedStateOf { items.sumOf { it.price } } }
 ```kotlin
 val list = remember { mutableStateListOf<Item>() }
 val map = remember { mutableStateMapOf<Key, Value>() }
+```
+
+## Examples
+
+### Stateless + stateful pair (hoisting)
+```kotlin
+@Composable
+fun Counter(count: Int, onIncrement: () -> Unit) {
+    Column {
+        Text("Count: $count")
+        Button(onClick = onIncrement) {
+            Text("Increment")
+        }
+    }
+}
+
+@Composable
+fun CounterScreen() {
+    var count by remember { mutableStateOf(0) }
+    Counter(count = count, onIncrement = { count++ })
+}
+```
+
+### Lowest common ancestor hoisting
+```kotlin
+@Composable
+fun ConversationScreen(messages: List<Message>) {
+    val listState = rememberLazyListState()
+    val coroutineScope = rememberCoroutineScope()
+
+    Column {
+        MessagesList(
+            messages = messages,
+            listState = listState,
+            modifier = Modifier.weight(1f)
+        )
+        UserInput(
+            onSend = { newMessage ->
+                coroutineScope.launch {
+                    listState.animateScrollToItem(messages.size)
+                }
+            }
+        )
+    }
+}
+```
+
+### Plain state holder for complex UI logic
+```kotlin
+class FiltersState(
+    initial: Filter = Filter.All,
+) {
+    private var _filter by mutableStateOf(initial)
+    val filter: State<Filter> = derivedStateOf { _filter }
+
+    fun setFilter(newFilter: Filter) {
+        _filter = newFilter
+    }
+}
+
+@Composable
+fun rememberFiltersState(initial: Filter = Filter.All): FiltersState {
+    return remember { FiltersState(initial) }
+}
+```
+
+### Saved UI element state (Android ViewModel example)
+```kotlin
+// Android: ViewModel with SavedStateHandle for process death survival
+class FormViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel() {
+    var query by savedStateHandle.saveable { mutableStateOf("") }
+        private set
+
+    fun updateQuery(value: String) {
+        query = value
+    }
+}
+// Multiplatform: Use platform-specific saved state mechanisms or libraries
+// like Circuit's RetainedStateRegistry, or custom serialization solutions
+```
+
+### Remember with keys for controlled state resets
+```kotlin
+@Composable
+fun UserProfile(userId: String) {
+    // State resets when userId changes; uses immutable data structure
+    var profile by remember(userId) { mutableStateOf(ProfileData()) }
+
+    // Load user data for this userId
+    LaunchedEffect(userId) {
+        profile = fetchProfile(userId)
+    }
+}
+
+data class ProfileData(
+    val name: String = "",
+    val bio: String = ""
+)
+```
+
+### Derived state for computed values
+```kotlin
+@Composable
+fun ShoppingCart(items: List<CartItem>) {
+    // Recomputes only when items list changes
+    val totalPrice by remember(items) { derivedStateOf { items.sumOf { it.price } } }
+    val itemCount by remember(items) { derivedStateOf { items.size } }
+
+    Text("Total: $$totalPrice ($itemCount items)")
+}
+```
+
+### Snapshot state collections (platform-agnostic)
+```kotlin
+@Composable
+fun TodoList() {
+    // Observable list that triggers recomposition on mutations
+    val todos = remember { mutableStateListOf<Todo>() }
+
+    Button(onClick = { todos.add(Todo("New task")) }) {
+        Text("Add Todo")
+    }
+
+    LazyColumn {
+        items(todos) { todo ->
+            TodoItem(todo, onRemove = { todos.remove(todo) })
+        }
+    }
+}
 ```
 
 ## Observable Conversion

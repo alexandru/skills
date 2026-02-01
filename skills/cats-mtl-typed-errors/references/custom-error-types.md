@@ -2,6 +2,15 @@
 
 Source: https://typelevel.org/blog/2025/09/02/custom-error-types.html
 
+## Table of Contents
+- [Summary](#summary)
+- [Core concepts](#core-concepts)
+- [Prefer Cats MTL over EitherT](#prefer-cats-mtl-over-eithert)
+- [Capability-based typed errors](#capability-based-typed-errors)
+- [Notes on F[_] vs IO](#notes-on-f_-vs-io)
+- [Behavior and safety](#behavior-and-safety)
+- [When to use what](#when-to-use-what)
+
 ## Summary
 - Cats MTL 1.6.0 adds lightweight syntax for user-defined error types without monad transformer stacks.
 - Keeps the single Throwable error channel for Cats Effect while allowing scoped typed errors via capabilities.

@@ -8,7 +8,7 @@ description: Compose state management with a strong state-hoisting preference fo
 ## Overview
 Apply state hoisting and unidirectional data flow to Compose UIs, choosing the right state owner, lifespan, and saving strategy.
 
-For condensed reference, see `references/compose-state-guidance.md`.
+For condensed reference and examples, see `references/compose-state-guidance.md`.
 
 ## Workflow
 1. Identify the state and the logic that reads/writes it.
@@ -18,135 +18,21 @@ For condensed reference, see `references/compose-state-guidance.md`.
 5. Decide what must be saved and how (rememberSaveable, SavedStateHandle, or platform storage).
 6. Verify that state and callbacks are not duplicated or leaked.
 
-## Minimal Patterns (Copy/Adapt)
+## Rules of thumb
+- Hoist state to the lowest common ancestor of all readers/writers.
+- Keep composables stateless: state down, events up.
+- Pick the lifespan API explicitly; default to `remember` only for ephemeral UI state.
+- Save minimal data and rehydrate anything larger or derived.
 
-Stateless + stateful pair (hoisting):
-```kotlin
-@Composable
-fun Counter(count: Int, onIncrement: () -> Unit) {
-    Column {
-        Text("Count: $count")
-        Button(onClick = onIncrement) {
-            Text("Increment")
-        }
-    }
-}
+## Decision hints
+- If multiple parts of the UI must read/write the same state, hoist it.
+- If state survives config changes or process death, choose `retain` or `rememberSaveable` and document why.
+- For business logic, use a screen-level state holder; do not pass it down the tree.
 
-@Composable
-fun CounterScreen() {
-    var count by remember { mutableStateOf(0) }
-    Counter(count = count, onIncrement = { count++ })
-}
-```
-
-Lowest common ancestor hoisting:
-```kotlin
-@Composable
-fun ConversationScreen(messages: List<Message>) {
-    val listState = rememberLazyListState()
-    val coroutineScope = rememberCoroutineScope()
-    
-    Column {
-        MessagesList(
-            messages = messages,
-            listState = listState,
-            modifier = Modifier.weight(1f)
-        )
-        UserInput(
-            onSend = { newMessage ->
-                // Scroll to bottom when new message is sent
-                coroutineScope.launch {
-                    listState.animateScrollToItem(messages.size)
-                }
-            }
-        )
-    }
-}
-```
-
-Plain state holder for complex UI logic:
-```kotlin
-class FiltersState(
-    initial: Filter = Filter.All,
-) {
-    private var _filter by mutableStateOf(initial)
-    val filter: State<Filter> = derivedStateOf { _filter }
-
-    fun setFilter(newFilter: Filter) {
-        _filter = newFilter
-    }
-}
-
-@Composable
-fun rememberFiltersState(initial: Filter = Filter.All): FiltersState {
-    return remember { FiltersState(initial) }
-}
-```
-
-Saved UI element state (Android ViewModel example):
-```kotlin
-// Android: ViewModel with SavedStateHandle for process death survival
-class FormViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel() {
-    var query by savedStateHandle.saveable { mutableStateOf("") }
-        private set
-
-    fun updateQuery(value: String) {
-        query = value
-    }
-}
-// Multiplatform: Use platform-specific saved state mechanisms or libraries
-// like Circuit's RetainedStateRegistry, or custom serialization solutions
-```
-
-Remember with keys for controlled state resets:
-```kotlin
-@Composable
-fun UserProfile(userId: String) {
-    // State resets when userId changes; uses immutable data structure
-    var profile by remember(userId) { mutableStateOf(ProfileData()) }
-    
-    // Load user data for this userId
-    LaunchedEffect(userId) {
-        profile = fetchProfile(userId)
-    }
-}
-
-data class ProfileData(
-    val name: String = "",
-    val bio: String = ""
-)
-```
-
-Derived state for computed values:
-```kotlin
-@Composable
-fun ShoppingCart(items: List<CartItem>) {
-    // Recomputes only when items list changes
-    val totalPrice by remember(items) { derivedStateOf { items.sumOf { it.price } } }
-    val itemCount by remember(items) { derivedStateOf { items.size } }
-    
-    Text("Total: $$totalPrice ($itemCount items)")
-}
-```
-
-Snapshot state collections (platform-agnostic):
-```kotlin
-@Composable
-fun TodoList() {
-    // Observable list that triggers recomposition on mutations
-    val todos = remember { mutableStateListOf<Todo>() }
-    
-    Button(onClick = { todos.add(Todo("New task")) }) {
-        Text("Add Todo")
-    }
-    
-    LazyColumn {
-        items(todos) { todo ->
-            TodoItem(todo, onRemove = { todos.remove(todo) })
-        }
-    }
-}
-```
+## Common pitfalls
+- Duplicated state owners causing divergence.
+- Over-saving large objects in `rememberSaveable`/`SavedStateHandle`.
+- Mixing `remember` and `retain` for the same object.
 
 ## State Hoisting Rules
 - Hoist state to the lowest common ancestor of all composables that read and write it; keep it as close to consumers as possible.
@@ -202,3 +88,6 @@ fun TodoList() {
 - Prefer lowest common ancestor hoisting.
 - Choose lifecycle APIs intentionally; call out saving strategy explicitly.
 - Keep state minimal, immutable, and observable.
+
+## References
+- Load `references/compose-state-guidance.md` for decision trees, tables, and code examples.
