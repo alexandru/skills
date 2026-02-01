@@ -25,6 +25,12 @@ Reference: https://platform.claude.com/docs/en/agents-and-tools/agent-skills/bes
 - Provide concrete examples only when they materially improve correctness.
 - Provide original sources (web links) in references; keep sources high-quality.
 
+## Versioning (skills.json)
+- Version uses semantic versioning (e.g., `1.0.0`).
+- Increment patch for minor fixes (typos, code sample mistakes).
+- Increment minor when adding a new skill.
+- Increment major for more substantial skill changes.
+
 ## Workflow for adding a skill
 1. Create `skills/<skill-name>/SKILL.md` with YAML frontmatter and concise instructions.
 2. Add reference docs under `skills/<skill-name>/references/` as needed.
@@ -37,6 +43,7 @@ Reference: https://platform.claude.com/docs/en/agents-and-tools/agent-skills/bes
 - [ ] SKILL.md is concise and directs to references.
 - [ ] Examples are in references, not SKILL.md.
 - [ ] No nested references; one level deep from SKILL.md.
+- [ ] `skills.json` version updated per semantic versioning rules.
 - [ ] `skills.json` updated with tags.
 - [ ] `README.md` updated.
 - [ ] Tested with at least a few real requests.
