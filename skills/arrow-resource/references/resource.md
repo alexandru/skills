@@ -124,17 +124,21 @@ fun connectionResource(ds: DataSource): Resource<java.sql.Connection> = resource
 )
 ```
 
-### 7) Multipart part disposal
+### 7) Multipart part disposal (looped discovery)
+
+When parts are discovered in a loop, register a finalizer for each part as you see it.
+Use `onClose` for synchronous cleanup, or `onDispose` for suspend cleanup.
 
 ```kotlin
 import arrow.fx.coroutines.Resource
 import arrow.fx.coroutines.resource
 
-interface Part { fun dispose() }
-
-fun partResource(part: Part): Resource<Part> = resource {
-  onClose { part.dispose() }
-  part
+private fun receiveParts(multipart: Multipart): Resource<Unit> = resource {
+  multipart.forEachPart { part ->
+    onClose { part.dispose() }
+    // If disposal is suspendable, use onDispose { part.dispose() } instead.
+    handle(part)
+  }
 }
 ```
 
