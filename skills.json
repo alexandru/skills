@@ -33,6 +33,12 @@
       "tags": ["scala", "typelevel", "cats-effect", "io", "effects", "concurrency", "fp", "functional-programming"]
     },
     {
+      "name": "cats-effect-resource",
+      "path": "skills/cats-effect-resource",
+      "description": "Scala resource lifecycle management with Cats Effect `Resource` and `IO`. Use for defining safe acquisition/release, composing resources (including parallel acquisition), or designing resource-safe APIs and cancellation behavior for files, streams, pools, clients, and background fibers.",
+      "tags": ["scala", "typelevel", "cats-effect", "resource", "io", "lifecycle", "fp", "functional-programming"]
+    },
+    {
       "name": "compose-state-hoisting",
       "path": "skills/compose-state-hoisting",
       "description": "Compose state management with a strong state-hoisting preference for Kotlin Compose (Android, Multiplatform, Compose for Web). Use for refactors or new UI that needs clear state ownership, unidirectional data flow, saved state decisions, or guidance on remember/retain/rememberSaveable/rememberSerializable, and for designing stateless composables with event callbacks.",

@@ -11,6 +11,7 @@ description: Scala functional programming with Cats Effect IO and typeclasses. U
 - Use `Resource` to acquire/release resources and `IOApp` for program entry points.
 - Prefer structured concurrency (`parTraverse`, `parMapN`, `background`, `Supervisor`) over manual fiber management.
 - Read `references/cats-effect-io.md` for concepts, recipes, and FAQ guidance.
+- For deeper `Resource` guidance, use the `cats-effect-resource` skill (install: `npx skills add https://github.com/alexandru/skills --skill cats-effect-resource`).
 
 ## Workflow
 1. Classify side effects and choose the effect type: `IO` directly or polymorphic `F[_]` with the smallest required Cats Effect typeclass (`Sync`, `Async`, `Temporal`, `Concurrent`).
@@ -40,3 +41,4 @@ description: Scala functional programming with Cats Effect IO and typeclasses. U
 ## References
 - Load `references/cats-effect-io.md` for documentation summary and patterns.
 - For concrete samples, read `references/cats-effect-io.md`.
+- Use the `cats-effect-resource` skill for Resource-specific workflows and patterns (install: `npx skills add https://github.com/alexandru/skills --skill cats-effect-resource`).

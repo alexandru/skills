@@ -1,5 +1,12 @@
 # Compose State Quick Reference
 
+Sources:
+- https://developer.android.com/develop/ui/compose/state  
+- https://developer.android.com/develop/ui/compose/state-hoisting  
+- https://developer.android.com/develop/ui/compose/state-saving  
+- https://developer.android.com/develop/ui/compose/state-lifespans  
+- https://developer.android.com/develop/ui/compose/state-callbacks
+
 ## Table of Contents
 - [Decision Tree: Where to Hoist State?](#decision-tree-where-to-hoist-state)
 - [Lifespan API Comparison](#lifespan-api-comparison)

@@ -1,6 +1,16 @@
 # Arrow Typed Errors (Arrow Core) - Field Notes
 
-Concise reference for implementing typed errors in Kotlin with Arrow, based on Arrow docs.
+Concise reference for implementing typed errors in Kotlin with Arrow.
+
+Sources:
+- https://arrow-kt.io/learn/typed-errors/
+- https://arrow-kt.io/learn/typed-errors/working-with-typed-errors/
+- https://arrow-kt.io/learn/typed-errors/validation/
+- https://arrow-kt.io/learn/typed-errors/wrappers/
+- https://arrow-kt.io/learn/typed-errors/wrappers/nullable-and-option/
+- https://arrow-kt.io/learn/typed-errors/wrappers/either-and-ior/
+- https://arrow-kt.io/learn/typed-errors/wrappers/outcome-progress/
+- https://arrow-kt.io/learn/typed-errors/wrappers/own-error-types/
 
 ## Core concepts
 - Typed errors = logical failures are encoded in the type system (vs exceptions for truly exceptional conditions).

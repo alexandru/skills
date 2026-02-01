@@ -1,6 +1,8 @@
 # Custom Error Types Using Cats Effect and MTL
 
-Source: https://typelevel.org/blog/2025/09/02/custom-error-types.html
+Sources: 
+- https://typelevel.org/blog/2025/09/02/custom-error-types.html
+- https://typelevel.org/cats-mtl/mtl-classes/raise.html
 
 ## Table of Contents
 - [Summary](#summary)

@@ -1,6 +1,10 @@
 # Arrow Resource (Kotlin) - Practical Guide
 
-Concise reference for Arrow `Resource` and `resourceScope`, based on Arrow docs and common usage patterns.
+Concise reference for Arrow `Resource` and `resourceScope`.
+
+Sources:
+- https://arrow-kt.io/learn/coroutines/resource-safety/
+
 
 ## Table of Contents
 - [Core model](#core-model)
