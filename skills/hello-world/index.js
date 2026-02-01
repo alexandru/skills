@@ -15,10 +15,10 @@ function greet(name = 'World') {
 
 /**
  * Generates a formal greeting message
- * @param {string} name - The name to greet
+ * @param {string} name - The name to greet (defaults to "Sir/Madam")
  * @returns {string} A formal greeting message
  */
-function formalGreet(name) {
+function formalGreet(name = 'Sir/Madam') {
   return `Good day, ${name}. How are you?`;
 }
 

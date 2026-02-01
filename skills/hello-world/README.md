@@ -32,16 +32,30 @@ Returns a greeting string.
 **Returns:**
 - (string): A greeting message.
 
+### `formalGreet(name)`
+
+Returns a formal greeting string.
+
+**Parameters:**
+- `name` (string, optional): The name to greet. Defaults to "Sir/Madam".
+
+**Returns:**
+- (string): A formal greeting message.
+
 ## Example
 
 ```javascript
-const { greet } = require('./index.js');
+const { greet, formalGreet } = require('./index.js');
 
 // Simple greeting
 greet(); // "Hello, World!"
 
 // Personalized greeting
 greet('Bob'); // "Hello, Bob!"
+
+// Formal greeting
+formalGreet('Alice'); // "Good day, Alice. How are you?"
+formalGreet(); // "Good day, Sir/Madam. How are you?"
 ```
 
 ## Tags
