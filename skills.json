@@ -12,19 +12,25 @@
       "name": "arrow-resource",
       "path": "skills/arrow-resource",
       "description": "Kotlin + Arrow Resource lifecycle management with `Resource`, `ResourceScope`, and `resourceScope`. Use for designing safe acquisition/release of files, streams, DB pools/connections, HTTP clients, or multipart parts; composing resources (including parallel acquisition); or integrating Resource with typed errors and cancellation.",
-      "tags": ["kotlin", "arrow", "resource", "lifecycle"]
+      "tags": ["kotlin", "arrow", "resource", "lifecycle", "fp", "functional-programming"]
     },
     {
       "name": "arrow-typed-errors",
       "path": "skills/arrow-typed-errors",
       "description": "Kotlin + Arrow typed error handling using Raise DSL and wrapper types (Either/Option/Ior/Result/nullable), including validation with accumulation, interop with exceptions, and custom error wrappers. Use for designing or refactoring error modeling, converting exception-based flows, building smart constructors, accumulating validation errors, or integrating Outcome/Progress-style wrappers with Arrow.",
-      "tags": ["kotlin", "arrow", "typed-errors", "raise", "validation"]
+      "tags": ["kotlin", "arrow", "typed-errors", "raise", "validation", "fp", "functional-programming"]
+    },
+    {
+      "name": "cats-mtl-typed-errors",
+      "path": "skills/cats-mtl-typed-errors",
+      "description": "Scala typed errors with Cats MTL Raise/Handle and allow/rescue. Use for designing custom domain error types without EitherT, while keeping Cats Effect and ecosystem composition. Covers Scala 2/3 syntax and IO-only or F[_] usage.",
+      "tags": ["scala", "typelevel", "cats", "cats-mtl", "typed-errors", "errors", "fp", "functional-programming"]
     },
     {
       "name": "compose-state-hoisting",
       "path": "skills/compose-state-hoisting",
       "description": "Compose state management with a strong state-hoisting preference for Kotlin Compose (Android, Multiplatform, Compose for Web). Use for refactors or new UI that needs clear state ownership, unidirectional data flow, saved state decisions, or guidance on remember/retain/rememberSaveable/rememberSerializable, and for designing stateless composables with event callbacks.",
-      "tags": ["kotlin", "compose", "state", "state-hoisting", "ui"]
+      "tags": ["kotlin", "compose", "compose-mvc", "jetpack-compose", "state", "state-hoisting", "ui"]
     }
   ],
   "indexedBy": "https://skills.sh"
