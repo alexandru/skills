@@ -12,7 +12,7 @@ For condensed reference, see `references/compose-state-guidance.md`.
 
 ## Workflow
 1. Identify the state and the logic that reads/writes it.
-2. Decide the state owner (lowest common ancestor; or a state holder/ViewModel for complex UI/business logic).
+2. Decide the state owner (lowest common ancestor; or a plain state holder class, or a screen-level state holder like Android ViewModel for complex UI/business logic).
 3. Choose the lifespan API (remember/retain/rememberSaveable/rememberSerializable) based on how long it must survive.
 4. Make UI composables stateless: pass `value` and event callbacks; state goes down, events go up.
 5. Decide what must be saved and how (rememberSaveable, SavedStateHandle, or platform storage).
@@ -44,8 +44,23 @@ Lowest common ancestor hoisting:
 @Composable
 fun ConversationScreen(messages: List<Message>) {
     val listState = rememberLazyListState()
-    MessagesList(messages = messages, listState = listState)
-    UserInput(onSend = { /* apply UI logic to listState */ })
+    val coroutineScope = rememberCoroutineScope()
+    
+    Column {
+        MessagesList(
+            messages = messages,
+            listState = listState,
+            modifier = Modifier.weight(1f)
+        )
+        UserInput(
+            onSend = { newMessage ->
+                // Scroll to bottom when new message is sent
+                coroutineScope.launch {
+                    listState.animateScrollToItem(messages.size)
+                }
+            }
+        )
+    }
 }
 ```
 
@@ -54,11 +69,11 @@ Plain state holder for complex UI logic:
 class FiltersState(
     initial: Filter = Filter.All,
 ) {
-    var filter by mutableStateOf(initial)
-        private set
+    private var _filter by mutableStateOf(initial)
+    val filter: State<Filter> = derivedStateOf { _filter }
 
     fun setFilter(newFilter: Filter) {
-        filter = newFilter
+        _filter = newFilter
     }
 }
 
@@ -68,8 +83,9 @@ fun rememberFiltersState(initial: Filter = Filter.All): FiltersState {
 }
 ```
 
-Saved UI element state in ViewModel:
+Saved UI element state (Android ViewModel example):
 ```kotlin
+// Android: ViewModel with SavedStateHandle for process death survival
 class FormViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel() {
     var query by savedStateHandle.saveable { mutableStateOf("") }
         private set
@@ -78,12 +94,64 @@ class FormViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel(
         query = value
     }
 }
+// Multiplatform: Use platform-specific saved state mechanisms or libraries
+// like Circuit's RetainedStateRegistry, or custom serialization solutions
+```
+
+Remember with keys for controlled state resets:
+```kotlin
+@Composable
+fun UserProfile(userId: String) {
+    // State resets when userId changes; uses immutable data structure
+    var profile by remember(userId) { mutableStateOf(ProfileData()) }
+    
+    // Load user data for this userId
+    LaunchedEffect(userId) {
+        profile = fetchProfile(userId)
+    }
+}
+
+data class ProfileData(
+    val name: String = "",
+    val bio: String = ""
+)
+```
+
+Derived state for computed values:
+```kotlin
+@Composable
+fun ShoppingCart(items: List<CartItem>) {
+    // Recomputes only when items list changes
+    val totalPrice by remember(items) { derivedStateOf { items.sumOf { it.price } } }
+    val itemCount by remember(items) { derivedStateOf { items.size } }
+    
+    Text("Total: $$totalPrice ($itemCount items)")
+}
+```
+
+Snapshot state collections (platform-agnostic):
+```kotlin
+@Composable
+fun TodoList() {
+    // Observable list that triggers recomposition on mutations
+    val todos = remember { mutableStateListOf<Todo>() }
+    
+    Button(onClick = { todos.add(Todo("New task")) }) {
+        Text("Add Todo")
+    }
+    
+    LazyColumn {
+        items(todos) { todo ->
+            TodoItem(todo, onRemove = { todos.remove(todo) })
+        }
+    }
+}
 ```
 
 ## State Hoisting Rules
 - Hoist state to the lowest common ancestor of all composables that read and write it; keep it as close to consumers as possible.
 - If multiple states change from the same events, hoist them together.
-- Over-hoisting is acceptable; under-hoisting breaks unidirectional flow.
+- Over-hoisting (e.g., hoisting to screen level when a subtree would suffice) is acceptable and safer than under-hoisting; under-hoisting breaks unidirectional flow and creates duplicate sources of truth. Over-hoisting may trigger more recompositions or lose state on navigation.
 - Prefer exposing immutable state plus event callbacks from the state owner.
 
 ## Stateless vs Stateful Composables
@@ -94,36 +162,40 @@ class FormViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel(
 ## Decide Where to Hoist
 - **UI element state + simple UI logic**: keep internal or hoist within the UI subtree.
 - **Complex UI logic**: move state and UI logic into a plain state holder class scoped to the Composition.
-- **Business logic or screen UI state**: hoist to a screen-level state holder (Android: ViewModel). Do not pass ViewModel instances down the tree; inject at the screen level and pass state/events instead.
+- **Business logic or screen UI state**: hoist to a screen-level state holder (Android: ViewModel; Multiplatform: platform-specific or library solutions like Circuit, Molecule). Do not pass screen-level state holders down the tree; inject at the screen level and pass state/events instead.
+- **Deep prop drilling**: for state needed by many distant descendants (theme, user session), consider `CompositionLocal` to avoid passing parameters through many layers. Use sparingly; prefer explicit parameter passing when practical.
 
 ## Choose the Correct Lifespan
-- `remember`: survives recomposition only; same instance. Use for composition-scoped objects and small internal UI state. Do not use for user input.
-- `retain`: survives recomposition + activity recreation (config change), not process death. Use for non-serializable objects (players, caches, flows, lambdas). Do not retain objects with shorter lifespans (Activity, View, Fragment, ViewModel, Context, Lifecycle). Do not retain objects that were already remembered.
-- `rememberSaveable` / `rememberSerializable`: survives recomposition + activity recreation + process death by saving to Bundle. Use for user input or UI state that cannot be reloaded from another source. Restored objects are equal but not the same instance.
+- `remember`: survives recomposition only; same instance. Use for composition-scoped objects and small internal UI state. Do not use for user input that must be preserved.
+- `retain`: survives recomposition + window/configuration changes (Android: activity recreation), not process death. Use for non-serializable objects (players, caches, flows, lambdas). **Do not retain** platform-specific lifecycle objects (Android: Activity, View, Fragment, ViewModel, Context, Lifecycle). **Do not retain** objects that were already created with `remember` by the caller—`retain` and `remember` are mutually exclusive for the same object.
+- `rememberSaveable` / `rememberSerializable`: survives recomposition + configuration changes + process death (Android) by saving to the platform's saved state mechanism (Android: Bundle; other platforms may vary). Use for user input or UI state that cannot be reloaded from another source. Restored objects are equal but not the same instance.
+
+**Remember Keys**: Control when state resets by passing keys to `remember(key1, key2) { }`. State recreates when any key changes. Omit keys only when state should survive all recompositions.
 
 ## Saving UI State
 - Use `rememberSaveable` for UI state hoisted in composables or plain state holders; save only minimal, small data.
-- Bundle size is limited; do not store large objects or lists. Store IDs/keys and rehydrate from data/persistent storage.
-- Use `SavedStateHandle` in a ViewModel for UI element state that must survive process death; keep it small and transient.
-- Do not save full screen UI state in `SavedStateHandle`; rebuild it from the data layer.
+- Saved state storage is limited (Android Bundle: ~1MB); do not store large objects or lists. Store IDs/keys and rehydrate from data/persistent storage.
+- Android: Use `SavedStateHandle` in a ViewModel for UI element state that must survive process death; keep it small and session-scoped (not persistent app data).
+- Do not save full screen UI state; rebuild it from the data layer on restoration.
 
 ## Observable Types in Compose
 - Convert observable types to `State<T>` before reading in composables.
-- Android-specific: prefer `collectAsStateWithLifecycle` for `Flow`.
-- Multiplatform/Web: use `collectAsState` (platform-agnostic).
+- `Flow`: use `collectAsState` (platform-agnostic, always collects) or `collectAsStateWithLifecycle` (Android only, lifecycle-aware, pauses collection when UI is not visible).
+- `LiveData` (Android): use `observeAsState`.
 - For custom observables, create a `State<T>` via `produceState`.
 
 ## State Callbacks (RememberObserver / RetainObserver)
 - Run initialization side-effects in `onRemembered` / `onRetained`, not in constructors or remember/retain lambdas.
 - Always cancel work in `onForgotten` / `onRetired`; handle `onAbandoned` for canceled compositions.
 - Keep implementations private; expose safe factory functions like `rememberX()` to avoid misuse.
-- Do not remember the same object twice; do not remember inputs that are already remembered by the caller.
+- Do not remember the same object twice; do not pass parameters that are already wrapped in `State<T>` to another `remember` call—this creates unnecessary nested observability.
 
 ## Common Anti-Patterns
-- Storing mutable collections or mutable data classes directly as state; prefer immutable containers wrapped in `State`.
+- Storing mutable collections or mutable data classes directly as state; prefer immutable containers wrapped in `State` or use snapshot state collections (`mutableStateListOf`, `mutableStateMapOf`).
 - Duplicating state in multiple owners instead of hoisting to a single source of truth.
-- Remembering/retaining objects with mismatched lifespans or retaining remembered objects.
-- Saving large or complex objects in `rememberSaveable`/`SavedStateHandle`.
+- Mixing remember and retain for the same object; remembering/retaining objects with mismatched lifespans.
+- Saving large or complex objects in `rememberSaveable`/`SavedStateHandle` (Android); save IDs and rehydrate instead.
+- Computing derived values inside composables without `derivedStateOf`, causing unnecessary recompositions.
 
 ## Output Expectations
 - Favor stateless composables with `value` + callbacks.
