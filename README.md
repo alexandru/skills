@@ -13,10 +13,14 @@ skills/
 |   |-- SKILL.md
 |   `-- references/
 |       `-- resource.md
-`-- arrow-typed-errors/
+|-- arrow-typed-errors/
+|   |-- SKILL.md
+|   `-- references/
+|       `-- typed-errors.md
+`-- compose-state-hoisting/
     |-- SKILL.md
     `-- references/
-        `-- typed-errors.md
+        `-- compose-state-guidance.md
 ```
 
 ## Usage
@@ -29,6 +33,7 @@ npx skills add https://github.com/alexandru/skills --skill <skill-name>
 
 - [arrow-resource](./skills/arrow-resource/): Resource lifecycle management patterns with Arrow
 - [arrow-typed-errors](./skills/arrow-typed-errors/): Typed error modeling and Raise DSL guidance
+- [compose-state-hoisting](./skills/compose-state-hoisting/): Compose state hoisting and state ownership guidance
 
 ## License
 
