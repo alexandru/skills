@@ -27,6 +27,12 @@
       "tags": ["scala", "typelevel", "cats", "cats-mtl", "typed-errors", "errors", "fp", "functional-programming"]
     },
     {
+      "name": "cats-effect-io",
+      "path": "skills/cats-effect-io",
+      "description": "Scala functional programming with Cats Effect IO and typeclasses. Use for wrapping side effects, modeling purity, choosing Sync/Async/Temporal/Concurrent, handling blocking I/O, and composing resources, fibers, and concurrency safely.",
+      "tags": ["scala", "typelevel", "cats-effect", "io", "effects", "concurrency", "fp", "functional-programming"]
+    },
+    {
       "name": "compose-state-hoisting",
       "path": "skills/compose-state-hoisting",
       "description": "Compose state management with a strong state-hoisting preference for Kotlin Compose (Android, Multiplatform, Compose for Web). Use for refactors or new UI that needs clear state ownership, unidirectional data flow, saved state decisions, or guidance on remember/retain/rememberSaveable/rememberSerializable, and for designing stateless composables with event callbacks.",
