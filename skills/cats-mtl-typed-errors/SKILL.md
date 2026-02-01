@@ -27,6 +27,7 @@ description: Scala typed errors with Cats MTL Raise/Handle and allow/rescue. Use
 - **Scala 2 compatibility**: use `allowF` and explicit implicit parameters; expect more braces and explicit types.
 - **Interop with pure code**: use pure `Either[E, A]` for parsing/validation and lift into `F` where needed.
 - **Avoid transformer stacks**: do not reach for `EitherT` just to get a typed error channel; Cats MTL provides the capability without the stack.
+- **Avoid sealed-on-sealed inheritance**: model error hierarchies with composition (wrapper case classes), not sealed inheritance chains.
 
 ## References
 - Load `references/custom-error-types.md` for detailed guidance, Scala 2/3 syntax, and rationale from the Typelevel article.

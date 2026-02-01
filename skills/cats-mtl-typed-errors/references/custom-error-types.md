@@ -7,10 +7,12 @@ Sources:
 ## Table of Contents
 - [Summary](#summary)
 - [Core concepts](#core-concepts)
+- [Avoid sealed inheritance chains](#avoid-sealed-inheritance-chains)
 - [Prefer Cats MTL over EitherT](#prefer-cats-mtl-over-eithert)
 - [Capability-based typed errors](#capability-based-typed-errors)
 - [Notes on F[_] vs IO](#notes-on-f_-vs-io)
 - [Behavior and safety](#behavior-and-safety)
+- [Test prompts](#test-prompts)
 - [When to use what](#when-to-use-what)
 
 ## Summary
@@ -23,6 +25,32 @@ Sources:
 - **Typed errors** provide explicit, domain-specific errors in the function signature, similar to Java checked exceptions.
 - **Cats MTL capabilities** express what a scope can do (raise/handle errors) via implicit evidence.
 - **Scoped error handling** with `allow`/`rescue` acts like `try`/`catch` for typed errors.
+
+## Avoid sealed inheritance chains
+Avoid having a sealed error type inherit from another sealed error type. Prefer composition so each error ADT stays focused and can be wrapped by the outer domain error.
+
+Wrong:
+```scala
+sealed trait DomainError
+
+sealed trait ParseError extends DomainError
+object ParseError {
+  final case class MissingRequiredField(field: String) extends ParseError
+}
+```
+
+Prefer composition (wrapping):
+```scala
+sealed trait DomainError
+object DomainError {
+  final case class Parse(error: ParseError) extends DomainError
+}
+
+sealed trait ParseError
+object ParseError {
+  final case class MissingRequiredField(field: String) extends ParseError
+}
+```
 
 ## Prefer Cats MTL over EitherT
 - `IO[Either[E, A]]` forces pervasive `Either`-level plumbing and awkward integration with effect libraries.
@@ -120,6 +148,11 @@ val program: IO[Unit] = Handle.allowF[IO, ParseError] { implicit h =>
 - `rescue` forces you to handle any raised errors, mirroring try/catch.
 - Implementation uses a local traceless Throwable ("submarine error") to transport your domain error within the effect error channel.
 - Avoid catching all `Throwable` inside an `allow` scope unless you intentionally want to intercept the submarine error.
+
+## Test prompts
+- Replace an `EitherT[IO, E, A]` flow with Cats MTL `Raise/Handle`.
+- Refactor a sealed-on-sealed error hierarchy into composition using wrapper case classes.
+- Introduce `Raise[F, E]` for typed errors in a parsing function and `rescue` at the boundary.
 
 ## When to use what
 - Use `Raise[F, E]` for domain errors that should be explicit in signatures.

@@ -20,6 +20,10 @@ npx skills add https://github.com/alexandru/skills --skill <skill-name>
 - [cats-mtl-typed-errors](./skills/cats-mtl-typed-errors/): Scala typed errors using Cats MTL Raise/Handle and allow/rescue
 - [compose-state-hoisting](./skills/compose-state-hoisting/): Compose state hoisting and state ownership guidance
 
+## Testing
+
+Each skill's references include brief "Test prompts" to validate the guidance against representative requests.
+
 ## License
 
 MIT
