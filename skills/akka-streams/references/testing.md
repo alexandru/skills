@@ -343,6 +343,9 @@ import scala.concurrent.Future
 
 ### Testing concurrency limits
 ```scala
+import org.scalatest.concurrent.Eventually
+import org.scalatest.time.{Millis, Seconds, Span}
+
 "flow" should "respect parallelism limit" in {
   import java.util.concurrent.atomic.AtomicInteger
   import scala.concurrent.Promise
@@ -355,8 +358,8 @@ import scala.concurrent.Future
     Future {
       val current = concurrent.incrementAndGet()
       maxSeen.updateAndGet(max => math.max(max, current))
-      // Wait for latch to simulate slow processing (test-only pattern)
-      // In production, use proper async operations instead
+      // Await.result here is acceptable only in tests for coordinating
+      // concurrent execution; never use in production code
       Await.result(latch.future, 1.second)
       concurrent.decrementAndGet()
       n * 2
@@ -367,13 +370,19 @@ import scala.concurrent.Future
     .via(flowUnderTest)
     .runWith(Sink.seq)
   
-  // Give time for parallelism limit to be reached
+  // Use ScalaTest's eventually to poll until parallelism limit is reached
+  implicit val patienceConfig = PatienceConfig(
+    timeout = Span(3, Seconds),
+    interval = Span(50, Millis)
+  )
+  
   eventually {
     maxSeen.get() shouldBe 2
   }
   
   // Release latch to complete processing
   latch.success(())
+  // Await.result acceptable here for test synchronization only
   Await.result(future, 3.seconds)
   
   // Verify parallelism never exceeded limit
