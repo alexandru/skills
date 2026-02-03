@@ -1,6 +1,6 @@
 {
   "name": "alexandru-skills",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Collection of reusable code skills",
   "repository": {
     "type": "git",
@@ -43,6 +43,12 @@
       "path": "skills/compose-state-hoisting",
       "description": "Compose state management with a strong state-hoisting preference for Kotlin Compose (Android, Multiplatform, Compose for Web). Use for refactors or new UI that needs clear state ownership, unidirectional data flow, saved state decisions, or guidance on remember/retain/rememberSaveable/rememberSerializable, and for designing stateless composables with event callbacks.",
       "tags": ["kotlin", "compose", "compose-mvc", "jetpack-compose", "state", "state-hoisting", "ui"]
+    },
+    {
+      "name": "akka-streams",
+      "path": "skills/akka-streams",
+      "description": "Scala reactive streaming with Akka Streams and Pekko Streams. Use for designing streaming pipelines with backpressure, testing stream components, and understanding when NOT to use streams (prefer plain functions or Cats Effect IO for most I/O).",
+      "tags": ["scala", "akka", "akka-streams", "pekko", "pekko-streams", "reactive-streams", "streaming", "backpressure", "testing"]
     }
   ],
   "indexedBy": "https://skills.sh"
