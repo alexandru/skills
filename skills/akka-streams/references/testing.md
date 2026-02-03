@@ -343,6 +343,9 @@ import scala.concurrent.Future
 
 ### Testing concurrency limits
 ```scala
+// Test class setup required for this example:
+// class ConcurrencySpec extends AnyFlatSpec with Matchers with Eventually
+
 import org.scalatest.concurrent.Eventually
 import org.scalatest.time.{Millis, Seconds, Span}
 
@@ -370,12 +373,14 @@ import org.scalatest.time.{Millis, Seconds, Span}
     .via(flowUnderTest)
     .runWith(Sink.seq)
   
-  // Use ScalaTest's eventually to poll until parallelism limit is reached
-  implicit val patienceConfig = PatienceConfig(
+  // Use ScalaTest's eventually (from Eventually trait) to poll
+  // until parallelism limit is reached
+  implicit val defaultPatienceConfig: PatienceConfig = PatienceConfig(
     timeout = Span(3, Seconds),
     interval = Span(50, Millis)
   )
   
+  // shouldBe requires Matchers trait mixed in
   eventually {
     maxSeen.get() shouldBe 2
   }
