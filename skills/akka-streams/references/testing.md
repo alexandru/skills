@@ -285,8 +285,8 @@ import akka.stream.Supervision._
   source.sendNext(2)
   source.sendNext(3)
   
-  // Consumer is slow (no request yet)
-  Thread.sleep(100)
+  // Verify no elements received yet (no demand)
+  sink.expectNoMessage(100.millis)
   
   // Now request and verify order preserved
   sink.request(3)
@@ -345,14 +345,19 @@ import scala.concurrent.Future
 ```scala
 "flow" should "respect parallelism limit" in {
   import java.util.concurrent.atomic.AtomicInteger
+  import scala.concurrent.Promise
+  
   val concurrent = new AtomicInteger(0)
   val maxSeen = new AtomicInteger(0)
+  val latch = Promise[Unit]()
 
   val flowUnderTest = Flow[Int].mapAsync(2) { n =>
     Future {
       val current = concurrent.incrementAndGet()
       maxSeen.updateAndGet(max => math.max(max, current))
-      Thread.sleep(50) // Simulate work
+      // Wait for latch to simulate slow processing (test-only pattern)
+      // In production, use proper async operations instead
+      Await.result(latch.future, 1.second)
       concurrent.decrementAndGet()
       n * 2
     }(system.dispatcher)
@@ -361,11 +366,18 @@ import scala.concurrent.Future
   val future = Source(1 to 10)
     .via(flowUnderTest)
     .runWith(Sink.seq)
-    
+  
+  // Give time for parallelism limit to be reached
+  eventually {
+    maxSeen.get() shouldBe 2
+  }
+  
+  // Release latch to complete processing
+  latch.success(())
   Await.result(future, 3.seconds)
   
-  // Parallelism of 2 should mean max 2 concurrent
-  assert(maxSeen.get() <= 2)
+  // Verify parallelism never exceeded limit
+  assert(maxSeen.get() == 2)
 }
 ```
 
