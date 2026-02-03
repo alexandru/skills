@@ -254,11 +254,11 @@ import scala.concurrent.Future
 
 def fetchUserName(id: Int): Future[String] = Future.successful(s"User$id")
 
-val userIdToNameFlow = Flow[Int]
+val enrichWithUserName = Flow[Int]
   .mapAsync(parallelism = 4)(id => fetchUserName(id))
 
 Source(1 to 100)
-  .via(userIdToNameFlow)
+  .via(enrichWithUserName)
   .runWith(Sink.foreach(println))
 ```
 
