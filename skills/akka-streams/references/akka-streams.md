@@ -284,7 +284,7 @@ Source(jsonLines)
 ### Fan-out / Fan-in with GraphDSL
 ```scala
 import akka.stream.scaladsl.{GraphDSL, RunnableGraph, Broadcast, Merge}
-import akka.stream.{ClosedShape, ActorMaterializer}
+import akka.stream.ClosedShape
 
 val graph = RunnableGraph.fromGraph(GraphDSL.create() { implicit builder =>
   import GraphDSL.Implicits._
@@ -347,7 +347,7 @@ Source(1 to 5)
 import akka.stream.scaladsl.RestartSource
 import scala.concurrent.duration._
 
-val restartSettings = RestartSettings(
+val restartSettings = RestartSettings.create(
   minBackoff = 1.second,
   maxBackoff = 10.seconds,
   randomFactor = 0.2
