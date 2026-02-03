@@ -36,5 +36,4 @@ description: Scala/Java Akka Streams and Pekko Streams reactive stream processin
 - Provide test cases for normal flow, error scenarios, and cancellation.
 
 ## References
-- Load `references/akka-streams.md` for comprehensive guidance, examples, and testing patterns.
-- For concrete samples and cookbook recipes, read `references/akka-streams.md`.
+- Load `references/akka-streams.md` for comprehensive guidance, examples, testing patterns, and cookbook recipes.
