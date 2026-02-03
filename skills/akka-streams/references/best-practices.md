@@ -7,7 +7,7 @@ Sources:
 ## Critical: When NOT to Use Streams
 
 ### Use plain functions instead
-Streams are not a replacement for regular data transformations. If you can express your logic as pure functions without backpressure concerns, do so:
+Streams are not a replacement for regular data transformations. If you can express your logic as pure functions, do so:
 
 **Bad** (unnecessary stream complexity):
 ```scala
@@ -24,8 +24,8 @@ val result = List(1, 2, 3, 4, 5)
   .filter(_ > 5)
 ```
 
-### Use Cats Effect IO for I/O
-Despite Akka's documentation suggesting streams for I/O, **this is misguided**. I/O is better modeled with effect systems like Cats Effect:
+### Use plain functions for I/O
+Despite Akka's documentation suggesting streams for I/O, **prefer plain functions or other abstractions**:
 
 **Bad** (streams for simple I/O):
 ```scala
@@ -34,7 +34,15 @@ Source.fromIterator(() => lines.iterator)
   .runWith(Sink.foreach(println))
 ```
 
-**Good** (Cats Effect for I/O):
+**Good** (plain functions):
+```scala
+lines.foreach { line =>
+  val result = processLine(line)
+  println(result)
+}
+```
+
+Or with an effect system for better composition:
 ```scala
 import cats.effect.IO
 
@@ -43,11 +51,7 @@ lines.traverse_(line =>
 )
 ```
 
-Streams couple processing with execution, making testing and composition harder. Effect systems provide better:
-- Referential transparency
-- Composition without materialization concerns
-- Integration with the broader FP ecosystem
-- Testing (no need for TestKit infrastructure)
+Streams couple processing with execution, making testing and composition harder.
 
 ### Integration challenges
 If you must integrate Cats Effect with Akka Streams, be aware of challenges:
@@ -58,12 +62,13 @@ If you must integrate Cats Effect with Akka Streams, be aware of challenges:
 
 ## When Streams ARE Appropriate
 
-Use Akka Streams when you need:
+Use Akka Streams for dataflow and reactive programming patterns:
 
-1. **Bounded buffers with backpressure** between independent processing stages
+1. **Dataflow programming** - expressing computation as a graph of operations
 2. **Reactive Streams interop** with other compliant libraries
 3. **Complex graph topologies** with fan-out, fan-in, and rate control
 4. **Integration with Akka actors** for distributed stream processing
+5. **Backpressure management** between independent processing stages
 
 Example valid use case:
 ```scala
