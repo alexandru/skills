@@ -4,6 +4,23 @@ Sources:
 - https://doc.akka.io/libraries/akka-core/current/stream/stream-testkit.html
 - https://doc.akka.io/libraries/akka-core/current/stream/stream-cookbook.html
 
+## Table of Contents
+
+- [Dependency](#dependency)
+- [Testing Philosophy](#testing-philosophy)
+- [Basic Testing with Built-in Sources/Sinks](#basic-testing-with-built-in-sourcessinks)
+- [TestSource and TestSink](#testsource-and-testsink)
+- [Testing with TestProbe (Actor Integration)](#testing-with-testprobe-actor-integration)
+- [Testing Error Handling](#testing-error-handling)
+- [Testing Backpressure Scenarios](#testing-backpressure-scenarios)
+- [Testing Async Operations](#testing-async-operations)
+- [Testing Time-Based Operations](#testing-time-based-operations)
+- [Testing Graph DSL](#testing-graph-dsl)
+- [Testing Materialized Values](#testing-materialized-values)
+- [Integration Testing](#integration-testing)
+- [Common Testing Patterns](#common-testing-patterns)
+- [Pekko Streams Testing](#pekko-streams-testing)
+
 ## Dependency
 
 Add to your test scope:

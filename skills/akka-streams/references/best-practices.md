@@ -4,6 +4,18 @@ Sources:
 - https://doc.akka.io/libraries/akka-core/current/general/stream/stream-design.html
 - https://alexn.org/blog/2023/04/17/integrating-akka-with-cats-effect-3/
 
+## Table of Contents
+
+- [Critical: When NOT to Use Streams](#critical-when-not-to-use-streams)
+- [When Streams ARE Appropriate](#when-streams-are-appropriate)
+- [Design Principles](#design-principles)
+- [Common Anti-Patterns](#common-anti-patterns)
+- [Resource Cleanup](#resource-cleanup)
+- [Materialized Values](#materialized-values)
+- [Testing Philosophy](#testing-philosophy)
+- [Supervision Strategies](#supervision-strategies)
+- [Pekko Streams Notes](#pekko-streams-notes)
+
 ## Critical: When NOT to Use Streams
 
 ### Use plain functions instead
