@@ -8,6 +8,20 @@ Sources:
 - https://doc.akka.io/libraries/akka-core/current/stream/stream-error.html
 - https://doc.akka.io/libraries/akka-core/current/stream/reactive-streams-interop.html
 
+## Table of Contents
+
+- [Core Abstractions](#core-abstractions)
+- [Composition](#composition)
+- [Materialization](#materialization)
+- [Graph DSL](#graph-dsl)
+- [Backpressure and Buffering](#backpressure-and-buffering)
+- [Error Handling](#error-handling)
+- [Reactive Streams Interop](#reactive-streams-interop)
+- [Async Boundaries](#async-boundaries)
+- [Context Propagation](#context-propagation)
+- [Time-Based Operations](#time-based-operations)
+- [Common Patterns](#common-patterns)
+
 ## Core Abstractions
 
 ### Source
