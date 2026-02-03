@@ -13,6 +13,7 @@ npx skills add https://github.com/alexandru/skills --skill <skill-name>
 
 ## Skills
 
+- [akka-streams](./skills/akka-streams/): Akka Streams and Pekko Streams reactive stream processing patterns
 - [arrow-resource](./skills/arrow-resource/): Resource lifecycle management patterns with Arrow
 - [arrow-typed-errors](./skills/arrow-typed-errors/): Typed error modeling and Raise DSL guidance
 - [cats-effect-resource](./skills/cats-effect-resource/): Cats Effect Resource lifecycle management patterns
