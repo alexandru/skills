@@ -252,13 +252,13 @@ result.foreach(println) // List(4, 8, 12, 16, 20)
 ```scala
 import scala.concurrent.Future
 
-def fetchUser(id: Int): Future[String] = Future.successful(s"User$id")
+def fetchUserName(id: Int): Future[String] = Future.successful(s"User$id")
 
-val userFlow = Flow[Int]
-  .mapAsync(parallelism = 4)(id => fetchUser(id))
+val userIdToNameFlow = Flow[Int]
+  .mapAsync(parallelism = 4)(id => fetchUserName(id))
 
 Source(1 to 100)
-  .via(userFlow)
+  .via(userIdToNameFlow)
   .runWith(Sink.foreach(println))
 ```
 
@@ -410,6 +410,7 @@ val result = FileIO.fromPath(Paths.get("input.txt"))
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.model.{HttpRequest, HttpResponse}
 import scala.concurrent.Future
+import scala.concurrent.duration._
 
 val http = Http()
 
