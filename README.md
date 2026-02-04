@@ -2,7 +2,7 @@
 
 This is a collection of skills for use with AI Agents. See:
 
-- [Claud Skills](https://code.claude.com/docs/en/skills)
+- [Claude Skills](https://code.claude.com/docs/en/skills)
 - [Copilot Agent Skills](https://docs.github.com/en/copilot/concepts/agents/about-agent-skills)
 
 ## Usage
