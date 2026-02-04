@@ -1,6 +1,6 @@
 {
   "name": "alexandru-skills",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Collection of reusable code skills",
   "repository": {
     "type": "git",
@@ -49,6 +49,12 @@
       "path": "skills/akka-streams",
       "description": "Scala reactive streaming with Akka Streams and Pekko Streams. Use for dataflow and reactive programming patterns, testing stream components, and understanding when NOT to use streams (prefer plain functions for transformations and I/O).",
       "tags": ["scala", "akka", "akka-streams", "pekko", "pekko-streams", "reactive-streams", "streaming", "backpressure", "testing"]
+    },
+    {
+      "name": "kotlin-java-library",
+      "path": "skills/kotlin-java-library",
+      "description": "Kotlin design for Java libraries and Java consumers. Use when building Kotlin code intended for Java callers, aligning with Java interop, JVM annotations, records, and backward/binary compatibility rules.",
+      "tags": ["kotlin", "java", "interop", "jvm", "library", "api", "compatibility"]
     }
   ],
   "indexedBy": "https://skills.sh"
