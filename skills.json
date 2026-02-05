@@ -1,6 +1,6 @@
 {
   "name": "alexandru-skills",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "description": "Collection of reusable code skills",
   "repository": {
     "type": "git",
@@ -55,6 +55,12 @@
       "path": "skills/kotlin-java-library",
       "description": "Kotlin design for Java libraries and Java consumers. Use when building Kotlin code intended for Java callers, aligning with Java interop, JVM annotations, records, and backward/binary compatibility rules.",
       "tags": ["kotlin", "java", "interop", "jvm", "library", "api", "compatibility"]
+    },
+    {
+      "name": "jspecify-nullness",
+      "path": "skills/jspecify-nullness",
+      "description": "JSpecify nullness annotations for Java APIs and tooling. Use when adopting or migrating JSpecify annotations, designing null-safe Java signatures and generics, or interpreting tool conformance and Kotlin interop.",
+      "tags": ["java", "jspecify", "nullness", "annotations", "static-analysis", "interop"]
     }
   ],
   "indexedBy": "https://skills.sh"

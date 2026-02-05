@@ -20,6 +20,7 @@ npx skills add https://github.com/alexandru/skills --skill <skill-name>
 - [cats-effect-io](./skills/cats-effect-io/): Cats Effect IO usage patterns and typeclass guidance
 - [cats-mtl-typed-errors](./skills/cats-mtl-typed-errors/): Scala typed errors using Cats MTL Raise/Handle and allow/rescue
 - [compose-state-hoisting](./skills/compose-state-hoisting/): Compose state hoisting and state ownership guidance
+- [jspecify-nullness](./skills/jspecify-nullness/): JSpecify nullness annotations for Java APIs and tooling
 - [kotlin-java-library](./skills/kotlin-java-library/): Kotlin design for Java libraries and Java consumers
 
 ## Testing
