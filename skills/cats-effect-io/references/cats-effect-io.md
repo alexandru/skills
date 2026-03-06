@@ -5,6 +5,17 @@ Sources:
 - https://typelevel.org/cats-effect/docs/concepts
 - https://typelevel.org/cats-effect/docs/recipes
 - https://typelevel.org/cats-effect/docs/faq
+- https://typelevel.org/cats-effect/docs/core/test-runtime
+
+## Table of Contents
+- [Core ideas](#core-ideas)
+- [Blocking and interruptibility](#blocking-and-interruptibility)
+- [Resource safety](#resource-safety)
+- [Execution boundary rules](#execution-boundary-rules)
+- [Common recipes](#common-recipes)
+- [API samples](#api-samples)
+- [Testing guidance](#testing-guidance)
+- [FAQ highlights](#faq-highlights)
 
 ## Core ideas
 - **Effects as values**: `IO[A]` (or `F[A]`) describes side effects; nothing runs until the effect is evaluated.
@@ -21,12 +32,19 @@ Sources:
 - Prefer `Resource` over manual `try/finally` for acquisition/release.
 - Use `Resource.fromAutoCloseable` for simple `AutoCloseable` lifecycles; use `Resource.make` when you need custom release handling.
 
+## Execution boundary rules
+- Treat `unsafeRun*` as a runtime-boundary operation only; application and test code should not call it.
+- `import cats.effect.unsafe.implicits.global` is banned.
+- Keep effect execution at framework boundaries (`IOApp`, http server runtimes, stream runtimes).
+- To bridge non-Cats-Effect callback APIs, use `Dispatcher`.
+
 ## Common recipes
+- **Dispatcher provisioning**: resource-scoped components may create and use their own `Dispatcher` inside that same `Resource`; otherwise require `Dispatcher` as a parameter (`using`/implicit is fine).
 - **Background work**: use `Supervisor` for start-and-forget fibers with safe cleanup.
 - **Effectful loops**: use `traverse`/`traverse_` and `parTraverse` for sequencing or parallelism.
 - **Shared state**: use `Ref`, `Deferred`, and other std primitives (avoid mutable state).
 
-## API samples (IO and F[_])
+## API samples
 
 Side effects as values (IO vs F[_]):
 ```scala
@@ -88,6 +106,38 @@ object ParallelExample extends IOApp.Simple {
   val run: IO[Unit] =
     (IO.println("A"), IO.println("B")).parTupled.void
 }
+```
+
+Akka Streams interop with `mapAsync`:
+```scala
+import akka.stream.scaladsl.Source
+import cats.effect.std.Dispatcher
+import cats.effect.IO
+
+/** Interop example showcasing a legitimate `unsafeToFuture` call. */
+extension [A, Mat](self: Source[A, Mat])
+  def mapIO[B](parallelism: Int)(f: A => IO[B])(using Dispatcher[IO]): Source[B, Mat] =
+    self.mapAsync(parallelism) {
+      a => summon[Dispatcher[IO]].unsafeToFuture(f(a))
+    }
+```
+
+## Testing guidance
+- Prefer test frameworks/modules that accept effectful tests (`IO[Assertion]`, `F[Assertion]`) instead of manual `unsafeRun*`.
+- Avoid real sleeping in unit tests. Use virtual time with `TestControl` for deterministic scheduling.
+- `SyncIO` can be lifted without running it: `val io: IO[A] = syncIo.to[IO]`.
+
+Virtual-time test example:
+```scala
+import cats.effect.IO
+import cats.effect.testkit.TestControl
+import scala.concurrent.duration._
+
+val test: IO[Int] =
+  IO.sleep(1.second) *> IO.pure(42)
+
+val result: IO[Int] =
+  TestControl.executeEmbed(test)
 ```
 
 ## FAQ highlights
