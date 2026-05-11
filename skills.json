@@ -1,6 +1,6 @@
 {
   "name": "alexandru-skills",
-  "version": "1.3.1",
+  "version": "1.4.0",
   "description": "Collection of reusable code skills",
   "repository": {
     "type": "git",
@@ -49,6 +49,12 @@
       "path": "skills/akka-streams",
       "description": "Scala reactive streaming with Akka Streams and Pekko Streams. Use for dataflow and reactive programming patterns, testing stream components, and understanding when NOT to use streams (prefer plain functions for transformations and I/O).",
       "tags": ["scala", "akka", "akka-streams", "pekko", "pekko-streams", "reactive-streams", "streaming", "backpressure", "testing"]
+    },
+    {
+      "name": "create-skill",
+      "path": "skills/create-skill",
+      "description": "Guide for creating effective agent skills. Use when users want to create a new skill (or update an existing skill) that extends agent capabilities with specialized knowledge, workflows, or tool integrations.",
+      "tags": ["skill", "skill-creation", "authoring", "best-practices"]
     },
     {
       "name": "kotlin-java-library",
