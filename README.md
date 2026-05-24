@@ -24,6 +24,7 @@ npx skills add https://github.com/alexandru/skills --skill <skill-name>
 - [jspecify-nullness](./skills/jspecify-nullness/): JSpecify nullness annotations for Java APIs and tooling
 - [kotlin-context-parameters](./skills/kotlin-context-parameters/): Kotlin context parameter syntax, patterns, and migration guidance
 - [kotlin-java-library](./skills/kotlin-java-library/): Kotlin design for Java libraries and Java consumers
+- [simplify](./skills/simplify/): Behavior-preserving code simplification and readability-focused refactoring
 
 ## Testing
 
