@@ -22,6 +22,7 @@ npx skills add https://github.com/alexandru/skills --skill <skill-name>
 - [compose-state-hoisting](./skills/compose-state-hoisting/): Compose state hoisting and state ownership guidance
 - [create-skill](./skills/create-skill/): Guide for creating effective agent skills
 - [jspecify-nullness](./skills/jspecify-nullness/): JSpecify nullness annotations for Java APIs and tooling
+- [kotlin-context-parameters](./skills/kotlin-context-parameters/): Kotlin context parameter syntax, patterns, and migration guidance
 - [kotlin-java-library](./skills/kotlin-java-library/): Kotlin design for Java libraries and Java consumers
 
 ## Testing
