@@ -15,7 +15,7 @@ npx skills add https://github.com/alexandru/skills --skill <skill-name>
 
 - [akka-streams](./skills/akka-streams/): Akka Streams and Pekko Streams reactive streaming patterns and testing
 - [arrow-resource](./skills/arrow-resource/): Resource lifecycle management patterns with Arrow
-- [arrow-typed-errors](./skills/arrow-typed-errors/): Typed error modeling and Raise DSL guidance
+- [arrow-typed-errors](./skills/arrow-typed-errors/): Context-parameter Raise DSL, efficient Either composition, and validation guidance
 - [cats-effect-resource](./skills/cats-effect-resource/): Cats Effect Resource lifecycle management patterns
 - [cats-effect-io](./skills/cats-effect-io/): Cats Effect IO usage patterns and typeclass guidance
 - [cats-mtl-typed-errors](./skills/cats-mtl-typed-errors/): Scala typed errors using Cats MTL Raise/Handle and allow/rescue
@@ -28,7 +28,7 @@ npx skills add https://github.com/alexandru/skills --skill <skill-name>
 
 ## Testing
 
-Each skill's references include brief "Test prompts" to validate the guidance against representative requests.
+Each skill's references include guidance for representative requests. Executable Kotlin checks for the Arrow typed-errors guidance live in [`samples/arrow-typed-errors-context.kt`](./samples/arrow-typed-errors-context.kt).
 
 ## License
 
