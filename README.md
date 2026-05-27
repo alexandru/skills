@@ -28,7 +28,7 @@ npx skills add https://github.com/alexandru/skills --skill <skill-name>
 
 ## Testing
 
-Each skill's references include guidance for representative requests. Skill-specific examples are type-checked by bundled `scripts/verify-examples.*` files inside each skill directory. Root [`templates/`](./templates/) files are harness templates only and are not referenced by installed skills.
+Each skill's references include guidance for representative requests. Skill-specific examples are type-checked by bundled `scripts/verify-examples.*` files inside each skill directory. Root [`templates/`](./templates/) files provide Kotlin, Scala, and Java harness starting points only and are not referenced by installed skills.
 
 ## License
 

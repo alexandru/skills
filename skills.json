@@ -1,6 +1,6 @@
 {
   "name": "alexandru-skills",
-  "version": "4.0.0",
+  "version": "4.0.1",
   "description": "Collection of reusable code skills",
   "repository": {
     "type": "git",
@@ -174,7 +174,7 @@
     {
       "name": "jspecify-nullness",
       "path": "skills/jspecify-nullness",
-      "description": "JSpecify nullness annotations for Java APIs and tooling. Use when adopting or migrating JSpecify annotations, designing null-safe Java signatures and generics, or interpreting tool conformance and Kotlin interop.",
+      "description": "JSpecify nullness annotations for Java APIs and tooling. Use when adopting or migrating JSpecify annotations, designing null-safe Java signatures, fixing generic bounds and type-use placement, or interpreting Kotlin interop, annotation-processor, and tool-conformance behavior.",
       "tags": [
         "java",
         "jspecify",
