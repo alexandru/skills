@@ -23,12 +23,12 @@ npx skills add https://github.com/alexandru/skills --skill <skill-name>
 - [create-skill](./skills/create-skill/): Guide for creating effective agent skills
 - [jspecify-nullness](./skills/jspecify-nullness/): JSpecify nullness annotations for Java APIs and tooling
 - [kotlin-context-parameters](./skills/kotlin-context-parameters/): Kotlin context parameter syntax, patterns, and migration guidance
-- [kotlin-java-library](./skills/kotlin-java-library/): Kotlin design for Java libraries and Java consumers
+- [kotlin-java-library](./skills/kotlin-java-library/): Kotlin library API design for Java consumers, JVM annotations, records, and compatibility
 - [simplify](./skills/simplify/): Behavior-preserving code simplification and readability-focused refactoring
 
 ## Testing
 
-Each skill's references include guidance for representative requests. Skill-specific examples are type-checked by bundled `scripts/verify-examples.*` files inside each skill directory. Root [`templates/`](./templates/) files are harness templates only and are not referenced by installed skills.
+Each skill's references include guidance for representative requests. Skill-specific examples are type-checked by bundled `scripts/verify-examples.*` files inside each skill directory. Root [`templates/`](./templates/) files include Kotlin, Scala, and Java harness templates only and are not referenced by installed skills.
 
 ## License
 
