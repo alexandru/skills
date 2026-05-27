@@ -137,15 +137,17 @@
     {
       "name": "kotlin-java-library",
       "path": "skills/kotlin-java-library",
-      "description": "Kotlin design for Java libraries and Java consumers. Use when building Kotlin code intended for Java callers, aligning with Java interop, JVM annotations, records, and backward/binary compatibility rules.",
+      "description": "Helps agents design and review Kotlin library APIs for Java consumers. Use when building Kotlin code intended for Java callers, shaping JVM signatures with @JvmName, @JvmOverloads, @JvmStatic, @JvmField, @Throws, @JvmRecord, nullability, records, and backward/binary compatibility rules.",
       "tags": [
         "kotlin",
         "java",
         "interop",
         "jvm",
+        "jvm-records",
         "library",
         "api",
-        "compatibility"
+        "compatibility",
+        "binary-compatibility"
       ]
     },
     {
@@ -177,7 +179,7 @@
     {
       "name": "jspecify-nullness",
       "path": "skills/jspecify-nullness",
-      "description": "JSpecify nullness annotations for Java APIs and tooling. Use when adopting or migrating JSpecify annotations, designing null-safe Java signatures and generics, or interpreting tool conformance and Kotlin interop.",
+      "description": "JSpecify nullness annotations for Java APIs and tooling. Use when adopting or migrating JSpecify annotations, designing null-safe Java signatures, fixing generic bounds and type-use placement, or interpreting Kotlin interop, annotation-processor, and tool-conformance behavior.",
       "tags": [
         "java",
         "jspecify",
