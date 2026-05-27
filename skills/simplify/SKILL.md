@@ -113,7 +113,7 @@ Scan for these signals — each one is a concrete pattern, not a vague smell:
 - **Over-abstracted patterns** — interface with one implementation, class that could be a function, typeclass with one instance — replace with the simplest construct that expresses the behavior
 - **Redundant type assertions** — remove casts to types that are already inferred
 
-For detailed signal tables with examples, see [simplification patterns](references/simplification-patterns.md).
+For detailed signal tables, see [simplification patterns](references/simplification-patterns.md).
 
 ### Step 3: Apply Changes Incrementally
 
