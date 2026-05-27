@@ -134,15 +134,17 @@
     {
       "name": "kotlin-java-library",
       "path": "skills/kotlin-java-library",
-      "description": "Kotlin design for Java libraries and Java consumers. Use when building Kotlin code intended for Java callers, aligning with Java interop, JVM annotations, records, and backward/binary compatibility rules.",
+      "description": "Helps agents design and review Kotlin library APIs for Java consumers. Use when building Kotlin code intended for Java callers, shaping JVM signatures with @JvmName, @JvmOverloads, @JvmStatic, @JvmField, @Throws, @JvmRecord, nullability, records, and backward/binary compatibility rules.",
       "tags": [
         "kotlin",
         "java",
         "interop",
         "jvm",
+        "jvm-records",
         "library",
         "api",
-        "compatibility"
+        "compatibility",
+        "binary-compatibility"
       ]
     },
     {
