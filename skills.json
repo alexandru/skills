@@ -1,6 +1,6 @@
 {
   "name": "alexandru-skills",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "Collection of reusable code skills",
   "repository": {
     "type": "git",
@@ -11,12 +11,16 @@
     {
       "name": "arrow-resource",
       "path": "skills/arrow-resource",
-      "description": "Kotlin + Arrow Resource lifecycle management with `Resource`, `ResourceScope`, and `resourceScope`. Use for designing safe acquisition/release of files, streams, DB pools/connections, HTTP clients, or multipart parts; composing resources (including parallel acquisition); or integrating Resource with typed errors and cancellation.",
+      "description": "Kotlin + Arrow Resource lifecycle discipline with `Resource`, `ResourceScope`, `resourceScope`, and context parameters. Use for safe acquisition/release of files, streams, DB pools/connections, HTTP clients, background scopes, or multipart parts; preventing resource leaks and use-after-close bugs; designing companion `Resource` builders; using `arrow-autoclose` when only synchronous `AutoCloseable` cleanup is possible; composing resources with typed errors, cancellation, or parallel acquisition.",
       "tags": [
         "kotlin",
         "arrow",
         "resource",
+        "context-parameters",
+        "autoclose",
+        "autocloseable",
         "lifecycle",
+        "resource-safety",
         "fp",
         "functional-programming"
       ]
