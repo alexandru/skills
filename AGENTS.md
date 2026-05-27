@@ -24,6 +24,7 @@ Reference: https://platform.claude.com/docs/en/agents-and-tools/agent-skills/bes
 - `skills/<skill-name>/SKILL.md` contains quick start, workflow, rules, and pointers to references.
 - `skills/<skill-name>/references/*.md` holds extended explanations and examples.
 - `skills/<skill-name>/scripts/*` holds reusable deterministic operations or validators when prose alone is insufficient.
+- Skill-local verification scripts must live under `skills/<skill-name>/scripts/`, because root-level harness files are not distributed with an installed skill.
 - Keep references one level deep from SKILL.md (no nested references).
 - Add a table of contents for reference files longer than ~100 lines.
 - Cross-skill references are allowed, but must include install instructions (e.g., `npx skills add https://github.com/alexandru/skills --skill <skill-name>`).
@@ -51,8 +52,8 @@ Reference: https://platform.claude.com/docs/en/agents-and-tools/agent-skills/bes
 
 ## Verification
 - Type-check API examples rather than publishing plausible snippets. Keep an executable representative sample when a skill teaches non-trivial library APIs.
-- For Kotlin skills, take the JBang directives and dependency-pinning approach in `./samples/kotlin-script.kt` as the starting harness; adapt it to compile and run the documented APIs.
-- For Scala skills, take the Scala CLI shebang/directive and dependency-pinning approach in `./samples/scala-script.scala` as the starting harness; adapt it to compile and run the documented APIs.
+- For Kotlin skills, take the JBang directives and dependency-pinning approach in `./templates/kotlin-script.kt` as the starting harness; adapt it into a skill-local script that compiles and runs the documented APIs.
+- For Scala skills, take the Scala CLI shebang/directive and dependency-pinning approach in `./templates/scala-script.scala` as the starting harness; adapt it into a skill-local script that compiles and runs the documented APIs.
 - Use the same language/compiler and library features the reference recommends. If a feature requires an opt-in or compiler flag, show and test that flag in the sample.
 - Run the validator or executable sample, fix failures, and rerun until it passes; record any intentionally untested snippets.
 - Exercise the skill with representative requests, including error-prone or boundary cases. Where the skill will be used across multiple models, test it with the intended models rather than assuming one model’s behavior generalizes.

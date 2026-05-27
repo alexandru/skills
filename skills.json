@@ -1,6 +1,6 @@
 {
   "name": "alexandru-skills",
-  "version": "2.0.0",
+  "version": "4.0.1",
   "description": "Collection of reusable code skills",
   "repository": {
     "type": "git",
@@ -11,12 +11,16 @@
     {
       "name": "arrow-resource",
       "path": "skills/arrow-resource",
-      "description": "Kotlin + Arrow Resource lifecycle management with `Resource`, `ResourceScope`, and `resourceScope`. Use for designing safe acquisition/release of files, streams, DB pools/connections, HTTP clients, or multipart parts; composing resources (including parallel acquisition); or integrating Resource with typed errors and cancellation.",
+      "description": "Kotlin + Arrow Resource lifecycle discipline with `Resource`, `ResourceScope`, `resourceScope`, and context parameters. Use for safe acquisition/release of files, streams, DB pools/connections, HTTP clients, background scopes, or multipart parts; preventing resource leaks and use-after-close bugs; designing companion `Resource` builders; using `arrow-autoclose` when only synchronous `AutoCloseable` cleanup is possible; composing resources with typed errors, cancellation, or parallel acquisition.",
       "tags": [
         "kotlin",
         "arrow",
         "resource",
+        "context-parameters",
+        "autoclose",
+        "autocloseable",
         "lifecycle",
+        "resource-safety",
         "fp",
         "functional-programming"
       ]
@@ -56,7 +60,7 @@
     {
       "name": "cats-effect-io",
       "path": "skills/cats-effect-io",
-      "description": "Scala functional programming with Cats Effect IO and typeclasses. Use for wrapping side effects, modeling purity, choosing Sync/Async/Temporal/Concurrent, handling blocking I/O, and composing resources, fibers, and concurrency safely.",
+      "description": "Helps agents write and review Scala Cats Effect IO code. Use for suspending side effects and non-determinism in IO or F[_], choosing Sync/Async/Temporal/Concurrent/Clock/Random, handling blocking I/O, testing with TestControl, and composing resources, fibers, races, and structured concurrency safely.",
       "tags": [
         "scala",
         "typelevel",
@@ -64,6 +68,10 @@
         "io",
         "effects",
         "concurrency",
+        "fibers",
+        "testing",
+        "side-effects",
+        "blocking-io",
         "fp",
         "functional-programming"
       ]
@@ -71,7 +79,7 @@
     {
       "name": "cats-effect-resource",
       "path": "skills/cats-effect-resource",
-      "description": "Scala resource lifecycle management with Cats Effect `Resource` and `IO`. Use for defining safe acquisition/release, composing resources (including parallel acquisition), or designing resource-safe APIs and cancellation behavior for files, streams, pools, clients, and background fibers.",
+      "description": "Helps agents write and review Scala Cats Effect Resource code. Use for preventing resource leaks and use-after-release bugs, modeling disposable values with Resource, designing Resource-returning factories and constructor-injected services, wrapping Java AutoCloseable values, composing resources, and handling cancellation-safe release.",
       "tags": [
         "scala",
         "typelevel",
@@ -79,6 +87,10 @@
         "resource",
         "io",
         "lifecycle",
+        "autocloseable",
+        "resource-safety",
+        "java-interop",
+        "cancellation",
         "fp",
         "functional-programming"
       ]
@@ -122,15 +134,17 @@
     {
       "name": "kotlin-java-library",
       "path": "skills/kotlin-java-library",
-      "description": "Kotlin design for Java libraries and Java consumers. Use when building Kotlin code intended for Java callers, aligning with Java interop, JVM annotations, records, and backward/binary compatibility rules.",
+      "description": "Helps agents design and review Kotlin library APIs for Java consumers. Use when building Kotlin code intended for Java callers, shaping JVM signatures with @JvmName, @JvmOverloads, @JvmStatic, @JvmField, @Throws, @JvmRecord, nullability, records, and backward/binary compatibility rules.",
       "tags": [
         "kotlin",
         "java",
         "interop",
         "jvm",
+        "jvm-records",
         "library",
         "api",
-        "compatibility"
+        "compatibility",
+        "binary-compatibility"
       ]
     },
     {
@@ -162,7 +176,7 @@
     {
       "name": "jspecify-nullness",
       "path": "skills/jspecify-nullness",
-      "description": "JSpecify nullness annotations for Java APIs and tooling. Use when adopting or migrating JSpecify annotations, designing null-safe Java signatures and generics, or interpreting tool conformance and Kotlin interop.",
+      "description": "JSpecify nullness annotations for Java APIs and tooling. Use when adopting or migrating JSpecify annotations, designing null-safe Java signatures, fixing generic bounds and type-use placement, or interpreting Kotlin interop, annotation-processor, and tool-conformance behavior.",
       "tags": [
         "java",
         "jspecify",

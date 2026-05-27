@@ -1,6 +1,6 @@
 # Arrow Typed Errors: Best Practices and Simplifications
 
-Use this guide when choosing a typed-error design or simplifying code that already returns `Either`. It combines the official Arrow guidance with practical refactoring cases; the objective is concise intent, not elimination of Kotlin `when`. Complete type-checked API examples are in `typed-errors.md` and `samples/arrow-typed-errors-context.kt`; snippets here use application-shaped placeholder types where the refactoring intent matters.
+Use this guide when choosing a typed-error design or simplifying code that already returns `Either`. It combines the official Arrow guidance with practical refactoring cases; the objective is concise intent, not elimination of Kotlin `when`. Complete type-checked API examples are in `typed-errors.md` and `scripts/verify-examples.kt`; snippets here use application-shaped placeholder types where the refactoring intent matters.
 
 ## Contents
 
