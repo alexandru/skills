@@ -1,33 +1,36 @@
 ---
 name: cats-mtl-typed-errors
-description: Scala typed errors with Cats MTL Raise/Handle and allow/rescue. Use for designing custom domain error types without EitherT, while keeping Cats Effect and ecosystem composition. Covers Scala 2/3 syntax and IO-only or F[_] usage.
+description: Helps agents model Scala domain failures with Cats MTL Raise/Handle, allow/rescue, Cats Effect IO, and pure Either tests. Use for designing typed error ADTs, replacing EitherT in effectful flows, choosing IO-only or F[_] APIs, and preserving Typelevel resource/concurrency semantics.
 ---
 
 # Cats MTL Typed Errors (Scala)
 
 ## Quick start
-- Define a domain error type; it may or may not extend Throwable depending on context.
-- Use Cats MTL `Raise[F, E]` in functions that can raise errors.
-- Use `Handle.allow`/`rescue` (Scala 3) or `Handle.allowF` (Scala 2) to introduce a scoped error capability and handle it like try/catch.
-- Prefer Cats MTL over `IO[Either[E, A]]` and avoid `EitherT[IO, E, A]`; pure functions returning `Either[E, A]` are fine at API boundaries.
-- `F[_]` is optional: you can write `IO`-specific code or keep `F[_]` for polymorphism, depending on the project.
+- Model expected domain failures as focused ADTs that do not extend `Throwable` unless interop requires it.
+- Use `Raise[F, E]` for functions that can raise `E`; use `Handle[F, E]` only when the function also recovers from `E`.
+- Introduce a lexical typed-error scope with `Handle.allow`/`rescue` in Scala 3 or `Handle.allowF`/`rescue` in Scala 2.
+- Prefer Cats MTL over pervasive `IO[Either[E, A]]` or `EitherT[IO, E, A]` in effectful Cats Effect code; keep pure `Either[E, A]` for deterministic validation and tests.
+- Choose concrete `IO` or polymorphic `F[_]` based on the project style. When using `F[_]`, require the smallest Cats/Cats Effect capability that the function needs.
+- For side-effect, blocking, resource, and fiber rules, use the related `cats-effect-io` skill (install: `npx skills add https://github.com/alexandru/skills --skill cats-effect-io`).
 
 ## Workflow
-1. Model domain errors as sealed ADTs (Scala 2) or enums (Scala 3)
-2. For effectful code that can raise errors, require `Raise[F, E]` (and `Monad[F]` or `Applicative[F]`).
-3. Raise errors with `.raise` and return successful values with `pure`.
-4. At a boundary, use `Handle.allow` (Scala 3) or `Handle.allowF` (Scala 2) to create a scope where raises are valid.
-5. Close the scope with `.rescue` to handle each error case explicitly.
-6. Keep Cats Effect resource and concurrency semantics intact by staying in the monofunctor error channel.
+1. Model errors as sealed ADTs (Scala 2) or enums (Scala 3), using wrapper cases to compose lower-level errors into higher-level domains.
+2. Add `Raise[F, E]` to functions that can fail with `E`; add `Applicative`, `Monad`, or Cats Effect capabilities only as needed.
+3. Raise failures with `.raise` or `Raise[F, E].raise`; return successes with `pure`, `map`, and `flatMap`.
+4. At an application, route, stream, or service boundary, open an `allow`/`allowF` scope and close it with `rescue`.
+5. Keep the `rescue` handler exhaustive for the error ADT and translate to the boundary result, such as `IO[Response]`, fallback `IO[A]`, or pure `Either`.
+6. Compile the representative examples after changing guidance: run `scripts/verify-examples.scala` and `scripts/verify-examples-scala2.scala`.
 
 ## Patterns to apply
-- **Typed errors in signatures**: treat the error type parameter `E` as the checked-exception channel in the function signature.
-- **Scoped error capabilities**: require `Raise[F, E]` in functions that can fail; use `Handle[F, E]` when you also need to recover.
-- **Scala 3 ergonomics**: prefer `using` and context functions with `allow`; type inference is significantly better.
-- **Scala 2 compatibility**: use `allowF` and explicit implicit parameters; expect more braces and explicit types.
-- **Interop with pure code**: use pure `Either[E, A]` for parsing/validation and lift into `F` where needed.
-- **Avoid transformer stacks**: do not reach for `EitherT` just to get a typed error channel; Cats MTL provides the capability without the stack.
-- **Avoid sealed-on-sealed inheritance**: model error hierarchies with composition (wrapper case classes), not sealed inheritance chains.
+- **Typed signatures**: `Raise[F, E]` is the checked-error capability; it says this function may raise domain error `E`.
+- **Boundary handling**: `allow`/`rescue` is analogous to `try`/`catch`, but it works with effect values and ordinary ADTs.
+- **Local recovery**: use `Handle[F, E]` plus `handle`/`handleWith` only where recovery is part of that function's contract.
+- **Small constraints**: use `Applicative` for `pure` plus `raise`, `Monad` for dependent sequencing, and Cats Effect typeclasses for real effects.
+- **Scala 3 first**: prefer `using` and `Handle.allow`; for Scala 2, use `allowF` and explicit implicit parameters.
+- **Pure interop**: instantiate `F` as `Either[E, *]`/a type alias in pure tests; lift or translate the result at effect boundaries.
+- **Transformer avoidance**: avoid `EitherT` for typed domain errors in Cats Effect flows unless a local transformer scope is clearly simpler.
+- **Error composition**: do not make sealed error ADTs inherit from other sealed error ADTs; wrap lower-level errors in outer-domain cases.
+- **Throwable handling**: avoid broad `Throwable` recovery inside an `allow` scope unless you intentionally preserve or re-raise Cats MTL's internal transport error.
 
 ## References
-- Load `references/custom-error-types.md` for detailed guidance, Scala 2/3 syntax, and rationale from the Typelevel article.
+- Load `references/custom-error-types.md` for checked Scala 3/2 samples, source notes, Cats Effect interactions, and review prompts.

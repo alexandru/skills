@@ -1,6 +1,6 @@
 {
   "name": "alexandru-skills",
-  "version": "4.0.0",
+  "version": "4.0.1",
   "description": "Collection of reusable code skills",
   "repository": {
     "type": "git",
@@ -45,12 +45,15 @@
     {
       "name": "cats-mtl-typed-errors",
       "path": "skills/cats-mtl-typed-errors",
-      "description": "Scala typed errors with Cats MTL Raise/Handle and allow/rescue. Use for designing custom domain error types without EitherT, while keeping Cats Effect and ecosystem composition. Covers Scala 2/3 syntax and IO-only or F[_] usage.",
+      "description": "Helps agents model Scala domain failures with Cats MTL Raise/Handle, allow/rescue, Cats Effect IO, and pure Either tests. Use for designing typed error ADTs, replacing EitherT in effectful flows, choosing IO-only or F[_] APIs, and preserving Typelevel resource/concurrency semantics.",
       "tags": [
         "scala",
         "typelevel",
         "cats",
         "cats-mtl",
+        "cats-effect",
+        "raise",
+        "handle",
         "typed-errors",
         "errors",
         "fp",
