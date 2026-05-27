@@ -19,6 +19,7 @@ description: Models Kotlin logical failures with Arrow's context-parameter Raise
 5. Convert only expected, recoverable exceptions into typed failures.
 6. Inspect the result with a combinator or intentional case analysis at the consumer boundary.
 7. Type-check examples when introducing a less familiar Arrow API or upgrading Arrow/Kotlin.
+8. When changing examples, update and run the bundled `scripts/verify-examples.kt` check.
 
 ## References
 - Load [references/typed-errors.md](references/typed-errors.md) for context-parameter API examples, imports, validation, wrapper usage, and the checked sample location.

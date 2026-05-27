@@ -16,8 +16,8 @@ npx skills add https://github.com/alexandru/skills --skill <skill-name>
 - [akka-streams](./skills/akka-streams/): Akka Streams and Pekko Streams reactive streaming patterns and testing
 - [arrow-resource](./skills/arrow-resource/): Arrow Resource lifecycle discipline, context-parameter builders, and arrow-autoclose fallback patterns
 - [arrow-typed-errors](./skills/arrow-typed-errors/): Context-parameter Raise DSL, efficient Either composition, and validation guidance
-- [cats-effect-resource](./skills/cats-effect-resource/): Cats Effect Resource lifecycle management patterns
-- [cats-effect-io](./skills/cats-effect-io/): Cats Effect IO usage patterns and typeclass guidance
+- [cats-effect-resource](./skills/cats-effect-resource/): Cats Effect Resource leak prevention, factory, lifecycle, and Java interop guidance
+- [cats-effect-io](./skills/cats-effect-io/): Cats Effect IO side-effect suspension, typeclass, testing, fiber, and race guidance
 - [cats-mtl-typed-errors](./skills/cats-mtl-typed-errors/): Scala typed errors using Cats MTL Raise/Handle and allow/rescue
 - [compose-state-hoisting](./skills/compose-state-hoisting/): Compose state hoisting and state ownership guidance
 - [create-skill](./skills/create-skill/): Guide for creating effective agent skills
@@ -28,7 +28,7 @@ npx skills add https://github.com/alexandru/skills --skill <skill-name>
 
 ## Testing
 
-Each skill's references include guidance for representative requests. Executable Kotlin checks for Arrow guidance live in [`samples/arrow-typed-errors-context.kt`](./samples/arrow-typed-errors-context.kt) and [`samples/arrow-resource-context.kt`](./samples/arrow-resource-context.kt).
+Each skill's references include guidance for representative requests. Skill-specific examples are type-checked by bundled `scripts/verify-examples.*` files inside each skill directory. Root [`templates/`](./templates/) files are harness templates only and are not referenced by installed skills.
 
 ## License
 

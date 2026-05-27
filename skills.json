@@ -1,6 +1,6 @@
 {
   "name": "alexandru-skills",
-  "version": "3.0.0",
+  "version": "4.0.0",
   "description": "Collection of reusable code skills",
   "repository": {
     "type": "git",
@@ -60,7 +60,7 @@
     {
       "name": "cats-effect-io",
       "path": "skills/cats-effect-io",
-      "description": "Scala functional programming with Cats Effect IO and typeclasses. Use for wrapping side effects, modeling purity, choosing Sync/Async/Temporal/Concurrent, handling blocking I/O, and composing resources, fibers, and concurrency safely.",
+      "description": "Helps agents write and review Scala Cats Effect IO code. Use for suspending side effects and non-determinism in IO or F[_], choosing Sync/Async/Temporal/Concurrent/Clock/Random, handling blocking I/O, testing with TestControl, and composing resources, fibers, races, and structured concurrency safely.",
       "tags": [
         "scala",
         "typelevel",
@@ -68,6 +68,10 @@
         "io",
         "effects",
         "concurrency",
+        "fibers",
+        "testing",
+        "side-effects",
+        "blocking-io",
         "fp",
         "functional-programming"
       ]
@@ -75,7 +79,7 @@
     {
       "name": "cats-effect-resource",
       "path": "skills/cats-effect-resource",
-      "description": "Scala resource lifecycle management with Cats Effect `Resource` and `IO`. Use for defining safe acquisition/release, composing resources (including parallel acquisition), or designing resource-safe APIs and cancellation behavior for files, streams, pools, clients, and background fibers.",
+      "description": "Helps agents write and review Scala Cats Effect Resource code. Use for preventing resource leaks and use-after-release bugs, modeling disposable values with Resource, designing Resource-returning factories and constructor-injected services, wrapping Java AutoCloseable values, composing resources, and handling cancellation-safe release.",
       "tags": [
         "scala",
         "typelevel",
@@ -83,6 +87,10 @@
         "resource",
         "io",
         "lifecycle",
+        "autocloseable",
+        "resource-safety",
+        "java-interop",
+        "cancellation",
         "fp",
         "functional-programming"
       ]

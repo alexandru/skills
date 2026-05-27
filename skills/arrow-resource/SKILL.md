@@ -25,6 +25,7 @@ description: Kotlin + Arrow Resource lifecycle discipline with `Resource`, `Reso
 - Use context parameters for scoped capabilities: `context(_: ResourceScope) suspend fun acquire...`.
 - Use `ExitCase` when release behavior depends on success, failure, or cancellation.
 - `Resource` is FP-style ownership: acquisition and finalization are values/effects that compose; hidden side-effectful constructors are a design smell.
+- When changing examples, update and run the bundled `scripts/verify-examples.kt` check.
 
 ## References
 - Load `references/resource.md` for rules, source links, and typechecked examples.

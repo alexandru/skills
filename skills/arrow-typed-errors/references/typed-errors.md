@@ -1,6 +1,6 @@
 # Arrow Typed Errors: Context-Parameter API Examples
 
-This reference targets Arrow Core's context-parameter API for Kotlin. The snippets below are represented together in `samples/arrow-typed-errors-context.kt` and were type-checked with Kotlin `2.3.21`, `-Xcontext-parameters`, and Arrow Core `2.2.2.1`. Kotlin `2.4` is the intended stable context-parameter target; remove the compiler opt-in only when the project compiler supports that.
+This reference targets Arrow Core's context-parameter API for Kotlin. The snippets below are represented together in `scripts/verify-examples.kt` and were type-checked with Kotlin `2.3.21`, `-Xcontext-parameters`, and Arrow Core `2.2.2.1`. Kotlin `2.4` is the intended stable context-parameter target; remove the compiler opt-in only when the project compiler supports that.
 
 ## Contents
 - [Sources and imports](#sources-and-imports)

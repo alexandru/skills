@@ -1,6 +1,7 @@
 #!/usr/bin/env -S scala shebang -q
 
 //> using scala "3.3.7"
+//> using options "-no-indent"
 //> using dep "org.typelevel::cats-effect::3.7.0"
 
 import cats.effect.*

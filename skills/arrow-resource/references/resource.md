@@ -11,7 +11,7 @@ Sources:
 - <https://apidocs.arrow-kt.io/arrow-fx-coroutines/arrow.fx.coroutines.resource.context/index.html>
 - <https://apidocs.arrow-kt.io/arrow-autoclose/arrow/auto-close-scope.html>
 
-Typechecked representative sample: `samples/arrow-resource-context.kt`.
+Typechecked representative check: `scripts/verify-examples.kt`.
 
 ## Table of Contents
 
