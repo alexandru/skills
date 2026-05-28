@@ -2,277 +2,68 @@
 
 ## Table of contents
 
-- [Principles](#principles)
-- [Process](#process)
 - [Signal catalog](#signal-catalog)
-- [Examples](#examples)
+- [Common rationalizations](#common-rationalizations)
+- [Red flags](#red-flags)
 - [Test prompts](#test-prompts)
-
-## Principles
-
-### 1. Preserve behavior exactly
-
-Simplification changes structure, not outcomes. Keep:
-
-- inputs and outputs
-- error behavior
-- side effects and ordering
-- edge-case handling
-- public contracts and expectations
-- public API signatures (exported functions, method names, parameter lists, return types)
-
-If a refactor changes behavior, it is no longer a simplification.
-
-### 2. Follow project conventions
-
-Make the code look like the rest of the codebase. Reuse existing patterns for naming, function shape, error handling, and helper placement. Do not trade local consistency for a personal preference.
-
-### 3. Prefer clarity over cleverness
-
-Choose the version that is easiest to read on a first pass. Favor direct control flow, descriptive names, and small helpers over dense expressions that require unpacking.
-
-### 4. Maintain balance
-
-Simpler should also mean easier to debug and extend. Do not remove structure that carries meaning, collapses distinct paths that deserve separation, or hide logic inside a generic helper that is harder to inspect.
-
-### 5. Scope to what changed
-
-Keep the refactor focused on the code under review or the recently modified area. Avoid drive-by cleanup in unrelated files unless the task explicitly asks for it.
-
-## Process
-
-### 1. Understand
-
-Read the code in context before changing anything. Identify the responsibility, the callers, the downstream effects, and the tests that lock behavior in place.
-
-### 2. Identify
-
-Look for simplification signals:
-
-- deep nesting
-- long functions
-- duplicated logic
-- dead code
-- misleading or generic names
-- nested ternaries
-- boolean flag arguments
-- redundant abstractions
-- comments that merely restate obvious code
-
-### 3. Apply incrementally
-
-Make the smallest useful refactor first. Prefer one clear transformation at a time, then re-check behavior before moving on.
-
-### 4. Verify
-
-Confirm the simplified code still behaves the same, still matches project style, and is easier to understand than before.
+- [Source](#source)
 
 ## Signal catalog
 
-- **Deep nesting**: guard clauses, early returns, or small helpers can flatten the flow.
-- **Long functions**: split by responsibility, not by arbitrary line count.
-- **Duplicated logic**: extract the repeated decision or transformation once.
-- **Dead code**: remove unused branches, parameters, and helpers.
-- **Misleading names**: rename to reflect what the code actually does.
-- **Nested ternaries**: replace with readable branching.
-- **Boolean flag arguments**: split into clearer named functions or a better API.
-- **Redundant abstractions**: remove wrappers that add indirection without value.
-- **Obvious comments**: delete comments that repeat the code; keep comments that explain intent, constraints, or tradeoffs.
+Scan for these patterns — each one is a concrete signal, not a vague smell.
 
-## Examples
+### Structural complexity
 
-The following samples are language-specific illustrations. They are not prescriptive rules — always defer to the project's own conventions (Principle 2).
+| Pattern                    | Signal                             | Simplification                                            |
+| -------------------------- | ---------------------------------- | --------------------------------------------------------- |
+| Deep nesting (3+ levels)   | Hard to follow control flow        | Extract conditions into guard clauses or helper functions |
+| Long functions (50+ lines) | Multiple responsibilities          | Split into focused functions with descriptive names       |
+| Nested ternaries           | Requires mental stack to parse     | Replace with if/else chains, switch, or lookup objects    |
+| Boolean parameter flags    | `doThing(true, false, true)`       | Replace with options objects or separate functions        |
+| Repeated conditionals      | Same `if` check in multiple places | Extract to a well-named predicate function                |
 
-### JavaScript / TypeScript
+### Naming and readability
 
-**Prefer `function` over arrow for top-level**
+| Pattern                    | Signal                                         | Simplification                                                           |
+| -------------------------- | ---------------------------------------------- | ------------------------------------------------------------------------ |
+| Generic names              | `data`, `result`, `temp`, `val`, `item`        | Rename to describe the content: `userProfile`, `validationErrors`        |
+| Abbreviated names          | `usr`, `cfg`, `btn`, `evt`                     | Use full words unless the abbreviation is universal (`id`, `url`, `api`) |
+| Misleading names           | Function named `get` that also mutates state   | Rename to reflect actual behavior                                        |
+| Comments explaining "what" | `// increment counter` above `count++`         | Delete the comment — the code is clear enough                            |
+| Comments explaining "why"  | `// Retry because the API is flaky under load` | Keep these — they carry intent the code can't express                    |
 
-Before:
-```js
-const fetchData = async (id: string): Promise<Data> => {
-  const result = await api.get(id);
-  return result;
-};
-```
-After:
-```js
-async function fetchData(id: string): Promise<Data> {
-  return await api.get(id);
-}
-```
+### Redundancy
 
-**Replace nested ternary with readable branching**
+| Pattern                   | Signal                                                       | Simplification                                            |
+| ------------------------- | ------------------------------------------------------------ | --------------------------------------------------------- |
+| Duplicated logic          | Same 5+ lines in multiple places                             | Extract to a shared function                              |
+| Dead code                 | Unreachable branches, unused variables, commented-out blocks | Remove (after confirming it's truly dead)                 |
+| Unnecessary abstractions  | Wrapper that adds no value                                   | Inline the wrapper, call the underlying function directly |
+| Over-engineered patterns  | Factory-for-a-factory, strategy-with-one-strategy            | Replace with the simple direct approach                   |
+| Over-abstracted patterns  | Interface with one implementation, class that could be a function, typeclass with one instance | Replace with the simplest construct that expresses the behavior (principle of least power) |
+| Redundant type assertions | Casting to a type that's already inferred                    | Remove the assertion                                      |
 
-Before:
-```ts
-const label = isLoading ? "Loading..." : hasError ? errorMessage : data?.name ?? "Untitled";
-```
-After:
-```ts
-function getLabel(state: State): string {
-  if (state.isLoading) return "Loading...";
-  if (state.hasError) return state.errorMessage;
-  return state.data?.name ?? "Untitled";
-}
-```
+## Common rationalizations
 
-**Remove useless try/catch that only re-throws**
+| Rationalization                                      | Reality                                                                                                                                               |
+| ---------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| "It's working, no need to touch it"                  | Working code that's hard to read will be hard to fix when it breaks. Simplifying now saves time on every future change.                               |
+| "Fewer lines is always simpler"                      | A 1-line nested ternary is not simpler than a 5-line if/else. Simplicity is about comprehension speed, not line count.                                |
+| "I'll just quickly simplify this unrelated code too" | Unscoped simplification creates noisy diffs and risks regressions in code you didn't intend to change. Stay focused.                                  |
+| "The types make it self-documenting"                 | Types document structure, not intent. A well-named function explains _why_ better than a type signature explains _what_.                              |
+| "This abstraction might be useful later"             | Don't preserve speculative abstractions. If it's not used now, it's complexity without value. Remove it and re-add when needed.                       |
+| "The original author must have had a reason"         | Maybe. Check git blame — apply Chesterton's Fence. But accumulated complexity often has no reason; it's just the residue of iteration under pressure. |
+| "I'll refactor while adding this feature"            | Separate refactoring from feature work. Mixed changes are harder to review, revert, and understand in history.                                        |
 
-Before:
-```ts
-try {
-  return process(input);
-} catch (e) {
-  throw e;
-}
-```
-After:
-```ts
-return process(input);
-```
+## Red flags
 
-### Go
-
-**`interface{}` → `any`**
-
-Before:
-```go
-func process(data map[string]interface{}) interface{} {
-```
-After:
-```go
-func process(data map[string]any) any {
-```
-
-**Semantic type alias for domain concepts**
-
-Before:
-```go
-func calculateDiscount(base float64, isPremium bool) float64 {
-```
-After:
-```go
-type Price float64
-
-func calculateDiscount(base Price, isPremium bool) Price {
-```
-
-**Prefer small, focused files**
-
-When a single file spans many unrelated concerns, split it apart. Aim for files in the 200-500 line range as a signal, not a hard rule.
-
-### Python
-
-**Replace overly-dense expression with named steps**
-
-Before:
-```python
-result = {k: v.upper() for k, v in sorted(filter(lambda x: x[0].startswith("user_"), data.items()), key=lambda x: x[1])}
-```
-After:
-```python
-user_items = {k: v for k, v in data.items() if k.startswith("user_")}
-sorted_items = sorted(user_items.items(), key=lambda item: item[1])
-result = {k: v.upper() for k, v in sorted_items}
-```
-
-**Add type hints to clarify intent**
-
-Before:
-```python
-def apply_discount(base, loyalty_years):
-    rate = min(0.05 * loyalty_years, 0.30)
-    return base * (1 - rate)
-```
-After:
-```python
-def apply_discount(base: float, loyalty_years: int) -> float:
-    rate: float = min(0.05 * loyalty_years, 0.30)
-    return base * (1 - rate)
-```
-
-### C# / .NET
-
-**Pattern matching over type casting**
-
-Before:
-```csharp
-var person = obj as Person;
-if (person != null)
-{
-    Console.WriteLine(person.Name);
-}
-```
-After:
-```csharp
-if (obj is Person person)
-{
-    Console.WriteLine(person.Name);
-}
-```
-
-**`async`/`await` over `.Result` or `.Wait()`**
-
-Before:
-```csharp
-var data = GetDataAsync().Result;
-```
-After:
-```csharp
-var data = await GetDataAsync();
-```
-
-**File-scoped namespace over block-scoped**
-
-Before:
-```csharp
-namespace App.Services
-{
-    public class Parser
-    {
-    }
-}
-```
-After:
-```csharp
-namespace App.Services;
-
-public class Parser
-{
-}
-
-**Use `var` only when the type is obvious from the right-hand side**
-
-Before:
-```csharp
-var result = GetData();
-var items = new List<string>();
-```
-After:
-```csharp
-var items = new List<string>();
-DataResult result = GetData();
-```
-
-**Annotate nullability explicitly**
-
-Before:
-```csharp
-public string FindUser(int id)
-{
-    return _users.FirstOrDefault(u => u.Id == id)?.Name;
-}
-```
-After:
-```csharp
-public string? FindUser(int id)
-{
-    return _users.FirstOrDefault(u => u.Id == id)?.Name;
-}
-
-## Source
-
-Adapted from [code-simplification](https://github.com/addyosmani/agent-skills/blob/main/skills/code-simplification/SKILL.md) by Addy Osmani with additional patterns from [code-simplifier](https://raw.githubusercontent.com/githubnext/agentics/refs/heads/main/workflows/code-simplifier.md).
+- Simplification that requires modifying tests to pass (you likely changed behavior)
+- "Simplified" code that is longer and harder to follow than the original
+- Renaming things to match your preferences rather than project conventions
+- Removing error handling because "it makes the code cleaner"
+- Simplifying code you don't fully understand
+- Batching many simplifications into one large, hard-to-review commit
+- Refactoring code outside the scope of the current task without being asked
 
 ## Test prompts
 
@@ -280,3 +71,7 @@ Adapted from [code-simplification](https://github.com/addyosmani/agent-skills/bl
 - Review this recently modified code for readability-only refactors and avoid drive-by changes.
 - Replace nested ternaries and duplicated conditionals with clearer control flow while preserving tests.
 - Identify simplification opportunities in this module, but skip changes that are risky or behavior-changing.
+
+## Source
+
+Adapted from [code-simplification](https://github.com/addyosmani/agent-skills/blob/fea75b16472ba87e8c11f13a9e000c3ffdb2d1f5/skills/code-simplification/SKILL.md) by Addy Osmani with additional patterns from [code-simplifier](https://raw.githubusercontent.com/githubnext/agentics/refs/heads/main/workflows/code-simplifier.md).
