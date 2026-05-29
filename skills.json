@@ -1,6 +1,6 @@
 {
   "name": "alexandru-skills",
-  "version": "4.1.0",
+  "version": "4.2.0",
   "description": "Collection of reusable code skills",
   "repository": {
     "type": "git",
@@ -173,6 +173,23 @@
         "dsl",
         "dependency-injection",
         "language"
+      ]
+    },
+    {
+      "name": "scala-kindlings-derivation",
+      "path": "skills/scala-kindlings-derivation",
+      "description": "Scala auto-derivation with Kindlings for Circe and PureConfig. Use when replacing circe-generic/circe-generic-extras or PureConfig generic derivation with Kindlings while keeping normal Circe JSON APIs and PureConfig loading/writing APIs.",
+      "tags": [
+        "scala",
+        "kindlings",
+        "derivation",
+        "auto-derivation",
+        "circe",
+        "pureconfig",
+        "json",
+        "hocon",
+        "typeclass",
+        "typeclass-derivation"
       ]
     },
     {
