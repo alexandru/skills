@@ -2,6 +2,14 @@
 
 Kindlings derives standard Circe instances. It does not replace Circe’s JSON AST, parser, printer, cursor, or syntax APIs.
 
+## Contents
+
+- [Derivation API](#derivation-api)
+- [Configuration](#configuration)
+- [Fields and transient fields](#fields-and-transient-fields)
+- [Sealed traits](#sealed-traits)
+- [Custom field types](#custom-field-types)
+
 ## Derivation API
 
 ```scala
@@ -12,15 +20,23 @@ final case class User(name: String, age: Int)
 
 object User {
   // Derive a codec when callers need both encoding and decoding.
-  implicit val codec: Codec.AsObject[User] = KindlingsCodecAsObject.derive[User]
+  implicit val codec: Codec.AsObject[User] = KindlingsCodecAsObject.derived[User]
 }
 ```
 
 If a type is only encoded or only decoded, derive just that side:
 
 ```scala
-val encoder: Encoder[User] = KindlingsEncoder.derive[User]
-val decoder: Decoder[User] = KindlingsDecoder.derive[User]
+val encoder: Encoder[User] = KindlingsEncoder.derived[User]
+val decoder: Decoder[User] = KindlingsDecoder.derived[User]
+```
+
+For one-off operations, use the inline helpers without defining an implicit instance:
+
+```scala
+val json = KindlingsEncoder.encode(User("Alice", 30))
+val decoded = io.circe.parser.parse("""{"name":"Bob","age":25}""")
+  .flatMap(KindlingsDecoder.decode[User](_))
 ```
 
 Use Circe at call sites:
@@ -76,7 +92,7 @@ final case class ApiUser(
 )
 
 object ApiUser {
-  implicit val codec: Codec.AsObject[ApiUser] = KindlingsCodecAsObject.derive[ApiUser]
+  implicit val codec: Codec.AsObject[ApiUser] = KindlingsCodecAsObject.derived[ApiUser]
 }
 ```
 
@@ -99,7 +115,7 @@ object Shape {
     .withDiscriminator("type")
     .withKebabCaseConstructorNames
 
-  implicit val codec: Codec.AsObject[Shape] = KindlingsCodecAsObject.derive[Shape]
+  implicit val codec: Codec.AsObject[Shape] = KindlingsCodecAsObject.derived[Shape]
 }
 ```
 
@@ -122,6 +138,6 @@ object Event {
   implicit val instantDecoder: Decoder[Instant] = Decoder.decodeString.emap { value =>
     Try(Instant.parse(value)).toEither.left.map(_.getMessage)
   }
-  implicit val codec: Codec.AsObject[Event] = KindlingsCodecAsObject.derive[Event]
+  implicit val codec: Codec.AsObject[Event] = KindlingsCodecAsObject.derived[Event]
 }
 ```

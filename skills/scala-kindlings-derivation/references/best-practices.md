@@ -29,7 +29,7 @@ final case class Address(street: String, country: String)
 final case class Person(name: String, address: Address)
 
 object Person {
-  implicit val codec: Codec.AsObject[Person] = KindlingsCodecAsObject.derive[Person]
+  implicit val codec: Codec.AsObject[Person] = KindlingsCodecAsObject.derived[Person]
 }
 ```
 
@@ -41,11 +41,11 @@ object Person {
   - Prefer companion/package instances using `Kindlings*`.
   - Use Kindlings sanely-automatic derivation only where that pattern is already established.
 - Replacing `io.circe.generic.semiauto._`:
-  - Use `KindlingsEncoder.derive`, `KindlingsDecoder.derive`, or `KindlingsCodecAsObject.derive`.
+  - Use `KindlingsEncoder.derived`, `KindlingsDecoder.derived`, or `KindlingsCodecAsObject.derived`.
 - Replacing `@ConfiguredJsonCodec`:
-  - Define an explicit `Configuration` and derive with `KindlingsCodecAsObject.derive`.
+  - Define an explicit `Configuration` and derive with `KindlingsCodecAsObject.derived`.
 - Replacing `pureconfig.generic.auto._` or `pureconfig.generic.semiauto._`:
-  - Use `KindlingsConfigReader.derive`, `KindlingsConfigWriter.derive`, or `KindlingsConfigConvert.derive`.
+  - Use `KindlingsConfigReader.derived`, `KindlingsConfigWriter.derived`, or `KindlingsConfigConvert.derived`.
 - Replacing `pureconfig.derivation.default.*`:
   - Use Kindlings derivation.
   - Add `PureConfig`/hints only when PureConfig defaults are not enough.
@@ -55,3 +55,7 @@ object Person {
 - Compile samples with the same Scala major version and Kindlings modules they document.
 - For JSON/config behavior, run at least one encode/decode or load/write assertion, not just type checking.
 - This skill’s representative snippets are validated by `scripts/verify-examples.scala`.
+
+## Sources
+
+- Kindlings documentation: <https://kindlings.readthedocs.io/>

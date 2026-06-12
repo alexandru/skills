@@ -2,6 +2,14 @@
 
 Kindlings derives standard PureConfig instances on the JVM. It does not replace HOCON parsing, `ConfigSource`, `ConfigReader`/`ConfigWriter` usage, or PureConfig error reporting.
 
+## Contents
+
+- [Derivation API](#derivation-api)
+- [Defaults match PureConfig conventions](#defaults-match-pureconfig-conventions)
+- [Discriminator configuration for sealed traits](#discriminator-configuration-for-sealed-traits)
+- [What `PureConfig` supports](#what-pureconfig-supports)
+- [Field annotations](#field-annotations)
+
 ## Derivation API
 
 ```scala
@@ -10,9 +18,9 @@ import pureconfig.{ConfigConvert, ConfigReader, ConfigWriter}
 
 final case class ServerConfig(host: String, port: Int = 8080)
 
-val reader: ConfigReader[ServerConfig] = KindlingsConfigReader.derive[ServerConfig]
-val writer: ConfigWriter[ServerConfig] = KindlingsConfigWriter.derive[ServerConfig]
-val convert: ConfigConvert[ServerConfig] = KindlingsConfigConvert.derive[ServerConfig]
+val reader: ConfigReader[ServerConfig] = KindlingsConfigReader.derived[ServerConfig]
+val writer: ConfigWriter[ServerConfig] = KindlingsConfigWriter.derived[ServerConfig]
+val convert: ConfigConvert[ServerConfig] = KindlingsConfigConvert.derived[ServerConfig]
 ```
 
 Use PureConfig at call sites:
@@ -50,7 +58,7 @@ final case class Sqlite(path: String) extends Backend
 
 object Backend {
   implicit val config: PureConfig = PureConfig.default.withDiscriminator("backend")
-  implicit val reader: ConfigReader[Backend] = KindlingsConfigReader.derive[Backend]
+  implicit val reader: ConfigReader[Backend] = KindlingsConfigReader.derived[Backend]
 }
 ```
 
@@ -104,7 +112,7 @@ final case class DatabaseConfig(
 )
 
 object DatabaseConfig {
-  implicit val reader: ConfigReader[DatabaseConfig] = KindlingsConfigReader.derive[DatabaseConfig]
+  implicit val reader: ConfigReader[DatabaseConfig] = KindlingsConfigReader.derived[DatabaseConfig]
 }
 ```
 

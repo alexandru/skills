@@ -17,12 +17,13 @@ description: Scala auto-derivation with Kindlings for Circe and PureConfig. Use 
 ## APIs to reach for
 
 - Circe JSON:
-  - Use `KindlingsEncoder.derive[A]`, `KindlingsDecoder.derive[A]`, or `KindlingsCodecAsObject.derive[A]`.
+  - Use `KindlingsEncoder.derived[A]`, `KindlingsDecoder.derived[A]`, or `KindlingsCodecAsObject.derived[A]`.
+  - For one-off operations, use `KindlingsEncoder.encode(value)` or `KindlingsDecoder.decode[A](json)`.
   - Cross-platform.
   - Default field names are unchanged.
   - ADTs are wrapped unless a discriminator is configured.
 - PureConfig HOCON:
-  - Use `KindlingsConfigReader.derive[A]`, `KindlingsConfigWriter.derive[A]`, or `KindlingsConfigConvert.derive[A]`.
+  - Use `KindlingsConfigReader.derived[A]`, `KindlingsConfigWriter.derived[A]`, or `KindlingsConfigConvert.derived[A]`.
   - JVM-only.
   - Defaults match PureConfig: kebab-case keys, `type` discriminator, defaults enabled, unknown keys allowed.
 
