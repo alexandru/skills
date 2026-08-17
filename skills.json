@@ -1,6 +1,6 @@
 {
   "name": "alexandru-skills",
-  "version": "4.2.1",
+  "version": "5.0.0",
   "description": "Collection of reusable code skills",
   "repository": {
     "type": "git",
@@ -150,7 +150,7 @@
     {
       "name": "simplify",
       "path": "skills/simplify",
-      "description": "Simplifies code for clarity without changing behavior. Use when code is working but overly complex, deeply nested, duplicated, or unclear.",
+      "description": "Simplifies and refines code for clarity, consistency, and maintainability while preserving all functionality. Use when refining recently modified code unless instructed otherwise.",
       "tags": [
         "refactoring",
         "readability",
