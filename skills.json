@@ -1,6 +1,6 @@
 {
   "name": "alexandru-skills",
-  "version": "5.0.0",
+  "version": "5.1.0",
   "description": "Collection of reusable code skills",
   "repository": {
     "type": "git",
@@ -130,6 +130,18 @@
       "path": "skills/create-skill",
       "description": "Guide for creating effective agent skills. Use when users want to create a new skill (or update an existing skill) that extends agent capabilities with specialized knowledge, workflows, or tool integrations.",
       "tags": ["skill", "skill-creation", "authoring", "best-practices"]
+    },
+    {
+      "name": "code-review",
+      "path": "skills/code-review",
+      "description": "Reviews code changes for bugs, structural problems, performance issues, and unintended behavior. Use when reviewing uncommitted changes, commits, branches, or pull requests.",
+      "tags": [
+        "code-review",
+        "bugs",
+        "correctness",
+        "performance",
+        "pull-requests"
+      ]
     },
     {
       "name": "kotlin-java-library",

@@ -1,0 +1,80 @@
+---
+name: code-review
+description: Reviews code changes for bugs, structural problems, performance issues, and unintended behavior. Use when reviewing uncommitted changes, commits, branches, or pull requests.
+---
+
+When doing a code review, follow these rules.
+
+## Gathering Context
+
+**Diffs alone are not enough.** After getting the diff, read the entire file(s) being modified to understand the full context. Code that looks wrong in isolation may be correct given surrounding logic—and vice versa.
+
+- Use the diff to identify which files changed
+- Use `git status --short` to identify untracked files, then read their full contents
+- Read the full file to understand existing patterns, control flow, and error handling
+- Check for existing style guide or conventions files (CONVENTIONS.md, AGENTS.md, .editorconfig, etc.)
+
+---
+
+## What to Look For
+
+**Bugs** - Your primary focus.
+
+- Logic errors, off-by-one mistakes, incorrect conditionals
+- If-else guards: missing guards, incorrect branching, unreachable code paths
+- Edge cases: null/empty/undefined inputs, error conditions, race conditions
+- Security issues: injection, auth bypass, data exposure
+- Broken error handling that swallows failures, throws unexpectedly or returns error types that are not caught.
+
+**Structure** - Does the code fit the codebase?
+
+- Does it follow existing patterns and conventions?
+- Are there established abstractions it should use but doesn't?
+- Excessive nesting that could be flattened with early returns or extraction
+
+**Performance** - Only flag if obviously problematic.
+
+- O(n²) on unbounded data, N+1 queries, blocking I/O on hot paths
+
+**Behavior Changes** - If a behavioral change is introduced, raise it (especially if it's possibly unintentional).
+
+---
+
+## Before You Flag Something
+
+**Be certain.** If you're going to call something a bug, you need to be confident it actually is one.
+
+- Only review the changes - do not review pre-existing code that wasn't modified
+- Don't flag something as a bug if you're unsure - investigate first
+- Don't invent hypothetical problems - if an edge case matters, explain the realistic scenario where it breaks
+- If you need more context to be sure, use the tools below to get it
+
+**Don't be a zealot about style.** When checking code against conventions:
+
+- Verify the code is _actually_ in violation. Don't complain about else statements if early returns are already being used correctly.
+- Some "violations" are acceptable when they're the simplest option. A `let` statement is fine if the alternative is convoluted.
+- Excessive nesting is a legitimate concern regardless of other style choices.
+- Don't flag style preferences as issues unless they clearly violate established project conventions.
+
+---
+
+## Tools
+
+Use these to inform your review:
+
+- **Codebase context** - Find how existing code handles similar problems. Check patterns, conventions, and prior art before claiming something doesn't fit.
+- **Exa Code Context** - Verify correct usage of libraries/APIs before flagging something as wrong.
+- **Web Search** - Research best practices if you're unsure about a pattern.
+
+If you're uncertain about something and can't verify it with these tools, say "I'm not sure about X" rather than flagging it as a definite issue.
+
+---
+
+## Output
+
+1. If there is a bug, be direct and clear about why it is a bug.
+2. Clearly communicate severity of issues. Do not overstate severity.
+3. Critiques should clearly and explicitly communicate the scenarios, environments, or inputs that are necessary for the bug to arise. The comment should immediately indicate that the issue's severity depends on these factors.
+4. Your tone should be matter-of-fact and not accusatory or overly positive. It should read as a helpful AI assistant suggestion without sounding too much like a human reviewer.
+5. Write so the reader can quickly understand the issue without reading too closely.
+6. AVOID flattery, do not give any comments that are not helpful to the reader. Avoid phrasing like "Great job ...", "Thanks for ...".

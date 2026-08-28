@@ -20,6 +20,7 @@ npx skills add https://github.com/alexandru/skills --skill <skill-name>
 - [cats-effect-io](./skills/cats-effect-io/): Cats Effect IO side-effect suspension, typeclass, testing, fiber, and race guidance
 - [cats-mtl-typed-errors](./skills/cats-mtl-typed-errors/): Scala typed errors using Cats MTL Raise/Handle and allow/rescue
 - [compose-state-hoisting](./skills/compose-state-hoisting/): Compose state hoisting and state ownership guidance
+- [code-review](./skills/code-review/): Review changed code for bugs, structural problems, performance issues, and unintended behavior
 - [create-skill](./skills/create-skill/): Guide for creating effective agent skills
 - [jspecify-nullness](./skills/jspecify-nullness/): JSpecify nullness annotations for Java APIs and tooling
 - [kotlin-context-parameters](./skills/kotlin-context-parameters/): Kotlin context parameter syntax, patterns, and migration guidance
