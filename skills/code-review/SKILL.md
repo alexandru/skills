@@ -5,12 +5,41 @@ description: Reviews code changes for bugs, structural problems, performance iss
 
 When doing a code review, follow these rules.
 
+## Determining what to review
+
+Choose the review scope from the user's request:
+
+1. **No target**: Review uncommitted changes with `git diff`, `git diff --cached`, and `git status --short`; read untracked files in full.
+2. **Commit**: Run `git show --find-renames <commit>`.
+3. **Branch or base ref**: Run `git diff <base-ref>...HEAD`. If the branch is already merged and this is empty, recover the historical base and head from pull-request metadata.
+4. **Pull request URL or number**:
+   - GitHub: run `gh pr view <pr>` and `gh pr diff <pr>`.
+   - Azure DevOps: parse the URL, run `az repos pr show --id <pr-id> --organization <organization-url> --project <project>`, and construct the diff from the recorded commit IDs. For a merged pull request, use its iteration or merge metadata rather than the current target branch.
+   - Treat a bare number as a pull request only when the request or repository provider makes this clear.
+
+Confirm that the ref or pull request resolves and the diff is non-empty. If provider authentication or metadata is unavailable, report that instead of choosing another diff.
+
+---
+
+## Identifying the spec source
+
+Look for the intended requirements in this order:
+
+1. A path, URL, issue or work-item ID, or requirements text supplied by the user.
+2. A specification or work item linked from the pull request.
+3. Issue references in commit messages, using the repository's configured issue-tracker workflow.
+4. Ask the user.
+
+If a supplied source cannot be accessed, ask the user for its contents. If the user confirms that no specification exists, continue the review and state that no spec was available.
+
+---
+
 ## Gathering Context
 
 **Diffs alone are not enough.** After getting the diff, read the entire file(s) being modified to understand the full context. Code that looks wrong in isolation may be correct given surrounding logic—and vice versa.
 
 - Use the diff to identify which files changed
-- Use `git status --short` to identify untracked files, then read their full contents
+- For worktree reviews, read each relevant untracked file completely
 - Read the full file to understand existing patterns, control flow, and error handling
 - Check for existing style guide or conventions files (CONVENTIONS.md, AGENTS.md, .editorconfig, etc.)
 
@@ -38,6 +67,8 @@ When doing a code review, follow these rules.
 
 **Behavior Changes** - If a behavioral change is introduced, raise it (especially if it's possibly unintentional).
 
+**Spec compliance** - When a spec is available, flag missing or incorrectly implemented requirements. Cite the relevant requirement.
+
 ---
 
 ## Before You Flag Something
@@ -63,7 +94,7 @@ When doing a code review, follow these rules.
 Use these to inform your review:
 
 - **Codebase context** - Find how existing code handles similar problems. Check patterns, conventions, and prior art before claiming something doesn't fit.
-- **Exa Code Context** - Verify correct usage of libraries/APIs before flagging something as wrong.
+- **Library/API context** - Use relevant available skills or approved documentation to verify library/API usage before flagging it as wrong.
 - **Web Search** - Research best practices if you're unsure about a pattern.
 
 If you're uncertain about something and can't verify it with these tools, say "I'm not sure about X" rather than flagging it as a definite issue.
@@ -78,3 +109,4 @@ If you're uncertain about something and can't verify it with these tools, say "I
 4. Your tone should be matter-of-fact and not accusatory or overly positive. It should read as a helpful AI assistant suggestion without sounding too much like a human reviewer.
 5. Write so the reader can quickly understand the issue without reading too closely.
 6. AVOID flattery, do not give any comments that are not helpful to the reader. Avoid phrasing like "Great job ...", "Thanks for ...".
+7. Cite the affected file and line for each finding.
