@@ -5,6 +5,8 @@ This is a collection of skills for use with AI Agents. See:
 - [Claude Skills](https://code.claude.com/docs/en/skills)
 - [Copilot Agent Skills](https://docs.github.com/en/copilot/concepts/agents/about-agent-skills)
 
+Part of [alexandru/agents-config](https://github.com/alexandru/agents-config).
+
 ## Usage
 
 ```
