@@ -9,15 +9,12 @@ When doing a code review, follow these rules.
 
 Choose the review scope from the user's request:
 
-1. **No target**: Review uncommitted changes with `git diff`, `git diff --cached`, and `git status --short`; read untracked files in full.
-2. **Commit**: Run `git show --find-renames <commit>`.
-3. **Branch or base ref**: Run `git diff <base-ref>...HEAD`. If the branch is already merged and this is empty, recover the historical base and head from pull-request metadata.
-4. **Pull request URL or number**:
-   - GitHub: run `gh pr view <pr>` and `gh pr diff <pr>`.
-   - Azure DevOps: parse the URL, run `az repos pr show --id <pr-id> --organization <organization-url> --project <project>`, and construct the diff from the recorded commit IDs. For a merged pull request, use its iteration or merge metadata rather than the current target branch.
-   - Treat a bare number as a pull request only when the request or repository provider makes this clear.
+1. **No target**: The staged and unstaged diffs, plus untracked files and their contents.
+2. **Commit**: The commit metadata and patch.
+3. **Branch or base ref**: The merge-base, commits since that base, and the branch diff. If the branch is already merged, its historical base and head from pull-request metadata.
+4. **Pull request URL or number**: The pull-request context, base and head commits, commit list, and historical diff. For a merged pull request, include its historical iteration or merge metadata. Treat a bare number as a pull request only when the request or repository provider makes this clear.
 
-Confirm that the ref or pull request resolves and the diff is non-empty. If provider authentication or metadata is unavailable, report that instead of choosing another diff.
+If the requested target or provider metadata is unavailable, report that instead of choosing a different review scope.
 
 ---
 
