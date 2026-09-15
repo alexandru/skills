@@ -1,6 +1,6 @@
 {
   "name": "alexandru-skills",
-  "version": "7.0.0",
+  "version": "8.0.0",
   "description": "Collection of reusable code skills",
   "repository": {
     "type": "git",
@@ -134,6 +134,12 @@
     {
       "name": "code-review",
       "path": "skills/code-review",
+      "description": "Reviews changed code using the shared code-reviewing workflow.",
+      "tags": ["code-review", "command", "user-invocable"]
+    },
+    {
+      "name": "code-reviewing",
+      "path": "skills/code-reviewing",
       "description": "Reviews code changes for bugs, structural problems, performance issues, and unintended behavior. Use when reviewing uncommitted changes, commits, branches, or pull requests.",
       "tags": [
         "code-review",
