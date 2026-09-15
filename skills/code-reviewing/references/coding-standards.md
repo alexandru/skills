@@ -2,7 +2,7 @@
 
 Copied from [Matt Pocock's code-review skill, v1.2.3](https://github.com/mattpocock/skills/blob/v1.2.3/skills/engineering/code-review/SKILL.md#L36-L55).
 
-On top of whatever the repo documents, the Standards axis always carries the **smell baseline** below — a fixed set of Fowler code smells (_Refactoring_, ch.3) that applies even when a repo documents nothing. Two rules bind it:
+On top of whatever the repo documents, apply the **smell baseline** below when reviewing coding standards. It is a fixed set of Fowler code smells (_Refactoring_, ch.3) that applies even when a repo documents nothing. Two rules apply:
 
 - **The repo overrides.** A documented repo standard always wins; where it endorses something the baseline would flag, suppress the smell.
 - **Always a judgement call.** Each smell is a labelled heuristic ("possible Feature Envy"), never a hard violation — and, like any standard here, skip anything tooling already enforces.

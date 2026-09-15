@@ -26,7 +26,7 @@ Look for the intended requirements in this order:
 2. A specification or work item linked from the pull request.
 3. Issue references in commit messages, using the repository's configured issue-tracker workflow.
 
-If a source cannot be accessed or no specification is found, continue without asking for one and state the limitation. Requirements inform the bugs task when available; they are not a prerequisite for either task.
+If a source cannot be accessed or no specification is found, continue without asking for one and state the limitation. Use requirements to assess bugs when available; they are not a prerequisite for the review.
 
 ---
 
@@ -34,23 +34,7 @@ If a source cannot be accessed or no specification is found, continue without as
 
 Anything in the repo that documents how code should be written, such as `CODING_STANDARDS.md` or `CONTRIBUTING.md`.
 
-Include applicable `AGENTS.md` files and the conventions files found while gathering context. Read [the smell baseline](references/coding-standards.md) and include it in the coding standards task even when the repository documents no standards.
-
----
-
-## Starting the parallel reviews
-
-Run two review subtasks in parallel: **Bugs** and **Coding standards**. The bugs task reviews behavior; the coding standards task reviews non-bug structure and conventions. The parent gathers the shared inputs, starts both tasks, and assembles their reports.
-
-Give both subtasks:
-
-- The review target, diff command or captured diff, relevant commit metadata and commit list, and any untracked files in scope.
-- The repository location, discovered context paths, and any unavailable inputs.
-- The shared context, finding, tool, and output rules below, pasted in full. Each task must be able to read the relevant files and gather additional evidence.
-
-Give the **Bugs** task the bugs brief below and any requirements paths or fetched contents. Give the **Coding standards** task the coding standards brief below, the standards-source paths, and the complete smell baseline pasted in full. Do not assume either task inherits the parent's instructions.
-
-Start both tasks before waiting for either result. Each task performs its own review and assigns severity. Do not turn them into a spec task and a standards task.
+Include applicable `AGENTS.md` files and the conventions files found while gathering context. Read [the smell baseline](references/coding-standards.md) even when the repository documents no standards.
 
 ---
 
@@ -65,7 +49,7 @@ Start both tasks before waiting for either result. Each task performs its own re
 
 ---
 
-## Bugs task
+## Bugs
 
 **Bugs** - Your primary focus.
 
@@ -83,11 +67,11 @@ Start both tasks before waiting for either result. Each task performs its own re
 
 **Spec compliance** - When a spec is available, flag missing or incorrectly implemented requirements. Cite the relevant requirement.
 
-Leave non-bug structure and convention findings to the coding standards task.
+Report non-bug structure and convention findings under Coding standards.
 
 ---
 
-## Coding standards task
+## Coding standards
 
 Review the diff against the discovered repository standards and the supplied smell baseline. Report documented-standard violations with the standard's file and rule. For baseline smells, name the smell and quote the relevant hunk. Apply the baseline's rules for judgment calls, repository overrides, and tooling-enforced issues.
 
@@ -133,7 +117,7 @@ If you're uncertain about something and can't verify it with these tools, say "I
 
 ## Output
 
-Each subtask uses `Critical`, `High`, `Medium`, or `Low` severity, based on its judgment and applicable repository documentation. Assess severity, not whether the PR should merge or a finding should block it.
+Use `Critical`, `High`, `Medium`, or `Low` severity, based on your judgment and applicable repository documentation. Assess severity, not whether the PR should merge or a finding should block it.
 
 1. If there is a bug, be direct and clear about why it is a bug.
 2. Clearly communicate severity of issues. Do not overstate severity.
@@ -145,4 +129,4 @@ Each subtask uses `Critical`, `High`, `Medium`, or `Low` severity, based on its 
 
 Use a numbered level-three heading for each finding, containing its severity in square brackets and a short, specific title. Follow it with a **Location:** field containing the file and line range, then explain the finding and its impact. Coding standards findings also include a **Standard:** field citing the rule's file and lines when available. For unwritten conventions or structural concerns, identify the established pattern or explain the concern instead of inventing a standards citation.
 
-The parent presents the reports under `## Bugs` and then `## Coding standards`, verbatim or lightly cleaned for formatting. Keep both sections even when empty, stating that no issues were found. Do not perform another review or verification pass, deduplicate findings, or merge or rerank the two axes.
+Present findings under `## Bugs` and then `## Coding standards`. Keep both sections even when empty, stating that no issues were found.
