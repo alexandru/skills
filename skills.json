@@ -1,6 +1,6 @@
 {
   "name": "alexandru-skills",
-  "version": "8.0.1",
+  "version": "9.0.0",
   "description": "Collection of reusable code skills",
   "repository": {
     "type": "git",
@@ -169,7 +169,13 @@
     {
       "name": "simplify",
       "path": "skills/simplify",
-      "description": "Simplifies and refines code for clarity, consistency, and maintainability while preserving all functionality. Use when refining recently modified code unless instructed otherwise.",
+      "description": "Runs a behavior-preserving simplification loop using a reviewer subagent and the simplifying criteria. Use when the user invokes /simplify with an optional scope.",
+      "tags": ["refactoring", "simplification", "command", "user-invocable"]
+    },
+    {
+      "name": "simplifying",
+      "path": "skills/simplifying",
+      "description": "Teaches the simplification lenses of constraints, simplicity, and parametricity. Use when simplifying or refactoring code, or reviewing simplification opportunities.",
       "tags": [
         "refactoring",
         "readability",

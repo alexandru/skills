@@ -29,7 +29,8 @@ npx skills add https://github.com/alexandru/skills --skill <skill-name>
 - [kotlin-context-parameters](./skills/kotlin-context-parameters/): Kotlin context parameter syntax, patterns, and migration guidance
 - [kotlin-java-library](./skills/kotlin-java-library/): Kotlin library API design for Java consumers, JVM annotations, records, and compatibility
 - [scala-kindlings-derivation](./skills/scala-kindlings-derivation/): Scala Kindlings auto-derivation for Circe and PureConfig instances
-- [simplify](./skills/simplify/): Behavior-preserving code simplification and readability-focused refactoring ([source](https://raw.githubusercontent.com/anthropics/claude-plugins-official/refs/heads/main/plugins/code-simplifier/agents/code-simplifier.md)).
+- [simplify](./skills/simplify/): User-invoked review, refactor, and verification loop using `simplifying`.
+- [simplifying](./skills/simplifying/): Simplification lenses of constraints, simplicity, and parametricity ([source](https://github.com/ghostdogpr/skills/blob/156ec13f7c0e4936fedcea4016894db302e75deb/skills/refine/references/reviewer.md)).
 
 ## Testing
 
