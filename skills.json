@@ -1,6 +1,6 @@
 {
   "name": "alexandru-skills",
-  "version": "10.0.0",
+  "version": "10.1.0",
   "description": "Collection of reusable code skills",
   "repository": {
     "type": "git",
@@ -165,6 +165,12 @@
         "compatibility",
         "binary-compatibility"
       ]
+    },
+    {
+      "name": "mcp-access",
+      "path": "skills/mcp-access",
+      "description": "Call MCP (Model Context Protocol) servers when native MCP tools are unavailable, restricted, or unsupported. Three-tier fallback: harness MCP tools, then the MCP Inspector CLI, then raw JSON-RPC over stdio or streamable HTTP via a bundled Python script and curl. Use for listing or calling tools (tools/list, tools/call) on stdio servers like chrome-devtools-mcp and persistent servers like JetBrains IDEs and Metals.",
+      "tags": ["mcp", "model-context-protocol", "json-rpc", "cli", "protocol", "fallback", "inspector"]
     },
     {
       "name": "simplify",
