@@ -1,5 +1,5 @@
 ---
-name: simplifying
+name: simplicity
 description: Teaches the simplification lenses of constraints, simplicity, and parametricity. Use when simplifying or refactoring code, or reviewing simplification opportunities.
 ---
 
