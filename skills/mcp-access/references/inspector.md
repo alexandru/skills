@@ -1,153 +1,95 @@
-# MCP Inspector CLI
+# MCP Inspector connection CLI (`mcpdo`)
 
-The MCP Inspector (`@modelcontextprotocol/inspector`) is the official
-debugging and testing tool for MCP servers. Its CLI mode calls
-`tools/list` and `tools/call` directly, with no LLM API key. This skill
-standardizes on it for the external-tool tier.
+`mcpdo` is the connection-oriented CLI shipped by the official Inspector.
+It uses a local daemon to retain named connections between invocations.
+The client is experimental; use the pinned release and validate it against
+the required server before relying on a workflow.
 
-Current major version: 2.x, a rewrite of the 1.x line. Much of the older
-1.x syntax circulating online is wrong for 2.x. Use the forms below.
+## Run the pinned client
 
-## Contents
-
-- [Install](#install)
-- [Syntax rules](#syntax-rules)
-- [Listing tools](#listing-tools)
-- [Calling tools](#calling-tools)
-- [URL-based servers (HTTP and SSE)](#url-based-servers-http-and-sse)
-- [Output and exit codes](#output-and-exit-codes)
-- [Authentication](#authentication)
-- [Saved servers (config and catalog)](#saved-servers-config-and-catalog)
-- [Troubleshooting](#troubleshooting)
-
-## Install
+Requires Node >= 22.19.0 and an installed or retrievable package. No LLM
+API key is needed:
 
 ```bash
-npx -y @modelcontextprotocol/inspector@2.10.1   # one-off run, version pinned
-npm install -g @modelcontextprotocol/inspector  # persistent install, provides the mcp-inspector binary
+npx -y --package @modelcontextprotocol/inspector@2.10.1 mcpdo --help
 ```
 
-- `-y` suppresses the first-run npx install prompt, which otherwise hangs
-  unattended runs.
-- Pin the version (as above) for reproducible, supply-chain-safer runs;
-  check for newer with `npm view @modelcontextprotocol/inspector version`.
-- Requires **Node >= 22.19** (npm only warns on older Node, and the tool
-  then fails in confusing ways). Check with `node --version`.
-- There is no official Python install; the PyPI package `mcp-inspector`
-  is unrelated. Do not use it.
+In the examples below, prefix each `mcpdo` command with
+`npx -y --package @modelcontextprotocol/inspector@2.10.1` unless that release
+is already installed. Put global options such as `--format json`,
+`--connection`, and `--config` before the subcommand.
 
-## Syntax rules
+## Connect, inspect, call, disconnect
 
-```
-npx -y @modelcontextprotocol/inspector@2.10.1 --cli <target> [flags]
-```
-
-- The mode flag `--cli` comes first.
-- The target must precede all flags: a stdio server command (e.g.
-  `node build/index.js`, `npx -y some-mcp@latest`) or a URL. A target
-  placed after a flag is silently dropped.
-- When the server command itself has flags, end it with `--`; everything
-  before `--` is the server command, everything after is inspector flags:
-  ```bash
-  npx -y @modelcontextprotocol/inspector@2.10.1 --cli node build/index.js --config ./server.conf -- --method tools/list
-  ```
-- Key flags: `--method <method>`, `--transport <stdio|http|sse>`,
-  `--server-url <url>`, `--config <path>`, `--catalog <path>`,
-  `--header 'Name: Value'` (repeatable).
-
-## Listing tools
+For a compatible `mcpServers` config, connect an existing entry without
+editing its source file. Choose a connection name unique to your session:
 
 ```bash
-npx -y @modelcontextprotocol/inspector@2.10.1 --cli npx -y chrome-devtools-mcp@latest -- --method tools/list
-npx -y @modelcontextprotocol/inspector@2.10.1 --cli http://localhost:8083/mcp --transport http --method tools/list
+mcpdo --format json --connection task-browser --config /path/to/mcp.json \
+  connect browser --era auto
+mcpdo --format json @task-browser tools/list
+mcpdo --format json @task-browser tools/call navigate_page '{"url":"https://example.com"}'
+mcpdo --format json @task-browser tools/call take_screenshot '{}'
+mcpdo --format json disconnect task-browser
 ```
 
-`--method initialize` is a cheap connect-only probe that prints
-`{serverInfo, protocolVersion, capabilities, instructions}`. Use it to
-check that a server is reachable before calling tools.
+Inspect each response before issuing the next command. `tools/list` merges
+all pages; it does not need a `--cursor` flag. Calls accept one JSON object
+as the tool arguments. For unknown options, use the subcommand's `--help`.
 
-## Calling tools
+Ad-hoc connections preserve separate server arguments; the `--` belongs
+before the server command and its flags. These targets must already be
+configured or approved:
 
 ```bash
-# simple scalar arguments: repeat --tool-arg key=value (values are JSON-parsed when they parse)
-npx -y @modelcontextprotocol/inspector@2.10.1 --cli npx -y chrome-devtools-mcp@latest -- \
-  --method tools/call --tool-name navigate_page --tool-arg url=https://example.com
-
-# structured arguments: one JSON object
-npx -y @modelcontextprotocol/inspector@2.10.1 --cli npx -y chrome-devtools-mcp@latest -- \
-  --method tools/call --tool-name navigate_page --tool-args-json '{"url":"https://example.com"}'
+mcpdo --format json --connection task-browser connect --era auto --transport stdio -- \
+  npx -y chrome-devtools-mcp@latest --headless --isolated
+mcpdo --format json --connection task-ide connect http://localhost:64342/stream \
+  --transport http --era auto
 ```
 
-- `--tool-args-json '<json object>'` passes the object verbatim; prefer it
-  for structured arguments. It is mutually exclusive with `--tool-arg`.
-- Other methods: `resources/list`, `resources/read` (`--uri`),
-  `prompts/list`, `prompts/get` (`--prompt-name`, `--prompt-args`), plus
-  `tools/list` pagination via `--cursor`. There is no generic `--params`
-  flag.
+Use `--transport sse` for a configured SSE endpoint. Supply the configured
+`--cwd`, environment (`-e KEY=VALUE`), and HTTP headers (`--header 'Name: Value'`)
+when needed; prefer a protected config file for secret values.
 
-## URL-based servers (HTTP and SSE)
+## Pending results and connection lifetime
 
-```bash
-npx -y @modelcontextprotocol/inspector@2.10.1 --cli http://localhost:8083/mcp --transport http --method tools/list
-npx -y @modelcontextprotocol/inspector@2.10.1 --cli http://localhost:64342/sse --transport sse --method tools/list
-```
+`--format json` writes the payload to stdout, not a `{result: ...}` wrapper.
+Diagnostics go to stderr; keep the two streams separate. Exit 0 alone does
+not establish completion:
 
-- Always pass `--transport` explicitly for URLs. Without it the inspector
-  guesses from the path suffix only: a path ending in `/mcp` counts as
-  http and one ending in `/sse` as sse, and anything else errors.
-- `http` here means the streamable HTTP transport.
+- **`pendingAuth: true`:** the connection is not usable. If sign-in is
+  permitted, relay `authUrl` as literal text at the end of your reply, ask
+  the user to sign in, and end the turn. Do not poll. After their confirmation,
+  use `mcpdo --format json connections/show @task-browser` to complete sign-in.
+- **`elicitationPending`:** the tool call remains parked in the daemon.
+  Inspect its question and schema, obtain the required answer, then use
+  `mcpdo --format json elicitation/respond ID '{"field":"value"}'`, or
+  `elicitation/respond ID --decline` / `--cancel`. Do not resubmit the tool call.
+- **`isError: true` or `error`:** apply the failure policy in [SKILL.md](../SKILL.md).
 
-## Output and exit codes
+Connections can transparently reconnect after transport loss. A new stdio
+process need not retain browser or workspace state; inspect that state
+before continuing a dependent workflow. Reuse connections only when their
+ownership and state are known, and disconnect those you create.
 
-- Results go to stdout; logs and errors go to stderr. Never merge them
-  (`2>&1`) before piping stdout to `jq`.
-- A `MCP error -32001: Request timed out` line on stderr (the inspector
-  asking the calling client for roots) can appear even on successful runs;
-  judge success by the exit code and stdout, not by stderr silence.
-- `--format json` emits a single JSON object (`{"result": ...}`) instead of
-  pretty text; `-q` prints only the payload; `--output FILE` writes the
-  result to a file.
-- Exit codes:
+## Validation
 
-| Code | Meaning |
-|------|---------|
-| 0 | success |
-| 1 | usage or unexpected error |
-| 3 | server requires authentication (401/403) |
-| 4 | server unreachable (DNS, refused, timeout) |
-| 5 | tool error (`isError: true`, or tool not found) |
+After changing this skill:
 
-On any non-zero exit the last stderr line is a JSON `ErrorEnvelope`
-(`{"error":{"code":"...","message":"..."}}`). Exit 3 or 4 means the tier
-failed, so fall back to the raw protocol tier. Exit 5 means the tool ran
-and failed, so fix the arguments.
+1. Run the pinned client's `--help`, `connect --help`, `tools/call --help`,
+   and `elicitation/respond --help`; check the documented option forms.
+2. Against a configured or explicitly approved test server, connect once,
+   list tools, perform a benign schema-valid call, inspect the result, and
+   disconnect. Verify that dependent calls retain state and that argument
+   values containing spaces arrive intact.
+3. Exercise the manual HTTP sequence against such a server, checking both
+   JSON and SSE responses, session/version headers, and pending results.
+   Report any server or transport that was not exercised.
 
-## Authentication
+## Sources
 
-- Bearer/custom headers: `--header 'Authorization: Bearer <token>'`.
-- OAuth: `--client-id`, `--client-secret`, `--callback-url`,
-  `--wait-for-auth <sec>`, `--stored-auth-only`, `--relogin`. There is no
-  `--token` flag.
-- It does not scrub tokens embedded in URLs or server command args; pass
-  secrets with `--header` instead.
-
-## Saved servers (config and catalog)
-
-- `--config <path>`: read-only session file with server definitions
-  (`stdio` command/env or `http`/`sse` URL with headers).
-- `--catalog <path>`: writable catalog of servers (default
-  `~/.mcp-inspector/mcp.json`, override with `MCP_CATALOG_PATH`); combine
-  with `--server <name>` under `--cli` to skip re-typing commands.
-- Both are mutually exclusive with an ad-hoc target on the command line.
-
-## Troubleshooting
-
-- **`EBADENGINE` warning or obscure crash**: Node < 22.19. Check
-  `node --version`; if you cannot upgrade, use the raw-protocol tier
-  (`scripts/mcp_call.py`) instead.
-- **Target silently ignored**: it was placed after a flag. Targets come
-  first; use `--` when the server command has its own flags.
-- **Auth loop or 401**: pass `--header 'Authorization: Bearer ...'`, or
-  for OAuth servers use `--client-id` and `--wait-for-auth`.
-- **`--transport` error on a URL**: pass it explicitly; URL inference only
-  recognizes `/mcp` and `/sse` path suffixes.
+- [Pinned package and runtime requirement](https://github.com/modelcontextprotocol/inspector/blob/2.10.1/package.json)
+- [Connection CLI documentation](https://github.com/modelcontextprotocol/inspector/blob/2.10.1/clients/mcpdo/README.md)
+- [Official agent workflow](https://github.com/modelcontextprotocol/inspector/blob/2.10.1/skills/mcpdo/SKILL.md)
+- [CLI argument definitions](https://github.com/modelcontextprotocol/inspector/blob/2.10.1/clients/mcpdo/src/connection/mcp.ts)

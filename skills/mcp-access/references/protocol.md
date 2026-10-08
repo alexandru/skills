@@ -1,215 +1,200 @@
-# The MCP wire protocol (JSON-RPC) without an SDK
+# Manual MCP access specification
 
-MCP is JSON-RPC 2.0 over one of three transports: stdio (newline-delimited
-messages on the server process's stdin/stdout), streamable HTTP (JSON-RPC
-POSTed to a single endpoint), and the deprecated HTTP+SSE transport. This
-reference teaches the raw protocol so a server can be called with
-`scripts/mcp_call.py`, a shell pipeline, or curl. The bundled script
-automates everything here; use this page to understand what it does, to
-debug with `--verbose`, or to hand-write calls.
+Use this specification when the packaged client cannot be used and the
+available tools can exchange messages correctly. It covers tool discovery
+and calls, not a general-purpose MCP client. Apply the failure policy in
+[SKILL.md](../SKILL.md); a different transport does not grant authorization.
 
 ## Contents
 
-- [JSON-RPC 2.0 layer](#json-rpc-20-layer)
-- [Protocol revisions and negotiation](#protocol-revisions-and-negotiation)
-- [The initialize handshake](#the-initialize-handshake)
-- [tools/list](#toolslist)
-- [tools/call](#toolscall)
-- [stdio transport](#stdio-transport)
-- [Streamable HTTP with curl](#streamable-http-with-curl)
-- [Stateless servers (2026-07-28)](#stateless-servers-2026-07-28)
-- [SSE-only servers](#sse-only-servers)
-- [Security notes](#security-notes)
+- [Message contract](#message-contract)
+- [Choose a protocol revision](#choose-a-protocol-revision)
+- [Tool operations](#tool-operations)
+- [stdio](#stdio)
+- [Streamable HTTP and curl](#streamable-http-and-curl)
+- [SSE-only endpoints](#sse-only-endpoints)
+- [Completion and cleanup](#completion-and-cleanup)
+- [Sources](#sources)
 
-## JSON-RPC 2.0 layer
+## Message contract
+
+- Send one JSON-RPC 2.0 object per message, not a batch array. A request has
+  `jsonrpc: "2.0"`, a unique non-null string or integer `id`, `method`, and
+  optional object `params`. A notification omits `id`.
+- A response repeats the request's `id`, has no `method`, and contains
+  exactly one of `result` or `error`. Matching an ID alone is insufficient:
+  an incoming server request may use that same ID.
+- Keep notifications separate from responses, and inspect the complete
+  matched response before deciding the next operation. Bound each wait;
+  transport exit status is not the MCP operation's completion status.
+
+## Choose a protocol revision
+
+Use the server's documented revision or the official discovery/fallback
+rules linked below. Do not infer a revision from an arbitrary HTTP 400 or
+a missing method. Use only revisions whose message contract you understand.
+
+### Initialize-era: 2025-06-18 and 2025-11-25
+
+Send `initialize`, wait for its response, check the returned version and
+capabilities, then send `notifications/initialized`. Continue only if the
+selected version is supported by the manual workflow:
 
 ```json
-{"jsonrpc":"2.0","id":1,"method":"tools/list","params":{"cursor":"..."}}
+{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-06-18","capabilities":{},"clientInfo":{"name":"manual-client","version":"1.0.0"}}}
+```
+
+```json
 {"jsonrpc":"2.0","method":"notifications/initialized"}
-{"jsonrpc":"2.0","id":1,"result":{"tools":[...]}}
-{"jsonrpc":"2.0","id":1,"error":{"code":-32602,"message":"Unknown tool: x","data":{}}}
 ```
 
-- Requests carry an `id` (string or integer, never null); notifications
-  omit it; responses repeat it and carry exactly one of `result` or
-  `error`. Batching (JSON arrays of messages) is not supported in MCP.
-- Common error codes: `-32700` parse error, `-32600` invalid request,
-  `-32601` method not found, `-32602` invalid params, `-32603` internal
-  error, `-32022` unsupported protocol version, `-32020` header mismatch.
+The server may return a different supported version. Do not substitute the
+proposed version for the returned version. Empty capabilities mean that no
+sampling, elicitation, or roots support is advertised.
 
-## Protocol revisions and negotiation
+### Stateless: 2026-07-28
 
-| Revisions | Behavior |
-|-----------|----------|
-| `2024-11-05` .. `2025-11-25` | handshake era: `initialize` + `notifications/initialized`; streamable HTTP or SSE |
-| `2026-07-28` (current) | stateless: no `initialize`, no sessions, per-request `_meta` |
-
-Handshake-era servers (through `2025-11-25`) answer an `initialize` request
-with the same version if they support it, otherwise with another version
-they do support. Use the server's returned version in later
-`MCP-Protocol-Version` headers. If they reject the proposed version, the
-error (`-32022`, or `-32602` from handshake-era servers) carries
-`data.supported` listing what they accept.
-Stateless-era servers (`2026-07-28`) have no `initialize` at all; see
-[Stateless servers](#stateless-servers-2026-07-28). Proposing `2025-06-18`
-works with the installed base. `scripts/mcp_call.py` negotiates
-automatically: it retries with an advertised version on `-32022`/`-32602`
-and switches to stateless mode on `-32601`.
-
-## The initialize handshake
-
-Before any other request, send `initialize`, wait for the response, then
-send the `notifications/initialized` notification:
+There is no `initialize`, initialized notification, or protocol session.
+Every request carries `params._meta` with the version and client capabilities;
+include client identity as recommended by the specification:
 
 ```json
-{"jsonrpc":"2.0","id":1,"method":"initialize","params":{
-  "protocolVersion":"2025-06-18",
-  "capabilities":{},
-  "clientInfo":{"name":"my-client","version":"1.0"}}}
+{"jsonrpc":"2.0","id":1,"method":"server/discover","params":{"_meta":{"io.modelcontextprotocol/protocolVersion":"2026-07-28","io.modelcontextprotocol/clientCapabilities":{},"io.modelcontextprotocol/clientInfo":{"name":"manual-client","version":"1.0.0"}}}}
 ```
 
-The response result carries `protocolVersion`, the server's
-`capabilities` (e.g. `{"tools":{"listChanged":true}}`), and `serverInfo`.
-The client SHOULD NOT send other requests before the initialize response
-arrives. The emergency pipeline below bends that rule by waiting blindly;
-`scripts/mcp_call.py` waits for the response.
+Discovery returns `result.supportedVersions` and `result.capabilities`.
+Choose a mutually supported revision. Error `-32022` carries
+`error.data.supported`; do not select an unfamiliar revision merely because
+the server lists it. Preserve caller metadata when adding protocol fields.
 
-## tools/list
+## Tool operations
+
+After choosing the protocol mode, list tools:
 
 ```json
 {"jsonrpc":"2.0","id":2,"method":"tools/list","params":{}}
 ```
 
-Result: `{"tools":[{"name":"echo","description":"...","inputSchema":{"type":"object","properties":{...},"required":[...]}}],"nextCursor":"..."}`.
-If `nextCursor` is present, repeat with `{"cursor":"<nextCursor>"}` and
-merge, until it is absent. Read each tool's `inputSchema` before calling:
-`required` lists mandatory argument names; `properties` documents types.
-
-## tools/call
+Read `result.tools` and each tool's `inputSchema`. If `result.nextCursor`
+is present, issue another request with a new ID and
+`params.cursor` equal to that exact value; merge pages until it is absent.
+Then call the selected tool with a schema-valid JSON object:
 
 ```json
-{"jsonrpc":"2.0","id":3,"method":"tools/call","params":{
-  "name":"echo","arguments":{"message":"hello"}}}
+{"jsonrpc":"2.0","id":3,"method":"tools/call","params":{"name":"echo","arguments":{"message":"hello"}}}
 ```
 
-- `arguments` is optional and is a single JSON object matching `inputSchema`.
-- Success result: `{"content":[{"type":"text","text":"..."}],"isError":false}`
-  (content items may also be `image`, `audio`, `resource`, `resource_link`;
-  `structuredContent` may carry JSON data).
-- **Tool failure**: a normal result with `"isError": true`. The tool ran
-  and reported the failure in its `content`. Fix arguments or inputs; do
-  not retry blindly.
-- **Protocol failure**: a JSON-RPC `error`, for example `-32602` for an
-  unknown tool. The tool never ran.
+These two messages show initialize-era bodies. For the stateless revision,
+add the same required `_meta` to each `params` object, including cursor
+requests. Do not send a tool call before inspecting its schema unless the
+name and schema are already known.
 
-## stdio transport
+## stdio
 
-- Messages are single-line UTF-8 JSON delimited by newlines: one JSON
-  message per line, no embedded newlines, and no LSP-style `Content-Length`
-  headers. Write requests to the server's stdin, read responses from its
-  stdout.
-- The server MAY log to stderr; stdout carries only protocol messages.
-  The server should exit when its stdin closes.
+Launch the configured command with its original argument boundaries,
+environment, and cwd using a tool that can retain an interactive process.
+Write single-line UTF-8 JSON followed by a newline to stdin; read stdout as
+newline-delimited messages. There are no `Content-Length` headers. Keep
+stderr separate for server diagnostics.
 
-Emergency shell pattern (no script, eyeball the ids in the output; the
-`sleep`s keep the pipe open until the call finishes):
+Retain both streams and the process between dependent calls. An interactive
+tool must allow reading a response before writing the next request; fixed
+sleep pipelines do not satisfy this contract. If your tools cannot maintain
+that interaction, report the limitation.
+
+## Streamable HTTP and curl
+
+POST each message separately to the configured endpoint. Include
+`Content-Type: application/json`, `Accept: application/json, text/event-stream`,
+and the configured authentication/project headers. Do not put credentials
+in the URL.
+
+For an initialize-era server, this is the initial request (`URL` must be
+set to the configured endpoint):
 
 ```bash
-{ printf '%s\n' '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-06-18","capabilities":{},"clientInfo":{"name":"shell","version":"1.0"}}}'
-  sleep 2
-  printf '%s\n' '{"jsonrpc":"2.0","method":"notifications/initialized"}' \
-                   '{"jsonrpc":"2.0","id":2,"method":"tools/call","params":{"name":"echo","arguments":{"message":"hi"}}}'
-  sleep 3
-} | npx -y @modelcontextprotocol/server-everything
+curl --silent --show-error --no-buffer --include --max-time 60 \
+  -H 'Content-Type: application/json' \
+  -H 'Accept: application/json, text/event-stream' \
+  --data-binary '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-06-18","capabilities":{},"clientInfo":{"name":"manual-client","version":"1.0.0"}}}' \
+  "$URL"
 ```
 
-Prefer `scripts/mcp_call.py`, which correlates responses by id, enforces
-timeouts, silences server log noise, paginates `tools/list`, and shuts the
-server down cleanly.
+On every subsequent POST, include `MCP-Protocol-Version` with the negotiated
+value and, if issued by the initialize response, `Mcp-Session-Id`. This
+includes the initialized notification and any replies to server requests.
+A notification or client response is accepted with HTTP 202 and no body.
+For an expired session (HTTP 404), initialize a new session without the old
+ID; reconcile any uncertain tool execution before resuming.
 
-## Streamable HTTP with curl
-
-One endpoint (e.g. `http://localhost:8083/mcp`), POSTed JSON-RPC. Required
-on every POST: `Content-Type: application/json` and
-`Accept: application/json, text/event-stream`.
+For a stateless server, send `MCP-Protocol-Version` matching `_meta`,
+`Mcp-Method` matching `method`, and, for `tools/call`, `Mcp-Name` matching
+`params.name`. Do not send a session header. A tool-list request is:
 
 ```bash
-BASE=http://localhost:3001/mcp   # example: PORT=3001 npx -y @modelcontextprotocol/server-everything streamableHttp
-
-# 1. initialize; the response headers may carry Mcp-Session-Id
-curl -sS -D /tmp/opencode/mcp-headers.txt -o /tmp/opencode/mcp-init.json \
-  -X POST "$BASE" \
-  -H 'Content-Type: application/json' -H 'Accept: application/json, text/event-stream' \
-  -d '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-06-18","capabilities":{},"clientInfo":{"name":"curl","version":"1.0"}}}'
-
-SESSION=$(grep -i '^mcp-session-id:' /tmp/opencode/mcp-headers.txt | tail -1 | tr -d '\r' | cut -d' ' -f2)
-# Use the protocolVersion the server returned in the header below; the
-# reference server's body is SSE-formatted, so grep it out:
-# grep -o '"protocolVersion":"[^"]*"' /tmp/opencode/mcp-init.json | head -1
-
-# 2. initialized notification (server answers 202 Accepted, no body)
-curl -sS -X POST "$BASE" \
-  -H 'Content-Type: application/json' -H 'Accept: application/json, text/event-stream' \
-  -H "Mcp-Session-Id: $SESSION" -H 'MCP-Protocol-Version: 2025-06-18' \
-  -d '{"jsonrpc":"2.0","method":"notifications/initialized"}'
-
-# 3. call a tool
-curl -sS -X POST "$BASE" \
-  -H 'Content-Type: application/json' -H 'Accept: application/json, text/event-stream' \
-  -H "Mcp-Session-Id: $SESSION" -H 'MCP-Protocol-Version: 2025-06-18' \
-  -d '{"jsonrpc":"2.0","id":2,"method":"tools/call","params":{"name":"echo","arguments":{"message":"hello"}}}'
+curl --silent --show-error --no-buffer --include --max-time 60 \
+  -H 'Content-Type: application/json' \
+  -H 'Accept: application/json, text/event-stream' \
+  -H 'MCP-Protocol-Version: 2026-07-28' -H 'Mcp-Method: tools/list' \
+  --data-binary '{"jsonrpc":"2.0","id":2,"method":"tools/list","params":{"_meta":{"io.modelcontextprotocol/protocolVersion":"2026-07-28","io.modelcontextprotocol/clientCapabilities":{},"io.modelcontextprotocol/clientInfo":{"name":"manual-client","version":"1.0.0"}}}}' \
+  "$URL"
 ```
 
-Rules and gotchas:
+Header/body mismatches produce `HeaderMismatch` (`-32020`, HTTP 400).
+For names requiring header encoding, follow the linked HTTP specification's
+value-encoding rules rather than changing the name in the JSON body.
 
-- If the server returned a `Mcp-Session-Id`, send it on every subsequent
-  request, along with `MCP-Protocol-Version: <negotiated version>`. A 404
-  means the session expired. Start over at initialize.
-- A request's response is HTTP 200 with either `Content-Type:
-  application/json` (one JSON object) or `text/event-stream` (SSE-formatted
-  lines; the JSON-RPC response is in a `data:` field, possibly after
-  server notifications). Notifications get `202 Accepted` with no body.
-  A `202` for a *request* is a protocol violation by the server.
-- Send credentials via `Authorization` (or the server's documented header).
-- GET (server-to-client stream) and DELETE (session teardown) are optional
-  for simple tool calls; the stateless revision removed them.
+A request response is one JSON object (`application/json`) or an SSE stream
+(`text/event-stream`). For SSE, collect `data:` lines within each event,
+join them with newlines, and parse that JSON object. Inspect events until the
+matched response arrives; progress notifications are not completion.
+HTTP 202 without a response body does not complete a tool request.
 
-## Stateless servers (2026-07-28)
+Curl may wait for EOF after a matched response. A curl timeout after a
+complete response need not mean the operation failed; inspect the message,
+not only the exit code. Closing a modern SSE response stream before the
+final response cancels that request. Do not blindly replay it.
 
-Servers implementing only the current revision have no initialize and no
-sessions. Detection: an `initialize` request fails with `-32601` (over
-stdio) or the server rejects handshakes with a header-mismatch `400`
-(`-32020`). Instead:
+## SSE-only endpoints
 
-- Every request carries `_meta`:
-  `{"io.modelcontextprotocol/protocolVersion":"2026-07-28","io.modelcontextprotocol/clientCapabilities":{},"io.modelcontextprotocol/clientInfo":{"name":"...","version":"..."}}`.
-- Over HTTP, also send the headers `MCP-Protocol-Version: 2026-07-28`
-  (must match the `_meta` value), `Mcp-Method: <method>`, and
-  `Mcp-Name: <params.name or params.uri>` (required for `tools/call`).
-- Results include `resultType` (`"complete"` or `"input_required"`); an
-  `input_required` result must be retried with new input responses under a
-  different JSON-RPC id.
+The deprecated HTTP+SSE transport needs a live GET event stream. Receive
+its `endpoint` event, resolve the POST URI against the configured server,
+then POST requests there while reading responses on the GET stream. Verify
+that the resolved endpoint is authorized; do not follow an unapproved origin.
+An endpoint ending in `/sse` is not itself a JSON-RPC POST endpoint.
+If your tools cannot maintain both channels, report the limitation.
 
-`scripts/mcp_call.py` switches to this mode automatically when
-`initialize` is rejected. `scripts/mock_stateless_server.py` imitates a
-stateless server for testing (see [script.md](script.md)).
+## Completion and cleanup
 
-## SSE-only servers
+- In initialize-era mode, answer an incoming `ping` request promptly with
+  `{"jsonrpc":"2.0","id":"server-ping","result":{}}`, substituting its exact
+  ID. Reply to other unsupported server requests with `-32601` and the same
+  ID. On HTTP, POST those responses separately while retaining the SSE read.
+  Stateless servers do not send independent server requests; `ping` is not
+  part of that revision.
+- A JSON-RPC `error` is a failure. A tool result with `isError: true` is also
+  a failure, even though it arrived in a normal response.
+- For the stateless revision, `resultType: "complete"` marks completion.
+  `resultType: "input_required"` is incomplete: inspect `inputRequests` and
+  `requestState`. Only fulfill input requests for capabilities you advertised
+  and can actually support. Retry the original operation with the requested
+  `inputResponses`, the exact opaque `requestState` if present, and a new ID.
+  A state-only retry needs no input responses. Otherwise report the unsupported
+  interaction; do not run dependent operations or claim success. Do not
+  interpret or alter the state, or reuse it for another operation.
+- Close a stdio child's stdin, wait for exit, and terminate only the process
+  you own if it does not exit. For initialize-era HTTP, send DELETE with the
+  session ID when finished; HTTP 405 means the server does not support client
+  session termination. Stateless HTTP needs no session DELETE.
 
-The deprecated HTTP+SSE transport (e.g. JetBrains `.../sse`) cannot be
-POSTed to directly: the client must first open a GET SSE stream, receive an
-`endpoint` event with the real POST URI, and keep the stream open while
-POSTing. Use the inspector instead:
+## Sources
 
-```bash
-npx -y @modelcontextprotocol/inspector@2.10.1 --cli http://localhost:64342/sse --transport sse --method tools/list
-```
-
-## Security notes
-
-- A stdio MCP server executes with your full user privileges. Only run
-  servers you or the user trust and that are already configured or
-  explicitly approved; never pipe a server in from an untrusted source.
-- Do not log or echo secrets (tokens in headers, `env` values). If a
-  network block or missing credential stops you, report it. Do not look
-  for ways around organizational controls.
+- [JSON-RPC 2.0](https://www.jsonrpc.org/specification)
+- [Initialize-era lifecycle and version negotiation](https://modelcontextprotocol.io/specification/2025-06-18/basic/lifecycle)
+- [Initialize-era HTTP and sessions](https://modelcontextprotocol.io/specification/2025-11-25/basic/transports)
+- [Initialize-era ping](https://modelcontextprotocol.io/specification/2025-06-18/basic/utilities/ping)
+- [Stateless versioning](https://modelcontextprotocol.io/specification/2026-07-28/basic/versioning)
+- [Server discovery](https://modelcontextprotocol.io/specification/2026-07-28/server/discover)
+- [stdio and backward-compatible discovery](https://modelcontextprotocol.io/specification/2026-07-28/basic/transports/stdio)
+- [Stateless HTTP, header encoding, and compatibility](https://modelcontextprotocol.io/specification/2026-07-28/basic/transports/streamable-http)
+- [Incomplete results and retries](https://modelcontextprotocol.io/specification/2026-07-28/basic/patterns/mrtr)
