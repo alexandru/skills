@@ -131,6 +131,9 @@ npx -y @modelcontextprotocol/server-everything                       # stdio
 PORT=3001 npx -y @modelcontextprotocol/server-everything streamableHttp   # HTTP at http://localhost:3001/mcp
 ```
 
+Tier 2 check: `npx -y @modelcontextprotocol/inspector@2.10.1 --cli npx -y
+@modelcontextprotocol/server-everything -- --method tools/list`
+
 ## Persistent-server patterns
 
 - **IDE-backed servers** (JetBrains): state lives in the IDE; connect,

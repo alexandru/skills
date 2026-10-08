@@ -59,8 +59,9 @@ work around network or policy blocks; report what you tried and what failed.
 2. Run `list` first, read each tool's `inputSchema`, then build one JSON
    object with every `required` field and `call` it.
 3. For slow-starting or persistent servers (Metals, browsers, IDEs), batch
-   every op you need into **one** script invocation, `list call a '{}' call
-   b '{}'`. The server process starts once and reuses its state.
+   every op you need into **one** `mcp_call.py` invocation (tier 3), `list
+   call a '{}' call b '{}'`. The server process starts once and reuses its
+   state. The inspector (tier 2) runs one method per command instead.
 4. On failure, read the printed JSON: `isError: true` means the tool
    executed and failed; an `error` object means a protocol-level failure
    (unknown tool, invalid arguments, no tools capability).

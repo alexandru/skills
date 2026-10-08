@@ -97,9 +97,10 @@ python3 scripts/mcp_call.py http http://localhost:8083/mcp raw resources/list
 
 ## Validating changes to this skill
 
-Run the built-in unit tests first (offline, needs only Python 3.10), then
-the live checks against the official test server (needs network and
-Node), then the stateless HTTP check against the bundled mock:
+Run these from the repository root. Run the built-in unit tests first
+(offline, needs only Python 3.10), then the live checks against the
+official test server (needs network and Node), then the stateless HTTP
+check against the bundled mock:
 
 ```bash
 python3 skills/mcp-access/scripts/mcp_call.py --self-test

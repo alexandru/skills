@@ -101,6 +101,9 @@ npx -y @modelcontextprotocol/inspector@2.10.1 --cli http://localhost:64342/sse -
 
 - Results go to stdout; logs and errors go to stderr. Never merge them
   (`2>&1`) before piping stdout to `jq`.
+- A `MCP error -32001: Request timed out` line on stderr (the inspector
+  asking the calling client for roots) can appear even on successful runs;
+  judge success by the exit code and stdout, not by stderr silence.
 - `--format json` emits a single JSON object (`{"result": ...}`) instead of
   pretty text; `-q` prints only the payload; `--output FILE` writes the
   result to a file.
