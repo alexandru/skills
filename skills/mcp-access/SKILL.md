@@ -1,6 +1,6 @@
 ---
 name: mcp-access
-description: Call MCP (Model Context Protocol) servers when the harness's native MCP tools are unavailable, restricted, or unsupported. Fallback chain: harness MCP tools, then the MCP Inspector CLI, then raw JSON-RPC over stdio or HTTP with a bundled script and curl recipes. Use for listing or calling tools (tools/list, tools/call) on stdio servers such as chrome-devtools-mcp and persistent servers such as JetBrains IDEs and Metals, and for debugging MCP connectivity.
+description: "Call MCP (Model Context Protocol) servers when the harness's native MCP tools are unavailable, restricted, or unsupported. Fallback chain: harness MCP tools, then the MCP Inspector CLI, then raw JSON-RPC over stdio or HTTP with a bundled script and curl recipes. Use for listing or calling tools (tools/list, tools/call) on stdio servers such as chrome-devtools-mcp and persistent servers such as JetBrains IDEs and Metals, and for debugging MCP connectivity."
 ---
 
 # MCP access without native MCP tools
