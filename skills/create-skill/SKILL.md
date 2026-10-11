@@ -18,6 +18,11 @@ Agent Skills are modular capabilities that extend an AI agent's functionality. E
 - `name` must be lowercase, numbers, hyphens only; prefer a clear action or domain name.
 - `description` must be third-person, specific, and include "when to use".
 
+## Invocation and arguments
+- Skills run in many harnesses: never assume an invocation syntax ("supplied after `/command`") or `$ARGUMENTS` substitution in the body. Where a harness injects arguments, its own configuration does it (e.g. an OpenCode command wrapper), not the skill.
+- Read the scope from the user's request, and define a default for when none is given.
+- Frontmatter beyond the portable core (`name`, `description`, and `disable-model-invocation` for user-invoked skills) is allowed only when inert elsewhere: harness-specific extras such as Claude Code's `argument-hint` are ignored by harnesses that don't support them, and the body must never depend on them.
+
 ## Structure
 - `skills/<skill-name>/SKILL.md` contains quick start, workflow, rules, and pointers to references.
 - `skills/<skill-name>/references/*.md` holds extended explanations and examples.

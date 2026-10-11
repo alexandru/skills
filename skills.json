@@ -1,6 +1,6 @@
 {
   "name": "alexandru-skills",
-  "version": "10.2.0",
+  "version": "11.0.3",
   "description": "Collection of reusable code skills",
   "repository": {
     "type": "git",
@@ -173,15 +173,15 @@
       "tags": ["mcp", "model-context-protocol", "json-rpc", "cli", "protocol", "fallback", "inspector", "mcpdo", "manual"]
     },
     {
-      "name": "simplify",
-      "path": "skills/simplify",
-      "description": "Simplifies code without changing behavior, using the lenses of the simplicity skill. Use when the user invokes /simplify with an optional scope.",
-      "tags": ["refactoring", "simplification", "command", "user-invocable"]
+      "name": "refine",
+      "path": "skills/refine",
+      "description": "Refines a scope of code in rounds of lens review, triage against the refinements rules, and verified edits, until a round removes no complexity. Every feature stays, no hot path gets slower, and bugs found along the way get fixed. Use when the user asks to refine a scope of code, such as a module, a directory, or the changes on a branch.",
+      "tags": ["refactoring", "refinement", "command", "user-invocable"]
     },
     {
-      "name": "simplicity",
-      "path": "skills/simplicity",
-      "description": "Teaches the simplification lenses of constraints, simplicity, and parametricity. Use when simplifying or refactoring code, or reviewing simplification opportunities.",
+      "name": "refinements",
+      "path": "skills/refinements",
+      "description": "Defines what refined code looks like through the three lenses of constraints, simplicity, and parametricity, with rules for type proofs, no partial calls, explicit signatures, unrepresentable wrong states, hot-path discipline, and style. Use when writing, changing, or reviewing code to a refinement bar, or whenever the user asks for code to follow the rules in refinements.",
       "tags": [
         "refactoring",
         "readability",
@@ -189,7 +189,7 @@
         "complexity",
         "clean-code",
         "behavior-preserving",
-        "simplification",
+        "refinement",
         "code-review"
       ]
     },
