@@ -1,6 +1,6 @@
 {
   "name": "alexandru-skills",
-  "version": "11.0.3",
+  "version": "11.0.4",
   "description": "Collection of reusable code skills",
   "repository": {
     "type": "git",
@@ -175,7 +175,7 @@
     {
       "name": "refine",
       "path": "skills/refine",
-      "description": "Refines a scope of code in rounds of lens review, triage against the refinements rules, and verified edits, until a round removes no complexity. Every feature stays, no hot path gets slower, and bugs found along the way get fixed. Use when the user asks to refine a scope of code, such as a module, a directory, or the changes on a branch.",
+      "description": "Refines code through the refinements lenses with verified, behavior-preserving edits. Use when the user asks to refine a scope of code, such as a module, a directory, or the changes on a branch.",
       "tags": ["refactoring", "refinement", "command", "user-invocable"]
     },
     {

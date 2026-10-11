@@ -43,15 +43,15 @@ The lenses name the complexity; these rules state what code free of it looks lik
 
 ### No partial calls
 
-Refined code holds no partial call, an operation that fails on some input its type allows: the first element of a list that may be empty, a map or dictionary lookup that throws on a missing key, an unchecked unwrap of an optional value (`Option.get`, `unwrap()`, a `!` non-null assertion), a cast, or a match or switch that misses a case. The type carries the proof: a non-empty type from where the list is built, the looked-up value in place of its key, a match that covers every case. An optional value is a type, not a sentinel default that code must remember to check. A hot path is the one exception, where the safe form costs work per call.
+Refined code holds no partial call, an operation that fails on some input its type allows: the first element of a list that may be empty, a map or dictionary lookup that throws on a missing key, an unchecked unwrap of an optional value (`Option.get`, `unwrap()`, a `!` non-null assertion), a cast, or a match or switch that misses a case. The type carries the proof: a non-empty type from where the list is built, the looked-up value in place of its key, a match that covers every case. An optional value is a type, not a sentinel default that code must remember to check. A hot path is the one exception, only when an established invariant makes the call safe and performance evidence shows the safe form adds meaningful cost.
 
 ### Explicit signatures
 
-Every function carries its return type, local helpers and lambdas included; every field carries its declared type; code in a language with optional type hints keeps them on. An annotation states the contract to the reader and the compiler; a missing one is a missing contract, not simplicity.
+Every function carries its return type, local helpers and lambdas included; every field carries its declared type; code in a language with optional type hints keeps them on. Where a lambda has no return-type annotation syntax, state its function type on its binding or the interface that accepts it. An annotation states the contract to the reader and the compiler; a missing one is a missing contract, not simplicity.
 
 ### Wrong states are unrepresentable
 
-A bug shows where the design lets a wrong state through; refined code admits no such state. Wrong input cannot be represented, or it flows through the mechanism that already handles its kind — one cause, one mechanism. A runtime guard holding up an invariant, or an `if` carrying an edge case, marks a wrong state the design still admits.
+A bug shows where the design lets a wrong state through; refined code admits no such state. Parse, don't validate: turn less-structured input into a representation that preserves the proof of its invariants, not a check whose result is discarded. Wrong input cannot be represented, or it flows through the mechanism that already handles its kind — one cause, one mechanism. A downstream runtime guard holding up an invariant, or an `if` carrying an edge case, marks a wrong state the design still admits.
 
 ### Hot paths stay fast
 
@@ -60,3 +60,7 @@ Code that runs per request, per entity, per item or per field does no more work 
 ### Style
 
 Code reads like its neighbors: the project's formatter, import style, naming and idioms. A comment belongs only where the code alone would mislead; a comment that restates a name says nothing. A doc comment states the contract the signature cannot, in the project's doc-comment conventions.
+
+## Foundations
+
+See [the philosophical foundations](references/philosophical-foundations.md) for original sources and how parsing preserves type proofs.
