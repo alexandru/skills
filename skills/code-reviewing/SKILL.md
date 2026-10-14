@@ -7,6 +7,11 @@ When doing a code review, follow these rules.
 
 ## Determining what to review
 
+Before gathering PR context:
+
+- Read applicable `AGENTS.md` files and linked review instructions.
+- You MUST follow the repository's PR-context instructions, including required tools and workflows.
+
 Choose the review scope from the user's request:
 
 1. **No target**: The staged and unstaged diffs, plus untracked files and their contents.
@@ -18,15 +23,32 @@ If the requested target or provider metadata is unavailable, report that instead
 
 ---
 
-## Identifying the spec source
+## Identifying the specification sources
 
-Look for the intended requirements in this order:
+**Specification review is essential to assessing correctness.**
+
+- You MUST follow the repository's specification-discovery instructions.
+- You MUST discover and read all applicable specifications. Do not stop at the first source.
+- Follow relevant links to requirements, acceptance criteria, and design specifications.
+
+If the repository does not prescribe a discovery process, search all of these sources in order:
 
 1. A path, URL, issue or work-item ID, or requirements text supplied by the user.
-2. A specification or work item linked from the pull request.
+2. Specifications and work items linked from the pull request, including its description and discussion.
 3. Issue references in commit messages, using the repository's configured issue-tracker workflow.
+4. Repository-local specifications and requirements documentation relevant to the changed code.
 
-If a source cannot be accessed or no specification is found, continue without asking for one and state the limitation. Use requirements to assess bugs when available; they are not a prerequisite for the review.
+If repository-directed discovery is blocked by unavailable tools, missing permissions, inaccessible sources, or unresolved required references:
+
+1. Explain the blocker.
+2. You MUST ask the user whether an incomplete specification review is acceptable.
+3. Wait for explicit approval before proceeding. Do not silently use a fallback.
+
+If no repository-directed discovery is blocked, missing or unread specifications do not require asking the user.
+
+- Review only what can be verified.
+- Report missing or unread specifications, even if the user approved proceeding.
+- Do not claim full specification compliance when discovery or reading is incomplete.
 
 ---
 
@@ -65,7 +87,11 @@ Include applicable `AGENTS.md` files and the conventions files found while gathe
 
 **Behavior Changes** - If a behavioral change is introduced, raise it (especially if it's possibly unintentional).
 
-**Spec compliance** - When a spec is available, flag missing or incorrectly implemented requirements. Cite the relevant requirement.
+**Spec compliance**
+
+- You MUST review the changes against all applicable specifications read during discovery.
+- Flag missing or incorrectly implemented requirements.
+- Cite the relevant requirement for each finding.
 
 Report non-bug structure and convention findings under Coding standards.
 
@@ -130,3 +156,12 @@ Use `Critical`, `High`, `Medium`, or `Low` severity, based on your judgment and 
 Use a numbered level-three heading for each finding, containing its severity in square brackets and a short, specific title. Follow it with a **Location:** field containing the file and line range, then explain the finding and its impact. Coding standards findings also include a **Standard:** field citing the rule's file and lines when available. For unwritten conventions or structural concerns, identify the established pattern or explain the concern instead of inventing a standards citation.
 
 Present findings under `## Bugs` and then `## Coding standards`. Keep both sections even when empty, stating that no issues were found.
+
+Append `## Specifications reviewed` to every report, even when there are no findings:
+
+- You MUST list every specification reference or URL discovered, not just those cited by findings.
+- Include all specifications read. Preserve exact URLs, repository paths, and issue or work-item IDs.
+- Identify the origin of user-supplied requirements that have no reference.
+- Mark each source as read or unread.
+- State discovery limitations, blockers, and any user approval to proceed.
+- If no specifications were found, say so.

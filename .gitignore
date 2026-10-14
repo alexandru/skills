@@ -4,3 +4,4 @@
 .bsp
 .DS_Store
 __pycache__
+.agents
