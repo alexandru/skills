@@ -22,6 +22,8 @@ npx skills add https://github.com/alexandru/skills --skill <skill-name>
 - [cats-effect-io](./skills/cats-effect-io/): Cats Effect IO side-effect suspension, typeclass, testing, fiber, and race guidance
 - [cats-mtl-typed-errors](./skills/cats-mtl-typed-errors/): Scala typed errors using Cats MTL Raise/Handle and allow/rescue
 - [compose-state-hoisting](./skills/compose-state-hoisting/): Compose state hoisting and state ownership guidance
+- [code-refine](./skills/code-refine/): User-invoked refinement of a scope in rounds until they converge, using `code-refinements` ([source](https://github.com/alexandru/skills/blob/main/skills/code-refine/SKILL.md))
+- [code-refinements](./skills/code-refinements/): What refined code looks like: the three lenses plus rules for type proofs, no partial calls, explicit signatures, unrepresentable wrong states, and hot paths ([source](https://github.com/alexandru/skills/blob/main/skills/code-refinements/SKILL.md))
 - [code-review](./skills/code-review/): User-invoked adapter for `code-reviewing`
 - [code-reviewing](./skills/code-reviewing/): Review changed code for bugs, structural problems, performance issues, and unintended behavior
 - [create-skill](./skills/create-skill/): Guide for creating effective agent skills
@@ -29,8 +31,6 @@ npx skills add https://github.com/alexandru/skills --skill <skill-name>
 - [kotlin-context-parameters](./skills/kotlin-context-parameters/): Kotlin context parameter syntax, patterns, and migration guidance
 - [kotlin-java-library](./skills/kotlin-java-library/): Kotlin library API design for Java consumers, JVM annotations, records, and compatibility
 - [mcp-access](./skills/mcp-access/): Call MCP servers when native MCP tools are unavailable or restricted: inspector CLI fallback, then raw JSON-RPC over stdio or HTTP
-- [refine](./skills/refine/): User-invoked refinement of a scope in rounds until they converge, using `refinements` ([source](https://github.com/ghostdogpr/skills/blob/156ec13f7c0e4936fedcea4016894db302e75deb/skills/refine/SKILL.md))
-- [refinements](./skills/refinements/): What refined code looks like: the three lenses plus rules for type proofs, no partial calls, explicit signatures, unrepresentable wrong states, and hot paths ([source](https://github.com/ghostdogpr/skills/blob/156ec13f7c0e4936fedcea4016894db302e75deb/skills/refine/references/rules.md))
 - [scala-kindlings-derivation](./skills/scala-kindlings-derivation/): Scala Kindlings auto-derivation for Circe and PureConfig instances
 
 ## Testing

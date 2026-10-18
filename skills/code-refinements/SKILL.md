@@ -1,9 +1,9 @@
 ---
-name: refinements
-description: Defines what refined code looks like through the three lenses of constraints, simplicity, and parametricity, with rules for type proofs, no partial calls, explicit signatures, unrepresentable wrong states, hot-path discipline, and style. Use when writing, changing, or reviewing code to a refinement bar, or whenever the user asks for code to follow the rules in refinements.
+name: code-refinements
+description: Defines what refined code looks like through the three lenses of constraints, simplicity, and parametricity, with rules for type proofs, no partial calls, explicit signatures, unrepresentable wrong states, hot-path discipline, and style. Use when writing, changing, or reviewing code to a refinement bar, or whenever the user asks for code to follow the rules in code-refinements.
 ---
 
-# Refinements
+# Code Refinements
 
 Refined code does the same job with less design: fewer states that can be wrong, fewer concerns braided together, fewer properties resting on discipline. What it does without is nameable — a runtime check, a branch, a partial call, a parameter, a stored field, a duplicate definition, a dependency between two components, a convention the reader had to remember — and every type or abstraction it carries earns its keep by the checks and conventions it makes unnecessary. Line count is not the measure: fewer lines often accompany refinement, but code shrunk to fit a count is not refined.
 

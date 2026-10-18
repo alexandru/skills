@@ -1,18 +1,18 @@
 ---
-name: refine
-description: Refines code through the refinements lenses with verified, behavior-preserving edits. Use when the user asks to refine a scope of code, such as a module, a directory, or the changes on a branch.
+name: code-refine
+description: Refines code through the three lenses in `code-refinements` with verified, behavior-preserving edits. Use when the user asks to refine a scope of code, such as a module, a directory, or the changes on a branch.
 disable-model-invocation: true
 argument-hint: <scope, e.g. "the planner module" or "the changes on this branch">
 ---
 
-# Refine
+# Code Refine
 
 The scope is whatever the user asks to refine; without one, use the current staged and unstaged diff, including untracked source files. If there is no code to refine, say so and stop. A scope that names changes — pending changes, a branch, a pull request — is refined as the diff it names; everything else is an area.
 
-Load the `refinements` skill and hold every change to its rules and its three lenses: constraints, simplicity, and parametricity. If it is not installed, install it with:
+Load the `code-refinements` skill and hold every change to its rules and its three lenses: constraints, simplicity, and parametricity. If it is not installed, install it with:
 
 ```sh
-npx skills add https://github.com/alexandru/skills --skill refinements
+npx skills add https://github.com/alexandru/skills --skill code-refinements
 ```
 
 ## Workflow

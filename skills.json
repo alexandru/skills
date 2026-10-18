@@ -1,6 +1,6 @@
 {
   "name": "alexandru-skills",
-  "version": "11.1.0",
+  "version": "12.0.0",
   "description": "Collection of reusable code skills",
   "repository": {
     "type": "git",
@@ -173,15 +173,15 @@
       "tags": ["mcp", "model-context-protocol", "json-rpc", "cli", "protocol", "fallback", "inspector", "mcpdo", "manual"]
     },
     {
-      "name": "refine",
-      "path": "skills/refine",
-      "description": "Refines code through the refinements lenses with verified, behavior-preserving edits. Use when the user asks to refine a scope of code, such as a module, a directory, or the changes on a branch.",
+      "name": "code-refine",
+      "path": "skills/code-refine",
+      "description": "Refines code through the three lenses in `code-refinements` with verified, behavior-preserving edits. Use when the user asks to refine a scope of code, such as a module, a directory, or the changes on a branch.",
       "tags": ["refactoring", "refinement", "command", "user-invocable"]
     },
     {
-      "name": "refinements",
-      "path": "skills/refinements",
-      "description": "Defines what refined code looks like through the three lenses of constraints, simplicity, and parametricity, with rules for type proofs, no partial calls, explicit signatures, unrepresentable wrong states, hot-path discipline, and style. Use when writing, changing, or reviewing code to a refinement bar, or whenever the user asks for code to follow the rules in refinements.",
+      "name": "code-refinements",
+      "path": "skills/code-refinements",
+      "description": "Defines what refined code looks like through the three lenses of constraints, simplicity, and parametricity, with rules for type proofs, no partial calls, explicit signatures, unrepresentable wrong states, hot-path discipline, and style. Use when writing, changing, or reviewing code to a refinement bar, or whenever the user asks for code to follow the rules in code-refinements.",
       "tags": [
         "refactoring",
         "readability",
