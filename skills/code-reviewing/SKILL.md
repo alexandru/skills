@@ -5,12 +5,16 @@ description: Reviews code changes for bugs, structural problems, performance iss
 
 When doing a code review, follow these rules.
 
-## Determining what to review
+Note this document uses keywords from RFC 2119 (MUST, MUST NOT, SHOULD, SHOULD NOT, etc.).
 
-Before gathering PR context:
+## Process
 
-- Read applicable `AGENTS.md` files and linked review instructions.
+### 1. Preparation
+
+- You MUST read applicable `AGENTS.md` files and linked review instructions.
 - You MUST follow the repository's PR-context instructions, including required tools and workflows.
+
+### 2. Determine what to review
 
 Choose the review scope from the user's request:
 
@@ -21,15 +25,13 @@ Choose the review scope from the user's request:
 
 If the requested target or provider metadata is unavailable, report that instead of choosing a different review scope.
 
----
+### 3. Identify the specification sources
 
-## Identifying the specification sources
-
-**Specification review is essential to assessing correctness.**
+Specification review is essential to assessing correctness.
 
 - You MUST follow the repository's specification-discovery instructions.
 - You MUST discover and read all applicable specifications. Do not stop at the first source.
-- Follow relevant links to requirements, acceptance criteria, and design specifications.
+- You MUST follow relevant links to requirements, acceptance criteria, and design specifications.
 
 If the repository does not prescribe a discovery process, search all of these sources in order:
 
@@ -44,106 +46,106 @@ If repository-directed discovery is blocked by unavailable tools, missing permis
 2. You MUST ask the user whether an incomplete specification review is acceptable.
 3. Wait for explicit approval before proceeding. Do not silently use a fallback.
 
-If no repository-directed discovery is blocked, missing or unread specifications do not require asking the user.
+If specifications are unavailable or discovery is blocked:
 
-- Review only what can be verified.
-- Report missing or unread specifications, even if the user approved proceeding.
-- Do not claim full specification compliance when discovery or reading is incomplete.
+- You MUST report it to the user and await further instructions.
 
----
+### 4. Identify the standards sources
 
-## Identifying the standards sources
+- You MUST search for anything in the repo that documents how code should be written, such as `CODING_STANDARDS.md` or `CONTRIBUTING.md`.
+- You MUST include applicable `AGENTS.md` files and the conventions files found while gathering context.
+- You SHOULD read [the smell baseline](references/coding-standards.md), but repository-specific standards take precedence.
 
-Anything in the repo that documents how code should be written, such as `CODING_STANDARDS.md` or `CONTRIBUTING.md`.
+### 5. Start the review
 
-Include applicable `AGENTS.md` files and the conventions files found while gathering context. Read [the smell baseline](references/coding-standards.md) even when the repository documents no standards.
+The review will look at two separate axes that are considered independently:
+1. Spec
+2. Standards
 
----
+#### 5.1. Delegation to sub-agents
 
-## Gathering Context
+How to delegate:
+- If the user asks for parallelism per axis, then start 2 sub-agents in parallel with fresh context, one for each axis.
+- If the user asks just for fresh context, without parallelism per axis, then start a single sub-agent with fresh context to handle both axes sequentially.
+- Otherwise do not delegate and proceed with the review yourself.
 
-**Diffs alone are not enough.** After getting the diff, read the entire file(s) being modified to understand the full context. Code that looks wrong in isolation may be correct given surrounding logic—and vice versa.
+Any sub-agent responsible for the "Spec" review MUST receive:
+- The resolved scope of the review (e.g., `git diff <base>...HEAD`)
+- Full specifications, already gathered during discovery at step 3 (references to local files are OK).
 
-- Use the diff to identify which files changed
-- For worktree reviews, read each relevant untracked file completely
-- Read the full file to understand existing patterns, control flow, and error handling
-- Check for existing style guide or conventions files (CONVENTIONS.md, AGENTS.md, .editorconfig, etc.)
+Any sub-agent responsible for the "Standards" review MUST receive:
+- The resolved scope of the review (e.g., `git diff <base>...HEAD`)
+- References to this repo's coding standards and conventions, discovered during step 4.
 
----
+You MUST NOT taint the context of sub-agents with anything else.
 
-## Bugs
+#### 5.2. The "Spec" review
 
-**Bugs** - Your primary focus.
+Look for the following categories of issues:
 
-- Logic errors, off-by-one mistakes, incorrect conditionals
-- If-else guards: missing guards, incorrect branching, unreachable code paths
-- Edge cases: null/empty/undefined inputs, error conditions, race conditions
-- Security issues: injection, auth bypass, data exposure
-- Broken error handling that swallows failures, throws unexpectedly or returns error types that are not caught.
-
-**Performance** - Only flag if obviously problematic.
-
-- O(n²) on unbounded data, N+1 queries, blocking I/O on hot paths
-
-**Behavior Changes** - If a behavioral change is introduced, raise it (especially if it's possibly unintentional).
-
-**Spec compliance**
-
-- You MUST review the changes against all applicable specifications read during discovery.
-- Flag missing or incorrectly implemented requirements.
-- Cite the relevant requirement for each finding.
-
-Report non-bug structure and convention findings under Coding standards.
-
----
-
-## Coding standards
-
-Review the diff against the discovered repository standards and the supplied smell baseline. Report documented-standard violations with the standard's file and rule. For baseline smells, name the smell and quote the relevant hunk. Apply the baseline's rules for judgment calls, repository overrides, and tooling-enforced issues.
-
-**Structure** - Does the code fit the codebase?
-
-- Does it follow existing patterns and conventions?
-- Are there established abstractions it should use but doesn't?
-- Excessive nesting that could be flattened with early returns or extraction
-
-Report non-bug issues here, not behavioral failures. Explain the violation or structural concern and its impact.
-
----
-
-## Before You Flag Something
+* Spec compliance
+  - You MUST review the changes against all applicable specifications read during discovery.
+  - Flag missing or incorrectly implemented requirements.
+  - Cite the relevant requirement for each finding.
+* Bugs
+  - Logic errors, off-by-one mistakes, incorrect conditionals
+  - If-else guards: missing guards, incorrect branching, unreachable code paths
+  - Edge cases: null/empty/undefined inputs, error conditions, race conditions
+  - Security issues: injection, auth bypass, data exposure
+  - Broken error handling that swallows failures, throws unexpectedly or returns error types that are not caught.
+* Performance - Only flag if obviously problematic.
+  - O(n²) on unbounded data, N+1 queries, blocking I/O on hot paths
+* Behavior Changes
+  - If a behavioral change is introduced, raise it if it's not in the specification.
 
 **Be certain.** If you're going to call something a bug, you need to be confident it actually is one.
 
 - Only review the changes - do not review pre-existing code that wasn't modified
 - Don't flag something as a bug if you're unsure - investigate first
 - Don't invent hypothetical problems - if an edge case matters, explain the realistic scenario where it breaks
-- If you need more context to be sure, use the tools below to get it
+- If you need more context to be sure, then gather it.
 
-**Don't be a zealot about style.** When checking code against conventions:
+#### 5.3. The "Standards" review
 
-- Verify the code is _actually_ in violation. Don't complain about else statements if early returns are already being used correctly.
-- Some "violations" are acceptable when they're the simplest option. A `let` statement is fine if the alternative is convoluted.
-- Excessive nesting is a legitimate concern regardless of other style choices.
-- Don't flag personal style preferences. Report established-project-convention violations or baseline smell judgments.
+Rules:
 
----
+- You MUST review the code against the discovered repository standards and the supplied smell baseline.
+- You MUST report documented-standard violations with the standard's file and rule.
+- You MUST name the smell and quote the relevant hunk for baseline smells.
+- You SHOULD not be a zealot about style:
+  - Verify the code is _actually_ in violation.
+  - Some "violations" are acceptable when they're the simplest option.
+  - Don't flag personal style preferences. Report established-project-convention violations or baseline smell judgments.
 
-## Tools
+### 6. Report findings
 
-Use these to inform your review:
+General template:
 
-- **Codebase context** - Find how existing code handles similar problems. Check patterns, conventions, and prior art before claiming something doesn't fit.
-- **Library/API context** - Use relevant available skills or approved documentation to verify library/API usage before flagging it as wrong.
-- **Web Search** - Research best practices if you're unsure about a pattern.
+```
+## Spec
 
-If you're uncertain about something and can't verify it with these tools, say "I'm not sure about X" rather than flagging it as a definite issue.
+...
 
----
+## Standards
 
-## Output
+...
+
+## Specifications reviewed
+
+...
+```
+
+#### 6.1. Aggregation
+
+Present the two reports under `## Spec` and `## Standards` headings, verbatim or lightly cleaned. Do **not** merge or rerank findings, because the two axes are deliberately separate (see _Why two axes_).
+
+End with a one-line summary: total findings per axis, and the worst issue _within each axis_ (if any). Don't pick a single winner across axes: that's the reranking the separation exists to prevent.
+
+#### 6.2. Classification
 
 Use `Critical`, `High`, `Medium`, or `Low` severity, based on your judgment and applicable repository documentation. Assess severity, not whether the PR should merge or a finding should block it.
+
+#### 6.3. Bug reporting guidelines
 
 1. If there is a bug, be direct and clear about why it is a bug.
 2. Clearly communicate severity of issues. Do not overstate severity.
@@ -153,9 +155,11 @@ Use `Critical`, `High`, `Medium`, or `Low` severity, based on your judgment and 
 6. AVOID flattery, do not give any comments that are not helpful to the reader. Avoid phrasing like "Great job ...", "Thanks for ...".
 7. Cite the affected file and line for each finding.
 
+#### 6.4. How to report findings
+
 Use a numbered level-three heading for each finding, containing its severity in square brackets and a short, specific title. Follow it with a **Location:** field containing the file and line range, then explain the finding and its impact. Coding standards findings also include a **Standard:** field citing the rule's file and lines when available. For unwritten conventions or structural concerns, identify the established pattern or explain the concern instead of inventing a standards citation.
 
-Present findings under `## Bugs` and then `## Coding standards`. Keep both sections even when empty, stating that no issues were found.
+#### 6.5. Reporting reviewed specifications
 
 Append `## Specifications reviewed` to every report, even when there are no findings:
 
@@ -165,3 +169,12 @@ Append `## Specifications reviewed` to every report, even when there are no find
 - Mark each source as read or unread.
 - State discovery limitations, blockers, and any user approval to proceed.
 - If no specifications were found, say so.
+
+## Why two axes
+
+A change can pass one axis and fail the other:
+
+- Code that follows every standard but implements the wrong thing → **Standards pass, Spec fail.**
+- Code that does exactly what the issue asked but breaks the project's conventions → **Spec pass, Standards fail.**
+
+Reporting them separately stops one axis from masking the other.
