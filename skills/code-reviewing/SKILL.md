@@ -122,22 +122,22 @@ Rules:
 General template:
 
 ```
-## Spec
-
-...
-
 ## Standards
 
 ...
 
-## Specifications reviewed
+## Spec
+
+...
+
+## Spec sources
 
 ...
 ```
 
 #### 6.1. Aggregation
 
-Present the two reports under `## Spec` and `## Standards` headings, verbatim or lightly cleaned. Do **not** merge or rerank findings, because the two axes are deliberately separate (see _Why two axes_).
+Present the two reports under `## Standards` and `## Spec` headings, verbatim or lightly cleaned. Do **not** merge or rerank findings, because the two axes are deliberately separate (see _Why two axes_).
 
 End with a one-line summary: total findings per axis, and the worst issue _within each axis_ (if any). Don't pick a single winner across axes: that's the reranking the separation exists to prevent.
 
@@ -161,7 +161,7 @@ Use a numbered level-three heading for each finding, containing its severity in 
 
 #### 6.5. Reporting reviewed specifications
 
-Append `## Specifications reviewed` to every report, even when there are no findings:
+Append `## Spec sources` to every report, even when there are no findings:
 
 - You MUST list every specification reference or URL discovered, not just those cited by findings.
 - Include all specifications read. Preserve exact URLs, repository paths, and issue or work-item IDs.
