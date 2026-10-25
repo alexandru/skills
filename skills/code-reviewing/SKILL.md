@@ -12,7 +12,7 @@ Note this document uses keywords from RFC 2119 (MUST, MUST NOT, SHOULD, SHOULD N
 ### 1. Preparation
 
 - You MUST read applicable `AGENTS.md` files and linked review instructions.
-- You MUST follow the repository's PR-context instructions, including required tools and workflows.
+- You MUST follow the repository's instructions for fetching the specifications; e.g., rules for fetching external resources that may require authentication.
 
 ### 2. Determine what to review
 
@@ -44,11 +44,11 @@ If repository-directed discovery is blocked by unavailable tools, missing permis
 
 1. Explain the blocker.
 2. You MUST ask the user whether an incomplete specification review is acceptable.
-3. Wait for explicit approval before proceeding. Do not silently use a fallback.
+3. You MUST stop and await for explicit approval before proceeding; MUST NOT use a fallback.
 
 If specifications are unavailable or discovery is blocked:
 
-- You MUST report it to the user and await further instructions.
+- You MUST report it to the user, stop and await further instructions; MUST NOT use a fallback.
 
 ### 4. Identify the standards sources
 
@@ -71,13 +71,11 @@ How to delegate:
 
 Any sub-agent responsible for the "Spec" review MUST receive:
 - The resolved scope of the review (e.g., `git diff <base>...HEAD`)
-- Full specifications, already gathered during discovery at step 3 (references to local files are OK).
+- Full specifications, already gathered during discovery at step 3; this includes any local files, included collected ones.
 
 Any sub-agent responsible for the "Standards" review MUST receive:
 - The resolved scope of the review (e.g., `git diff <base>...HEAD`)
 - References to this repo's coding standards and conventions, discovered during step 4.
-
-You MUST NOT taint the context of sub-agents with anything else.
 
 #### 5.2. The "Spec" review
 
