@@ -27,6 +27,7 @@ npx skills add https://github.com/alexandru/skills --skill <skill-name>
 - [code-review](./skills/code-review/): User-invoked adapter for `code-reviewing`
 - [code-reviewing](./skills/code-reviewing/): Review changed code for bugs, structural problems, performance issues, and unintended behavior
 - [create-skill](./skills/create-skill/): Guide for creating effective agent skills
+- [external-research](./skills/external-research/): External documentation, public repository, and dependency-artifact research with a persistent cache of Git clones and Maven artifacts
 - [jspecify-nullness](./skills/jspecify-nullness/): JSpecify nullness annotations for Java APIs and tooling
 - [kotlin-context-parameters](./skills/kotlin-context-parameters/): Kotlin context parameter syntax, patterns, and migration guidance
 - [kotlin-java-library](./skills/kotlin-java-library/): Kotlin library API design for Java consumers, JVM annotations, records, and compatibility
