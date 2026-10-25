@@ -66,7 +66,7 @@ The review will look at two separate axes that are considered independently:
 
 How to delegate:
 - If the user asks for parallelism per axis, then start 2 sub-agents in parallel with fresh context, one for each axis.
-- If the user asks just for fresh context, without parallelism per axis, then start a single sub-agent with fresh context to handle both axes sequentially.
+- If the user asks just for fresh context, without parallelism per axis, then start a single sub-agent with fresh context for both axes.
 - Otherwise do not delegate and proceed with the review yourself.
 
 Any sub-agent responsible for the "Spec" review MUST receive:
