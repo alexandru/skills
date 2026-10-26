@@ -13,7 +13,7 @@ Options, cheapest to most expensive:
 
 1. `glob`, `grep`, `read`, and shell filters for local inspection.
 2. LSP/MCP/IDE semantic tools (IntelliJ IDEA, Metals LSP).
-3. The `cellar` skill for JVM dependency public APIs.
+3. The `cellar` skill, when available, for JVM dependency public APIs.
 4. `gh` and `az` read-only subcommands for GitHub and Azure queries.
 5. `webfetch` for a known URL.
 6. `websearch` when no URL is known (tool or skill, whatever is available).
@@ -22,7 +22,8 @@ Options, cheapest to most expensive:
 
 Rules:
 
-- For public API lookups of JVM dependencies, prefer the `cellar` skill when it can answer directly.
+- Use optional skills, such as `cellar`, when available; otherwise proceed with the tools that are available.
+- For public API lookups of JVM dependencies, prefer the `cellar` skill when it is available and can answer directly.
 - Do not use mutating `gh` or `az` subcommands; report the limitation.
 - If a known web page answers directly, use `webfetch` and cite its URL; no task directory is needed. If content is empty, stale, or incomplete, switch only to a source likely to supply the missing evidence.
 - For semantic questions, compilation, or linting, use an available LSP/MCP/IDE semantic tool (IntelliJ IDEA, Metals LSP) when it answers directly or produces relevant diagnostics, and cite the symbol or source location; clone or fetch only when its evidence is unavailable or insufficient.
@@ -81,7 +82,7 @@ If cloning, fetching, or adding a worktree fails, report the exact error. Do not
 
 ## Maven artifact workflow
 
-- For a JVM dependency's public API, prefer `cellar` when it is the smallest reliable approach. Use this Maven cache workflow when JAR, source JAR, POM, metadata, or dependency-graph inspection is more suitable.
+- For a JVM dependency's public API, prefer `cellar` when it is available and the smallest reliable approach. Use this Maven cache workflow when JAR, source JAR, POM, metadata, or dependency-graph inspection is more suitable.
 - Choose a stable library key, such as `cats-effect`, and use `$HOME/.agents/librarian/maven/cats-effect/` as Maven's persistent local repository. Inspect the exact coordinate's files there before resolving it. Do not use the default `~/.m2/repository` as the download destination.
 - For one direct artifact, use Maven with `-Dtransitive=false`; do not create a synthetic project. For a transitive graph or effective resolution, create a request directory below the library cache, write a POM there, and invoke Maven with `-f <absolute-pom-path>`.
 - Keep request POMs and graph output below `$HOME/.agents/librarian/maven/<library-key>/requests/<request-key>/`. Reuse an existing request with the same coordinate and repository definitions instead of resolving it again.
