@@ -26,55 +26,58 @@ Rules:
 - For public API lookups of JVM dependencies, prefer the `cellar` skill when it is available and can answer directly.
 - Do not use mutating `gh` or `az` subcommands; report the limitation.
 - If a known web page answers directly, use `webfetch` and cite its URL; no task directory is needed. If content is empty, stale, or incomplete, switch only to a source likely to supply the missing evidence.
+- For multi-file source research, use a cached checkout or fetch the required ref once; never crawl files over HTTP/API. Stop on access failures or throttling.
 - For semantic questions, compilation, or linting, use an available LSP/MCP/IDE semantic tool (IntelliJ IDEA, Metals LSP) when it answers directly or produces relevant diagnostics, and cite the symbol or source location; clone or fetch only when its evidence is unavailable or insufficient.
 
 ## Persistent research cache
 
 - Use `$HOME/.agents/librarian/` as a persistent cache across runs, sessions, and harnesses. Create it when needed; do not use the session directory or `mktemp` for research caching.
-- Use absolute paths. Keep cloned repositories below `$HOME/.agents/librarian/repos/<repo-key>/` and Maven repositories below `$HOME/.agents/librarian/maven/<library-key>/`.
+- Use absolute paths. Every repository cache directory must use `$HOME/.agents/librarian/repos/<organization>/<project-name>/`; the organization/project-name layout is mandatory, for example `typelevel/cats-effect` or `anomalyco/opencode`. Keep Maven repositories below `$HOME/.agents/librarian/maven/<library-key>/`.
 - Before any network operation, inspect the relevant cache path. Reuse an existing matching clone, worktree, POM, JAR, source JAR, metadata file, or graph output. Download or fetch only the missing ref or artifact, or when the caller explicitly requests fresh remote data.
-- Verify cache identity before reuse. For repositories, compare `git -C <base-clone> remote get-url origin` with the requested URL. If the URL differs, use a different stable `<repo-key>` rather than overwriting or recloning the existing directory.
+- Verify cache identity before reuse. For repositories, compare `git -C <base-clone> remote get-url origin` with the requested URL. If the URL differs, report the exact `<base-clone>` path and stop; do not overwrite it, reclone it, or select another cache destination.
 - Cache maintenance may update Git metadata, add worktrees, and download artifacts, but must not modify source files, commit, push, change remotes, or alter the user's workspace.
 
 ## Clone and worktree workflow
 
-Use one stable, filesystem-safe key per repository as a single path component. Prefer the repository name, such as `cats-effect`; use a qualified key such as `github-typelevel-cats-effect` when names could collide. The permanent base clone is always named `main`, and ref-specific worktrees are siblings of it.
+For each organization/project-name path, the permanent base clone is named `main` and checks out the repository's default branch; requested refs belong in sibling worktrees.
 
 For `https://github.com/typelevel/cats-effect/` at tag `v3.7.0`, follow these steps exactly:
+
+Default to shallow, ref-scoped clones and fetches. Deepen the existing cache only when history is needed. Set a timeout of at least 10 minutes from the first attempt; run long transfers in the background.
 
 1. Create the persistent repository directory:
 
    ```sh
    mkdir -p "$HOME/.agents/librarian/repos"
-   mkdir -p "$HOME/.agents/librarian/repos/cats-effect"
+   mkdir -p "$HOME/.agents/librarian/repos/typelevel/cats-effect"
    ```
 
-2. Check whether `$HOME/.agents/librarian/repos/cats-effect/main` already exists. If it does, inspect its remote and worktree list; do not run `git clone` again. If it does not, clone the repository once with its full history:
+2. Check whether `$HOME/.agents/librarian/repos/typelevel/cats-effect/main` already exists. If it does, inspect its remote and worktree list; do not run `git clone` again. If it does not, shallow-clone the default branch:
 
    ```sh
-   git clone https://github.com/typelevel/cats-effect/ "$HOME/.agents/librarian/repos/cats-effect/main"
+   git clone --depth 1 --single-branch https://github.com/typelevel/cats-effect/ "$HOME/.agents/librarian/repos/typelevel/cats-effect/main"
    ```
 
-3. Check whether `v3.7.0` is already available in the base clone and whether `$HOME/.agents/librarian/repos/cats-effect/v3.7.0` is already registered by `git worktree list --porcelain`. If that worktree exists, reuse it without fetching or adding another one.
+3. Check whether `v3.7.0` is already available in the base clone and whether `$HOME/.agents/librarian/repos/typelevel/cats-effect/v3.7.0` is already registered by `git worktree list --porcelain`. If that worktree exists, reuse it without fetching or adding another one.
 
 4. If the tag is missing, fetch only that tag. Do not fetch the repository on every repeated request:
 
    ```sh
-   git -C "$HOME/.agents/librarian/repos/cats-effect/main" fetch origin "refs/tags/v3.7.0:refs/tags/v3.7.0"
+   git -C "$HOME/.agents/librarian/repos/typelevel/cats-effect/main" fetch --depth 1 origin "refs/tags/v3.7.0:refs/tags/v3.7.0"
    ```
 
 5. If the tag is available but its worktree is missing, create the sibling worktree and inspect it:
 
    ```sh
-   git -C "$HOME/.agents/librarian/repos/cats-effect/main" worktree add "$HOME/.agents/librarian/repos/cats-effect/v3.7.0" v3.7.0
-   # Inspect with glob, grep, read, or git -C "$HOME/.agents/librarian/repos/cats-effect/v3.7.0" ...
+   git -C "$HOME/.agents/librarian/repos/typelevel/cats-effect/main" worktree add "$HOME/.agents/librarian/repos/typelevel/cats-effect/v3.7.0" v3.7.0
+   # Inspect with glob, grep, read, or git -C "$HOME/.agents/librarian/repos/typelevel/cats-effect/v3.7.0" ...
    ```
 
    This is equivalent to running `git worktree add ../v3.7.0 v3.7.0` from the `main` worktree, but absolute paths avoid dependence on Bash's current directory.
 
-6. For a branch, use the same process. Fetch the branch only when its remote-tracking ref is absent, then add a sibling worktree. If a local branch must be created from a remote-tracking branch, use `git worktree add -b <branch> <absolute-worktree-path> origin/<branch>`.
+6. For a branch, use the same process. Single-branch clones do not track other branches, so when the remote-tracking ref is absent, fetch it with `git -C "$HOME/.agents/librarian/repos/typelevel/cats-effect/main" fetch --depth 1 origin "refs/heads/<branch>:refs/remotes/origin/<branch>"`. Then add a sibling worktree. If a local branch must be created from a remote-tracking branch, use `git worktree add -b "<branch>" "<absolute-worktree-path>" "origin/<branch>"`.
 
-7. If a requested path exists but is not a registered worktree, or its remote does not match, do not overwrite it. Report the exact path and use a different stable key only after verifying that it represents a different repository.
+7. If a requested path exists but is not a registered worktree, or its remote does not match, do not overwrite it. Report the exact path and stop; do not select another cache destination.
 
 Do not use `git checkout` or switch the base clone's branch to inspect a ref. Do not run `git worktree remove`, `git worktree prune`, `git reset`, `git clean`, or any command that changes source files. Do not push or change a remote.
 
