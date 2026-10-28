@@ -11,7 +11,8 @@ Part of [alexandru/agents-config](https://github.com/alexandru/agents-config).
 
 Every skill is a plain [SKILL.md](https://agentskills.io) folder under a category directory: `engineering/`, `coding/`, or `tools/`.
 
-**Claude Code** — install the collection as a plugin (Claude Code ≥ 2.1.292):
+<details>
+<summary><strong>Claude Code</strong> — install the collection as a plugin (CLI ≥ 2.1.292)</summary>
 
 ```
 claude plugin install alexandru-skills --marketplace alexandru/skills
@@ -19,20 +20,29 @@ claude plugin install alexandru-skills --marketplace alexandru/skills
 
 Skills then run as `/alexandru-skills:<skill-name>`; refresh with `claude plugin marketplace update alexandru`.
 
-**GitHub Copilot** — install by skill path (GitHub CLI ≥ 2.90):
+</details>
+
+<details>
+<summary><strong>GitHub Copilot</strong> — install by skill path (GitHub CLI ≥ 2.90)</summary>
 
 ```
 gh skill install alexandru/skills coding/arrow-resource/SKILL.md
 ```
 
-**OpenAI Codex** — install the collection as a plugin:
+</details>
+
+<details>
+<summary><strong>OpenAI Codex</strong> — install the collection as a plugin</summary>
 
 ```
 codex plugin marketplace add alexandru/skills
 codex plugin add alexandru-skills@alexandru
 ```
 
-**Any other agent** — with the [skills CLI](https://skills.sh):
+</details>
+
+<details>
+<summary><strong>Any other agent</strong> — with the [skills CLI](https://skills.sh)</summary>
 
 ```
 npx skills add https://github.com/alexandru/skills --skill arrow-resource
@@ -40,20 +50,18 @@ npx skills add https://github.com/alexandru/skills --skill arrow-resource
 
 or copy a skill folder into your agent's skills directory.
 
+</details>
+
 ## Skills
 
-<details open>
-<summary><strong>Engineering</strong> · 4 skills — practice and workflow</summary>
+### Engineering
 
 - [code-refine](./engineering/code-refine/): User-invoked refinement of a scope in rounds until they converge, using `code-refinements` ([source](https://github.com/alexandru/skills/blob/main/engineering/code-refine/SKILL.md))
 - [code-refinements](./engineering/code-refinements/): What refined code looks like: the three lenses plus rules for type proofs, no partial calls, explicit signatures, unrepresentable wrong states, and hot paths ([source](https://github.com/alexandru/skills/blob/main/engineering/code-refinements/SKILL.md))
 - [code-review](./engineering/code-review/): User-invoked adapter for `code-reviewing`
 - [code-reviewing](./engineering/code-reviewing/): Review changed code for bugs, structural problems, performance issues, and unintended behavior
 
-</details>
-
-<details>
-<summary><strong>Coding</strong> · 11 skills — language and library guidance</summary>
+### Coding
 
 - [akka-streams](./coding/akka-streams/): Akka Streams and Pekko Streams reactive streaming patterns and testing
 - [arrow-resource](./coding/arrow-resource/): Arrow Resource lifecycle discipline, context-parameter builders, and arrow-autoclose fallback patterns
@@ -67,16 +75,11 @@ or copy a skill folder into your agent's skills directory.
 - [kotlin-java-library](./coding/kotlin-java-library/): Kotlin library API design for Java consumers, JVM annotations, records, and compatibility
 - [scala-kindlings-derivation](./coding/scala-kindlings-derivation/): Scala Kindlings auto-derivation for Circe and PureConfig instances
 
-</details>
-
-<details>
-<summary><strong>Tools</strong> · 3 skills — agent tooling</summary>
+### Tools
 
 - [create-skill](./tools/create-skill/): Guide for creating effective agent skills
 - [external-research](./tools/external-research/): External documentation, public repository, and dependency-artifact research with a persistent cache of Git clones and Maven artifacts
 - [mcp-access](./tools/mcp-access/): Call MCP servers when native MCP tools are unavailable or restricted: inspector CLI fallback, then raw JSON-RPC over stdio or HTTP
-
-</details>
 
 ## Testing
 
