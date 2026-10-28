@@ -21,7 +21,7 @@ description: Helps agents design and review Kotlin library APIs for Java consume
 3. Audit public signatures for Java stability (names, nullability, overload sets, and collection exposure).
 4. Apply backward-compatibility rules before publishing; treat `@PublishedApi` members as public.
 5. Validate with Java call-site examples.
-6. Run `jbang skills/kotlin-java-library/scripts/verify-examples.java`; if it fails, fix the sample or document why it cannot be tested.
+6. Run `jbang coding/kotlin-java-library/scripts/verify-examples.java`; if it fails, fix the sample or document why it cannot be tested.
 
 ## Rules of thumb
 - Avoid Kotlin-only surface features in public API: default args without overloads, extension-only entry points, and name clashes.

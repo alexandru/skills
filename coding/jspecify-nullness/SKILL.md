@@ -31,7 +31,7 @@ description: JSpecify nullness annotations for Java APIs and tooling. Use when a
 - Provide annotated signatures and call-site implications.
 - Explain generic bound choices and type-use placement.
 - Call out tool-conformance limits instead of promising specific diagnostics.
-- For skill edits, run `jbang skills/jspecify-nullness/scripts/verify-examples.java`.
+- For skill edits, run `jbang coding/jspecify-nullness/scripts/verify-examples.java`.
 
 ## References
 - Load `references/jspecify-nullness.md` for source-backed guidance, examples, and representative prompts.

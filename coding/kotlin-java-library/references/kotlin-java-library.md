@@ -40,7 +40,7 @@ Sources:
 The examples in this section are covered by `../scripts/verify-examples.java`. From the repository root, run:
 
 ```bash
-jbang skills/kotlin-java-library/scripts/verify-examples.java
+jbang coding/kotlin-java-library/scripts/verify-examples.java
 ```
 
 The script writes the Kotlin API and Java client to a temporary directory, compiles the Kotlin API with `kotlinc -jvm-target 17`, compiles the Java caller with `javac`, then runs the Java client.

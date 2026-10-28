@@ -1,0 +1,20 @@
+{
+  "name": "alexandru-skills",
+  "description": "Collection of reusable code skills",
+  "owner": {
+    "name": "alexandru",
+    "url": "https://github.com/alexandru"
+  },
+  "plugins": [
+    {
+      "name": "alexandru-skills",
+      "source": "./",
+      "description": "Engineering practices, JVM language and library guidance, and agent tooling",
+      "skills": [
+        "./engineering/",
+        "./coding/",
+        "./tools/"
+      ]
+    }
+  ]
+}
