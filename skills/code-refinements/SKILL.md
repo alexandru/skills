@@ -47,7 +47,11 @@ Refined code holds no partial call, an operation that fails on some input its ty
 
 ### Explicit signatures
 
-Every function carries its return type, local helpers and lambdas included; every field carries its declared type; code in a language with optional type hints keeps them on. Where a lambda has no return-type annotation syntax, state its function type on its binding or the interface that accepts it. An annotation states the contract to the reader and the compiler; a missing one is a missing contract, not simplicity.
+Every top-level function declares its parameter and return types; every field declares its type. In languages with optional type annotations, keep these contracts explicit.
+
+Prefer type inference for local values and nested helpers when the inferred types preserve the intended constraints. Add explicit annotations where inference is unavailable, loses constraints, or permits unintended widening.
+
+Required annotations state the contract to readers and the compiler. Inside implementations, annotate only to enforce a constraint or clarify an otherwise unclear type.
 
 ### Wrong states are unrepresentable
 
