@@ -17,7 +17,7 @@ Every skill is a plain [SKILL.md](https://agentskills.io) folder under a categor
 claude plugin install alexandru-skills --marketplace alexandru/skills
 ```
 
-Skills then run as `/alexandru-skills:<skill-name>`; refresh with `claude plugin marketplace update alexandru-skills`.
+Skills then run as `/alexandru-skills:<skill-name>`; refresh with `claude plugin marketplace update alexandru`.
 
 **GitHub Copilot** — install by skill path (GitHub CLI ≥ 2.90):
 
@@ -29,7 +29,7 @@ gh skill install alexandru/skills coding/arrow-resource/SKILL.md
 
 ```
 codex plugin marketplace add alexandru/skills
-codex plugin add alexandru-skills@alexandru-skills
+codex plugin add alexandru-skills@alexandru
 ```
 
 **Any other agent** — with the [skills CLI](https://skills.sh):
