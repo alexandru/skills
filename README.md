@@ -25,14 +25,12 @@ Skills then run as `/alexandru-skills:<skill-name>`; refresh with `claude plugin
 gh skill install alexandru/skills coding/arrow-resource/SKILL.md
 ```
 
-**OpenAI Codex** — skills load from `~/.agents/skills/<skill-name>/` or a project's `.agents/skills/<skill-name>/`:
+**OpenAI Codex** — install the collection as a plugin:
 
 ```
-git clone https://github.com/alexandru/skills
-mkdir -p ~/.agents/skills && cp -R skills/coding/arrow-resource ~/.agents/skills/
+codex plugin marketplace add alexandru/skills
+codex plugin add alexandru-skills@alexandru-skills
 ```
-
-In a session, `$skill-installer` installs skills from a GitHub repo path.
 
 **Any other agent** — with the [skills CLI](https://skills.sh):
 

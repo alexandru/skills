@@ -1,0 +1,40 @@
+{
+  "name": "alexandru-skills",
+  "version": "13.3.1",
+  "description": "Engineering practices, JVM language and library guidance, and agent tooling skills.",
+  "author": {
+    "name": "alexandru",
+    "url": "https://github.com/alexandru"
+  },
+  "repository": "https://github.com/alexandru/skills",
+  "license": "MIT",
+  "keywords": [
+    "engineering",
+    "skills",
+    "code-review",
+    "refactoring",
+    "jvm",
+    "scala",
+    "kotlin"
+  ],
+  "skills": [
+    "./engineering/code-refine",
+    "./engineering/code-refinements",
+    "./engineering/code-review",
+    "./engineering/code-reviewing",
+    "./coding/akka-streams",
+    "./coding/arrow-resource",
+    "./coding/arrow-typed-errors",
+    "./coding/cats-effect-io",
+    "./coding/cats-effect-resource",
+    "./coding/cats-mtl-typed-errors",
+    "./coding/compose-state-hoisting",
+    "./coding/jspecify-nullness",
+    "./coding/kotlin-context-parameters",
+    "./coding/kotlin-java-library",
+    "./coding/scala-kindlings-derivation",
+    "./tools/create-skill",
+    "./tools/external-research",
+    "./tools/mcp-access"
+  ]
+}

@@ -9,12 +9,7 @@
     {
       "name": "alexandru-skills",
       "source": "./",
-      "description": "Engineering practices, JVM language and library guidance, and agent tooling",
-      "skills": [
-        "./engineering/",
-        "./coding/",
-        "./tools/"
-      ]
+      "description": "Engineering practices, JVM language and library guidance, and agent tooling"
     }
   ]
 }

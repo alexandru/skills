@@ -29,7 +29,7 @@ Reference: https://platform.claude.com/docs/en/agents-and-tools/agent-skills/bes
 - Keep references one level deep from SKILL.md (no nested references).
 - Add a table of contents for reference files longer than ~100 lines.
 - Cross-skill references are allowed, but must include install instructions (e.g., `npx skills add https://github.com/alexandru/skills --skill <skill-name>`).
-- `.claude-plugin/marketplace.json` packages the skills as the `alexandru-skills` Claude Code plugin; when adding a new category directory, extend its `skills` array.
+- `.claude-plugin/marketplace.json` and `.claude-plugin/plugin.json` package the skills as the `alexandru-skills` plugin for Claude Code and Codex; when adding a skill, add its path to `plugin.json`.
 - Use descriptive filenames and forward-slash paths in skill instructions.
 
 ## Guidance quality
@@ -48,7 +48,7 @@ Reference: https://platform.claude.com/docs/en/agents-and-tools/agent-skills/bes
 ## Workflow for adding a skill
 1. Create `<category>/<skill-name>/SKILL.md` with YAML frontmatter and concise instructions, in the matching category directory.
 2. Add reference docs under `<category>/<skill-name>/references/` as needed.
-3. Register the skill in `skills.json` (name, path, description, tags).
+3. Register the skill in `skills.json` (name, path, description, tags) and add its path to `.claude-plugin/plugin.json`.
 4. Update `README.md` so the skill list and structure stay current.
 5. Validate examples and any scripts, then test with representative prompts and refine.
 
