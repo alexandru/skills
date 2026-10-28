@@ -47,7 +47,7 @@ codex plugin add alexandru-skills@alexandru
 With the [skills CLI](https://skills.sh):
 
 ```
-npx skills add https://github.com/alexandru/skills --skill <skill-name>
+npx skills add https://github.com/alexandru/skills
 ```
 
 or copy a skill folder into your agent's skills directory.
