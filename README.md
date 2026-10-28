@@ -12,7 +12,7 @@ Part of [alexandru/agents-config](https://github.com/alexandru/agents-config).
 Every skill is a plain [SKILL.md](https://agentskills.io) folder under a category directory: `engineering/`, `coding/`, or `tools/`.
 
 <details>
-<summary><strong>Claude Code</strong> — install the collection as a plugin (CLI ≥ 2.1.292)</summary>
+<summary><strong>Claude Code</strong> — install the collection as a plugin</summary>
 
 ```
 claude plugin install alexandru-skills --marketplace alexandru/skills
@@ -23,7 +23,7 @@ Skills then run as `/alexandru-skills:<skill-name>`; refresh with `claude plugin
 </details>
 
 <details>
-<summary><strong>GitHub Copilot</strong> — install by skill path (GitHub CLI ≥ 2.90)</summary>
+<summary><strong>GitHub Copilot</strong> — install by skill path</summary>
 
 ```
 gh skill install alexandru/skills coding/arrow-resource/SKILL.md
