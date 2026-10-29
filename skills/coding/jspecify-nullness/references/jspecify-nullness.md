@@ -1,6 +1,6 @@
 # JSpecify Nullness - Reference
 
-Source-backed guidance for applying JSpecify annotations in Java APIs. The Java snippets below are mirrored in `coding/jspecify-nullness/scripts/verify-examples.java`; run that script after changing the examples.
+Source-backed guidance for applying JSpecify annotations in Java APIs. The Java snippets below are mirrored in `skills/coding/jspecify-nullness/scripts/verify-examples.java`; run that script after changing the examples.
 
 Sources:
 - https://jspecify.dev/docs/start-here/
@@ -155,7 +155,7 @@ Interpretation:
 - JSpecify defines semantics, not mandatory diagnostics. Say "this type usage is nullable/non-null/unspecified by JSpecify" rather than "the tool must error."
 - A conformant tool can still choose whether and how to report findings, and it may use extra facts to prove a dereference safe.
 - `javac` alone type-checks annotation syntax but does not perform JSpecify nullness analysis.
-- Use `jbang coding/jspecify-nullness/scripts/verify-examples.java` to compile and run the documented Java examples. Then run the project's configured JSpecify-aware checker for behavioral nullness feedback.
+- Use `jbang skills/coding/jspecify-nullness/scripts/verify-examples.java` to compile and run the documented Java examples. Then run the project's configured JSpecify-aware checker for behavioral nullness feedback.
 
 ## Kotlin and annotation processors
 - Kotlin users benefit because modern Kotlin compilers understand JSpecify-annotated Java APIs instead of treating every Java type as a platform type.

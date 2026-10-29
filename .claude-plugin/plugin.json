@@ -1,6 +1,6 @@
 {
   "name": "alexandru-skills",
-  "version": "13.3.2",
+  "version": "13.3.3",
   "description": "Engineering practices, JVM language and library guidance, and agent tooling skills.",
   "author": {
     "name": "alexandru",
@@ -18,23 +18,23 @@
     "kotlin"
   ],
   "skills": [
-    "./engineering/code-refine",
-    "./engineering/code-refinements",
-    "./engineering/code-review",
-    "./engineering/code-reviewing",
-    "./coding/akka-streams",
-    "./coding/arrow-resource",
-    "./coding/arrow-typed-errors",
-    "./coding/cats-effect-io",
-    "./coding/cats-effect-resource",
-    "./coding/cats-mtl-typed-errors",
-    "./coding/compose-state-hoisting",
-    "./coding/jspecify-nullness",
-    "./coding/kotlin-context-parameters",
-    "./coding/kotlin-java-library",
-    "./coding/scala-kindlings-derivation",
-    "./tools/create-skill",
-    "./tools/external-research",
-    "./tools/mcp-access"
+    "./skills/engineering/code-refine",
+    "./skills/engineering/code-refinements",
+    "./skills/engineering/code-review",
+    "./skills/engineering/code-reviewing",
+    "./skills/coding/akka-streams",
+    "./skills/coding/arrow-resource",
+    "./skills/coding/arrow-typed-errors",
+    "./skills/coding/cats-effect-io",
+    "./skills/coding/cats-effect-resource",
+    "./skills/coding/cats-mtl-typed-errors",
+    "./skills/coding/compose-state-hoisting",
+    "./skills/coding/jspecify-nullness",
+    "./skills/coding/kotlin-context-parameters",
+    "./skills/coding/kotlin-java-library",
+    "./skills/coding/scala-kindlings-derivation",
+    "./skills/tools/create-skill",
+    "./skills/tools/external-research",
+    "./skills/tools/mcp-access"
   ]
 }

@@ -9,7 +9,7 @@ Part of [alexandru/agents-config](https://github.com/alexandru/agents-config).
 
 ## Usage
 
-Every skill is a plain [SKILL.md](https://agentskills.io) folder under a category directory: `engineering/`, `coding/`, or `tools/`.
+Every skill is a plain [SKILL.md](https://agentskills.io) folder under a category directory in [`skills/`](./skills/): `engineering/`, `coding/`, or `tools/`.
 
 <details>
 <summary><strong>Claude Code</strong></summary>
@@ -26,7 +26,7 @@ Skills then run as `/alexandru-skills:<skill-name>`; refresh with `claude plugin
 <summary><strong>GitHub Copilot</strong></summary>
 
 ```
-gh skill install alexandru/skills coding/arrow-resource/SKILL.md
+gh skill install alexandru/skills skills/coding/arrow-resource/SKILL.md
 ```
 
 </details>
@@ -58,30 +58,30 @@ or copy a skill folder into your agent's skills directory.
 
 ### Engineering
 
-- [code-refine](./engineering/code-refine/): User-invoked refinement of a scope in rounds until they converge, using `code-refinements` ([source](https://github.com/alexandru/skills/blob/main/engineering/code-refine/SKILL.md))
-- [code-refinements](./engineering/code-refinements/): What refined code looks like: the three lenses plus rules for type proofs, no partial calls, explicit signatures, unrepresentable wrong states, and hot paths ([source](https://github.com/alexandru/skills/blob/main/engineering/code-refinements/SKILL.md))
-- [code-review](./engineering/code-review/): User-invoked adapter for `code-reviewing`
-- [code-reviewing](./engineering/code-reviewing/): Review changed code for bugs, structural problems, performance issues, and unintended behavior
+- [code-refine](./skills/engineering/code-refine/): User-invoked refinement of a scope in rounds until they converge, using `code-refinements` ([source](https://github.com/alexandru/skills/blob/main/skills/engineering/code-refine/SKILL.md))
+- [code-refinements](./skills/engineering/code-refinements/): What refined code looks like: the three lenses plus rules for type proofs, no partial calls, explicit signatures, unrepresentable wrong states, and hot paths ([source](https://github.com/alexandru/skills/blob/main/skills/engineering/code-refinements/SKILL.md))
+- [code-review](./skills/engineering/code-review/): User-invoked adapter for `code-reviewing`
+- [code-reviewing](./skills/engineering/code-reviewing/): Review changed code for bugs, structural problems, performance issues, and unintended behavior
 
 ### Coding
 
-- [akka-streams](./coding/akka-streams/): Akka Streams and Pekko Streams reactive streaming patterns and testing
-- [arrow-resource](./coding/arrow-resource/): Arrow Resource lifecycle discipline, context-parameter builders, and arrow-autoclose fallback patterns
-- [arrow-typed-errors](./coding/arrow-typed-errors/): Context-parameter Raise DSL, efficient Either composition, and validation guidance
-- [cats-effect-resource](./coding/cats-effect-resource/): Cats Effect Resource leak prevention, factory, lifecycle, and Java interop guidance
-- [cats-effect-io](./coding/cats-effect-io/): Cats Effect IO side-effect suspension, typeclass, testing, fiber, and race guidance
-- [cats-mtl-typed-errors](./coding/cats-mtl-typed-errors/): Scala typed errors using Cats MTL Raise/Handle and allow/rescue
-- [compose-state-hoisting](./coding/compose-state-hoisting/): Compose state hoisting and state ownership guidance
-- [jspecify-nullness](./coding/jspecify-nullness/): JSpecify nullness annotations for Java APIs and tooling
-- [kotlin-context-parameters](./coding/kotlin-context-parameters/): Kotlin context parameter syntax, patterns, and migration guidance
-- [kotlin-java-library](./coding/kotlin-java-library/): Kotlin library API design for Java consumers, JVM annotations, records, and compatibility
-- [scala-kindlings-derivation](./coding/scala-kindlings-derivation/): Scala Kindlings auto-derivation for Circe and PureConfig instances
+- [akka-streams](./skills/coding/akka-streams/): Akka Streams and Pekko Streams reactive streaming patterns and testing
+- [arrow-resource](./skills/coding/arrow-resource/): Arrow Resource lifecycle discipline, context-parameter builders, and arrow-autoclose fallback patterns
+- [arrow-typed-errors](./skills/coding/arrow-typed-errors/): Context-parameter Raise DSL, efficient Either composition, and validation guidance
+- [cats-effect-resource](./skills/coding/cats-effect-resource/): Cats Effect Resource leak prevention, factory, lifecycle, and Java interop guidance
+- [cats-effect-io](./skills/coding/cats-effect-io/): Cats Effect IO side-effect suspension, typeclass, testing, fiber, and race guidance
+- [cats-mtl-typed-errors](./skills/coding/cats-mtl-typed-errors/): Scala typed errors using Cats MTL Raise/Handle and allow/rescue
+- [compose-state-hoisting](./skills/coding/compose-state-hoisting/): Compose state hoisting and state ownership guidance
+- [jspecify-nullness](./skills/coding/jspecify-nullness/): JSpecify nullness annotations for Java APIs and tooling
+- [kotlin-context-parameters](./skills/coding/kotlin-context-parameters/): Kotlin context parameter syntax, patterns, and migration guidance
+- [kotlin-java-library](./skills/coding/kotlin-java-library/): Kotlin library API design for Java consumers, JVM annotations, records, and compatibility
+- [scala-kindlings-derivation](./skills/coding/scala-kindlings-derivation/): Scala Kindlings auto-derivation for Circe and PureConfig instances
 
 ### Tools
 
-- [create-skill](./tools/create-skill/): Guide for creating effective agent skills
-- [external-research](./tools/external-research/): External documentation, public repository, and dependency-artifact research with a persistent cache of Git clones and Maven artifacts
-- [mcp-access](./tools/mcp-access/): Call MCP servers when native MCP tools are unavailable or restricted: inspector CLI fallback, then raw JSON-RPC over stdio or HTTP
+- [create-skill](./skills/tools/create-skill/): Guide for creating effective agent skills
+- [external-research](./skills/tools/external-research/): External documentation, public repository, and dependency-artifact research with a persistent cache of Git clones and Maven artifacts
+- [mcp-access](./skills/tools/mcp-access/): Call MCP servers when native MCP tools are unavailable or restricted: inspector CLI fallback, then raw JSON-RPC over stdio or HTTP
 
 ## Testing
 

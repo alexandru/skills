@@ -21,11 +21,11 @@ Reference: https://platform.claude.com/docs/en/agents-and-tools/agent-skills/bes
 - Include trigger terms in `description`; agents choose whether to load the skill from this field before reading SKILL.md.
 
 ## Structure
-- Each skill lives in a category directory: `engineering/` for practice and workflow skills, `coding/` for language- and library-specific guidance, `tools/` for agent tooling.
-- `<category>/<skill-name>/SKILL.md` contains quick start, workflow, rules, and pointers to references.
-- `<category>/<skill-name>/references/*.md` holds extended explanations and examples.
-- `<category>/<skill-name>/scripts/*` holds reusable deterministic operations or validators when prose alone is insufficient.
-- Skill-local verification scripts must live under `<category>/<skill-name>/scripts/`, because root-level harness files are not distributed with an installed skill.
+- Each skill lives in a category directory under `skills/`: `engineering/` for practice and workflow skills, `coding/` for language- and library-specific guidance, `tools/` for agent tooling.
+- `skills/<category>/<skill-name>/SKILL.md` contains quick start, workflow, rules, and pointers to references.
+- `skills/<category>/<skill-name>/references/*.md` holds extended explanations and examples.
+- `skills/<category>/<skill-name>/scripts/*` holds reusable deterministic operations or validators when prose alone is insufficient.
+- Skill-local verification scripts must live under `skills/<category>/<skill-name>/scripts/`, because root-level harness files are not distributed with an installed skill.
 - Keep references one level deep from SKILL.md (no nested references).
 - Add a table of contents for reference files longer than ~100 lines.
 - Cross-skill references are allowed, but must include install instructions (e.g., `npx skills add https://github.com/alexandru/skills --skill <skill-name>`).
@@ -46,8 +46,8 @@ Reference: https://platform.claude.com/docs/en/agents-and-tools/agent-skills/bes
 - Increment major for more substantial skill changes.
 
 ## Workflow for adding a skill
-1. Create `<category>/<skill-name>/SKILL.md` with YAML frontmatter and concise instructions, in the matching category directory.
-2. Add reference docs under `<category>/<skill-name>/references/` as needed.
+1. Create `skills/<category>/<skill-name>/SKILL.md` with YAML frontmatter and concise instructions, in the matching category directory.
+2. Add reference docs under `skills/<category>/<skill-name>/references/` as needed.
 3. Register the skill in `skills.json` (name, path, description, tags) and add its path to `.claude-plugin/plugin.json`.
 4. Update `README.md` so the skill list and structure stay current.
 5. Validate examples and any scripts, then test with representative prompts and refine.

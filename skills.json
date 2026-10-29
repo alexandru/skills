@@ -1,6 +1,6 @@
 {
   "name": "alexandru-skills",
-  "version": "13.3.2",
+  "version": "13.3.3",
   "description": "Collection of reusable code skills",
   "repository": {
     "type": "git",
@@ -10,7 +10,7 @@
   "skills": [
     {
       "name": "arrow-resource",
-      "path": "coding/arrow-resource",
+      "path": "skills/coding/arrow-resource",
       "description": "Kotlin + Arrow Resource lifecycle discipline with `Resource`, `ResourceScope`, `resourceScope`, and context parameters. Use for safe acquisition/release of files, streams, DB pools/connections, HTTP clients, background scopes, or multipart parts; preventing resource leaks and use-after-close bugs; designing companion `Resource` builders; using `arrow-autoclose` when only synchronous `AutoCloseable` cleanup is possible; composing resources with typed errors, cancellation, or parallel acquisition.",
       "tags": [
         "kotlin",
@@ -27,7 +27,7 @@
     },
     {
       "name": "arrow-typed-errors",
-      "path": "coding/arrow-typed-errors",
+      "path": "skills/coding/arrow-typed-errors",
       "description": "Models Kotlin logical failures with Arrow's context-parameter Raise DSL and wrappers such as Either, nullable, Option, and Ior. Use when implementing or simplifying typed-error flows, translating error types, replacing verbose Either handling, validating input with accumulation, or selecting an error wrapper.",
       "tags": [
         "kotlin",
@@ -44,7 +44,7 @@
     },
     {
       "name": "cats-mtl-typed-errors",
-      "path": "coding/cats-mtl-typed-errors",
+      "path": "skills/coding/cats-mtl-typed-errors",
       "description": "Scala typed errors with Cats MTL Raise/Handle and allow/rescue. Use for designing custom domain error types without EitherT, while keeping Cats Effect and ecosystem composition. Covers Scala 2/3 syntax and IO-only or F[_] usage.",
       "tags": [
         "scala",
@@ -59,7 +59,7 @@
     },
     {
       "name": "cats-effect-io",
-      "path": "coding/cats-effect-io",
+      "path": "skills/coding/cats-effect-io",
       "description": "Helps agents write and review Scala Cats Effect IO code. Use for suspending side effects and non-determinism in IO or F[_], choosing Sync/Async/Temporal/Concurrent/Clock/Random, handling blocking I/O, testing with TestControl, and composing resources, fibers, races, and structured concurrency safely.",
       "tags": [
         "scala",
@@ -78,7 +78,7 @@
     },
     {
       "name": "cats-effect-resource",
-      "path": "coding/cats-effect-resource",
+      "path": "skills/coding/cats-effect-resource",
       "description": "Helps agents write and review Scala Cats Effect Resource code. Use for preventing resource leaks and use-after-release bugs, modeling disposable values with Resource, designing Resource-returning factories and constructor-injected services, wrapping Java AutoCloseable values, composing resources, and handling cancellation-safe release.",
       "tags": [
         "scala",
@@ -97,7 +97,7 @@
     },
     {
       "name": "compose-state-hoisting",
-      "path": "coding/compose-state-hoisting",
+      "path": "skills/coding/compose-state-hoisting",
       "description": "Compose state management with a strong state-hoisting preference for Kotlin Compose (Android, Multiplatform, Compose for Web). Use for refactors or new UI that needs clear state ownership, unidirectional data flow, saved state decisions, or guidance on remember/retain/rememberSaveable/rememberSerializable, and for designing stateless composables with event callbacks.",
       "tags": [
         "kotlin",
@@ -111,7 +111,7 @@
     },
     {
       "name": "akka-streams",
-      "path": "coding/akka-streams",
+      "path": "skills/coding/akka-streams",
       "description": "Scala reactive streaming with Akka Streams and Pekko Streams. Use for dataflow and reactive programming patterns, testing stream components, and understanding when NOT to use streams (prefer plain functions for transformations and I/O).",
       "tags": [
         "scala",
@@ -127,19 +127,19 @@
     },
     {
       "name": "create-skill",
-      "path": "tools/create-skill",
+      "path": "skills/tools/create-skill",
       "description": "Guide for creating effective agent skills. Use when users want to create a new skill (or update an existing skill) that extends agent capabilities with specialized knowledge, workflows, or tool integrations.",
       "tags": ["skill", "skill-creation", "authoring", "best-practices"]
     },
     {
       "name": "code-review",
-      "path": "engineering/code-review",
+      "path": "skills/engineering/code-review",
       "description": "Reviews changed code using the shared code-reviewing workflow.",
       "tags": ["code-review", "command", "user-invocable"]
     },
     {
       "name": "code-reviewing",
-      "path": "engineering/code-reviewing",
+      "path": "skills/engineering/code-reviewing",
       "description": "Reviews code changes for bugs, structural problems, performance issues, and unintended behavior. Use when reviewing uncommitted changes, commits, branches, or pull requests.",
       "tags": [
         "code-review",
@@ -152,7 +152,7 @@
     },
     {
       "name": "kotlin-java-library",
-      "path": "coding/kotlin-java-library",
+      "path": "skills/coding/kotlin-java-library",
       "description": "Helps agents design and review Kotlin library APIs for Java consumers. Use when building Kotlin code intended for Java callers, shaping JVM signatures with @JvmName, @JvmOverloads, @JvmStatic, @JvmField, @Throws, @JvmRecord, nullability, records, and backward/binary compatibility rules.",
       "tags": [
         "kotlin",
@@ -168,25 +168,25 @@
     },
     {
       "name": "external-research",
-      "path": "tools/external-research",
+      "path": "skills/tools/external-research",
       "description": "Researches evidence unavailable locally: external documentation, public repositories at specific refs, archives, and published dependency artifacts (JARs, source JARs, POMs, dependency graphs), reusing a persistent cache of Git clones and Maven artifacts. Use for library docs, upstream source and history, dependency source or metadata, or any question needing external evidence.",
       "tags": ["research", "documentation", "git", "worktree", "maven", "dependencies", "cache"]
     },
     {
       "name": "mcp-access",
-      "path": "tools/mcp-access",
+      "path": "skills/tools/mcp-access",
       "description": "Calls MCP (Model Context Protocol) servers when native MCP tools are unavailable or unsupported, using the MCP Inspector connection CLI or a manual JSON-RPC fallback specification. Use for listing and calling tools over stdio or HTTP, retaining state across calls, and diagnosing MCP connectivity.",
       "tags": ["mcp", "model-context-protocol", "json-rpc", "cli", "protocol", "fallback", "inspector", "mcpdo", "manual"]
     },
     {
       "name": "code-refine",
-      "path": "engineering/code-refine",
+      "path": "skills/engineering/code-refine",
       "description": "Refines code through the three lenses in `code-refinements` with verified, behavior-preserving edits. Use when the user asks to refine a scope of code, such as a module, a directory, or the changes on a branch.",
       "tags": ["refactoring", "refinement", "command", "user-invocable"]
     },
     {
       "name": "code-refinements",
-      "path": "engineering/code-refinements",
+      "path": "skills/engineering/code-refinements",
       "description": "Defines what refined code looks like through the three lenses of constraints, simplicity, and parametricity, with rules for type proofs, no partial calls, explicit signatures, unrepresentable wrong states, hot-path discipline, and style. Use when writing, changing, or reviewing code to a refinement bar, or whenever the user asks for code to follow the rules in code-refinements.",
       "tags": [
         "refactoring",
@@ -201,7 +201,7 @@
     },
     {
       "name": "kotlin-context-parameters",
-      "path": "coding/kotlin-context-parameters",
+      "path": "skills/coding/kotlin-context-parameters",
       "description": "Kotlin context parameters (`context(...)`) for scoped dependencies, DSL scopes, and migrations from context receivers. Use when designing, reviewing, or refactoring Kotlin code that uses implicit contextual values.",
       "tags": [
         "kotlin",
@@ -214,7 +214,7 @@
     },
     {
       "name": "scala-kindlings-derivation",
-      "path": "coding/scala-kindlings-derivation",
+      "path": "skills/coding/scala-kindlings-derivation",
       "description": "Scala auto-derivation with Kindlings for Circe and PureConfig. Use when replacing circe-generic/circe-generic-extras or PureConfig generic derivation with Kindlings while keeping normal Circe JSON APIs and PureConfig loading/writing APIs.",
       "tags": [
         "scala",
@@ -231,7 +231,7 @@
     },
     {
       "name": "jspecify-nullness",
-      "path": "coding/jspecify-nullness",
+      "path": "skills/coding/jspecify-nullness",
       "description": "JSpecify nullness annotations for Java APIs and tooling. Use when adopting or migrating JSpecify annotations, designing null-safe Java signatures, fixing generic bounds and type-use placement, or interpreting Kotlin interop, annotation-processor, and tool-conformance behavior.",
       "tags": [
         "java",
