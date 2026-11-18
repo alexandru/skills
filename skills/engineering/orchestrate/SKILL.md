@@ -59,6 +59,13 @@ Delegate, but obey the rules that follow.
 - When spawning a subagent, you MUST prefix its `task_name` with its agent type, using lowercase letters, digits, and underscores. For example, use `junior_resume_status` for a Junior agent so its path is `/root/junior_resume_status`.
 - If sub-agents do work at the same time, you MUST NOT give them the same files to edit. Avoid conflicts.
 
+### How to start a subagent
+
+- If the user has not specified Junior's model, ask which model to use and wait for the answer.
+- Start a fresh Junior subagent on that model. Give it the full [Junior prompt](references/junior.md) followed by the assignment.
+- When delegating to Orchestrator, give it this prompt, the selected Junior model, and the assignment.
+- If the harness has no configured agent for the role, give the role prompt to a general-purpose subagent. Use the harness's equivalent of `task_name`.
+
 ### How to send instructions
 
 General rules:
@@ -127,14 +134,7 @@ Per task type:
 - You MUST NOT add documentation (markdown files for example) or code comments unless the user or a skill requests them.
 - You MAY update existing documentation or comments that your code changes make incorrect.
 
-## Skill-specific instructions
-
-- If the user has not specified Junior's model, ask which model to use and wait for the answer.
-- Start a fresh Junior subagent on that model. Give it the full [Junior prompt](references/junior.md) followed by the assignment.
-- When delegating to Orchestrator, give it this prompt, the selected Junior model, and the assignment.
-- If the harness has no configured agent for the role, give the role prompt to a general-purpose subagent. Use the harness's equivalent of `task_name`.
-
-The user can install the skills that Junior calls with these commands.
+## Skills used by Junior
 
 - `npx skills add https://github.com/alexandru/skills -g --skill external-research`
 - `npx skills add https://github.com/VirtusLab/cellar/ -g --skill cellar`
