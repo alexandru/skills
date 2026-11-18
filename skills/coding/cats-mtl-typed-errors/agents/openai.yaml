@@ -1,0 +1,3 @@
+interface:
+  display_name: "Cats MTL Typed Errors"
+  short_description: "Raise and handle typed domain errors in Scala with Cats MTL"

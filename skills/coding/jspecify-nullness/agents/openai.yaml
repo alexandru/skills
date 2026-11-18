@@ -1,0 +1,3 @@
+interface:
+  display_name: "JSpecify Nullness"
+  short_description: "Annotate Java API nullness with JSpecify"

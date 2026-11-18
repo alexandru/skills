@@ -1,0 +1,3 @@
+interface:
+  display_name: "Code Review Workflow"
+  short_description: "Find bugs, regressions, and performance issues in code changes"

@@ -1,0 +1,3 @@
+interface:
+  display_name: "Arrow Resource"
+  short_description: "Acquire and release resources safely in Kotlin with Arrow"

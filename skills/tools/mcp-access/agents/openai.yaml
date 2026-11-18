@@ -1,0 +1,3 @@
+interface:
+  display_name: "MCP Access"
+  short_description: "Connect to MCP servers and call tools over stdio or HTTP"

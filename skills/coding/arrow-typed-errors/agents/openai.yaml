@@ -1,0 +1,3 @@
+interface:
+  display_name: "Arrow Typed Errors"
+  short_description: "Model and accumulate typed errors in Kotlin with Arrow"

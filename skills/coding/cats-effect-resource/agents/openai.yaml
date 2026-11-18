@@ -1,0 +1,3 @@
+interface:
+  display_name: "Cats Effect Resource"
+  short_description: "Compose resources with cancellation-safe cleanup in Scala"

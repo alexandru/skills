@@ -1,0 +1,3 @@
+interface:
+  display_name: "Cats Effect IO"
+  short_description: "Manage side effects and concurrency in Scala with IO"

@@ -1,0 +1,3 @@
+interface:
+  display_name: "Code Refinement Standards"
+  short_description: "Apply constraints, simplicity, and parametricity to code"

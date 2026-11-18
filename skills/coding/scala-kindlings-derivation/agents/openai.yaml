@@ -1,0 +1,3 @@
+interface:
+  display_name: "Scala Kindlings Derivation"
+  short_description: "Derive Circe codecs and PureConfig instances with Kindlings"

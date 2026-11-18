@@ -1,0 +1,3 @@
+interface:
+  display_name: "Kotlin Context Parameters"
+  short_description: "Pass scoped dependencies with Kotlin context parameters"

@@ -1,0 +1,3 @@
+interface:
+  display_name: "External Research"
+  short_description: "Find evidence in upstream code, documentation, and artifacts"

@@ -1,0 +1,3 @@
+interface:
+  display_name: "Compose State Hoisting"
+  short_description: "Hoist state and pass events through Compose callbacks"

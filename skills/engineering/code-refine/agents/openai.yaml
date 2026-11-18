@@ -1,0 +1,5 @@
+interface:
+  display_name: "Refine Code"
+  short_description: "Simplify existing code while preserving its behavior"
+policy:
+  allow_implicit_invocation: false
