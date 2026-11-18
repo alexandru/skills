@@ -1,6 +1,6 @@
 {
   "name": "alexandru-skills",
-  "version": "13.3.3",
+  "version": "13.4.0",
   "description": "Engineering practices, JVM language and library guidance, and agent tooling skills.",
   "author": {
     "name": "alexandru",
@@ -22,6 +22,7 @@
     "./skills/engineering/code-refinements",
     "./skills/engineering/code-review",
     "./skills/engineering/code-reviewing",
+    "./skills/engineering/orchestrate",
     "./skills/coding/akka-streams",
     "./skills/coding/arrow-resource",
     "./skills/coding/arrow-typed-errors",

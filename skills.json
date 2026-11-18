@@ -1,6 +1,6 @@
 {
   "name": "alexandru-skills",
-  "version": "13.3.3",
+  "version": "13.4.0",
   "description": "Collection of reusable code skills",
   "repository": {
     "type": "git",
@@ -149,6 +149,12 @@
         "performance",
         "pull-requests"
       ]
+    },
+    {
+      "name": "orchestrate",
+      "path": "skills/engineering/orchestrate",
+      "description": "Reduces cost and context use by delegating searches, research, build and test runs, and mechanical edits to a lower-cost subagent, so the main agent can focus on engineering decisions.",
+      "tags": ["orchestration", "delegation", "user-invocable"]
     },
     {
       "name": "kotlin-java-library",
