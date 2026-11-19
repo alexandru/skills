@@ -5,4 +5,4 @@ compatibility: Requires the code-reviewing skill.
 disable-model-invocation: true
 ---
 
-Call the Skill tool with "code-reviewing".
+Load the `code-reviewing` skill and follow its workflow.

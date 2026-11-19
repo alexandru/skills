@@ -1,6 +1,6 @@
 {
   "name": "alexandru-skills",
-  "version": "13.4.5",
+  "version": "14.0.0",
   "description": "Collection of reusable code skills",
   "repository": {
     "type": "git",
@@ -124,12 +124,6 @@
         "backpressure",
         "testing"
       ]
-    },
-    {
-      "name": "create-skill",
-      "path": "skills/tools/create-skill",
-      "description": "Guide for creating effective agent skills. Use when users want to create a new skill (or update an existing skill) that extends agent capabilities with specialized knowledge, workflows, or tool integrations.",
-      "tags": ["skill", "skill-creation", "authoring", "best-practices"]
     },
     {
       "name": "code-review",

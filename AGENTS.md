@@ -10,6 +10,7 @@ Reference: https://platform.claude.com/docs/en/agents-and-tools/agent-skills/bes
 - Keep each instruction in one place: do not repeat detailed guidance in SKILL.md and its references.
 
 ## Instruction design
+- Start with the task the skill supports and the requests that should activate it.
 - Match specificity to risk: use guidance for judgment calls, parameterized patterns when a preferred route exists, and exact commands/scripts for fragile or consistency-critical work.
 - Give a sensible default instead of listing interchangeable alternatives; mention an alternative only when its trigger is materially different.
 - For multi-step or quality-critical tasks, define a validation loop: produce or edit, validate, fix failures, and validate again before finishing.
@@ -19,6 +20,13 @@ Reference: https://platform.claude.com/docs/en/agents-and-tools/agent-skills/bes
 - `name` must be at most 64 characters, contain lowercase letters, numbers, and hyphens only, and contain no XML tags or reserved words such as `anthropic` or `claude`; prefer a clear action or domain name.
 - `description` must be non-empty, at most 1024 characters, contain no XML tags, be written in third person, be specific, and include what the skill does and “when to use” it.
 - Include trigger terms in `description`; agents choose whether to load the skill from this field before reading SKILL.md.
+- Give each skill a display name and a short description in `agents/openai.yaml`.
+
+## Invocation across harnesses
+
+- Read the task scope and arguments from the user's request. Use a default scope only when the request leaves it open.
+- Keep shared instructions independent of slash commands, argument placeholders, and harness-specific tool names. Put invocation syntax in the harness adapter. The skill must also work when a harness ignores optional metadata such as `argument-hint`.
+- For an explicit-only skill, set `disable-model-invocation: true` in the frontmatter and `policy.allow_implicit_invocation: false` in `agents/openai.yaml`.
 
 ## Structure
 - Each skill lives in a category directory under `skills/`: `engineering/` for practice and workflow skills, `coding/` for language- and library-specific guidance, `tools/` for agent tooling.
@@ -26,6 +34,7 @@ Reference: https://platform.claude.com/docs/en/agents-and-tools/agent-skills/bes
 - `skills/<category>/<skill-name>/references/*.md` holds extended explanations and examples.
 - `skills/<category>/<skill-name>/scripts/*` holds reusable deterministic operations or validators when prose alone is insufficient.
 - Skill-local verification scripts must live under `skills/<category>/<skill-name>/scripts/`, because root-level harness files are not distributed with an installed skill.
+- Link to bundled resources from `SKILL.md`. Give script commands relative to the directory containing `SKILL.md` and specify that working directory.
 - Keep references one level deep from SKILL.md (no nested references).
 - Add a table of contents for reference files longer than ~100 lines.
 - Refer to other skills by name and state when to use them. Keep skill installation commands in setup documentation or installers.
@@ -42,9 +51,10 @@ Reference: https://platform.claude.com/docs/en/agents-and-tools/agent-skills/bes
 
 ## Versioning (skills.json)
 - Version uses semantic versioning (e.g., `1.0.0`).
+- Use the same version in `skills.json` and `.claude-plugin/plugin.json`.
 - Increment patch for minor fixes (typos, code sample mistakes).
 - Increment minor when adding a new skill.
-- Increment major for more substantial skill changes.
+- Increment major when removing a published skill or making another substantial skill change.
 
 ## Workflow for adding a skill
 1. Create `skills/<category>/<skill-name>/SKILL.md` with YAML frontmatter and concise instructions, in the matching category directory.

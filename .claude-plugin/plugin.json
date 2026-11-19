@@ -1,6 +1,6 @@
 {
   "name": "alexandru-skills",
-  "version": "13.4.5",
+  "version": "14.0.0",
   "description": "Engineering practices, JVM language and library guidance, and agent tooling skills.",
   "author": {
     "name": "alexandru",
@@ -33,7 +33,6 @@
     "./skills/coding/kotlin-context-parameters",
     "./skills/coding/kotlin-java-library",
     "./skills/coding/scala-kindlings-derivation",
-    "./skills/tools/create-skill",
     "./skills/tools/external-research",
     "./skills/tools/mcp-access",
     "./skills/tools/orchestrate"

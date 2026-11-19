@@ -37,10 +37,10 @@ Sources:
 
 ## Type-checked sample
 
-The examples in this section are covered by `../scripts/verify-examples.java`. From the repository root, run:
+Run the following command from the directory containing this skill's `SKILL.md` to verify the examples in this section.
 
 ```bash
-jbang skills/coding/kotlin-java-library/scripts/verify-examples.java
+jbang scripts/verify-examples.java
 ```
 
 The script writes the Kotlin API and Java client to a temporary directory, compiles the Kotlin API with `kotlinc -jvm-target 17`, compiles the Java caller with `javac`, then runs the Java client.

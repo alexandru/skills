@@ -79,9 +79,9 @@ or copy a skill folder into your agent's skills directory.
 
 ### Tools
 
-- [create-skill](./skills/tools/create-skill/): Guide for creating effective agent skills
 - [external-research](./skills/tools/external-research/): External documentation, public repository, and dependency-artifact research with a persistent cache of Git clones and Maven artifacts
 - [mcp-access](./skills/tools/mcp-access/): Call MCP servers when native MCP tools are unavailable or restricted: inspector CLI fallback, then raw JSON-RPC over stdio or HTTP
+- [orchestrate](./skills/tools/orchestrate/) delegates research, verification, and routine edits to Junior.
 
 ## Testing
 
