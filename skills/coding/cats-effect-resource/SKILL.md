@@ -33,4 +33,3 @@ description: Helps agents write and review Scala Cats Effect Resource code. Use 
 ## References
 - Load `references/resource.md` for API details, patterns, and examples; the representative check is `scripts/verify-examples.scala`.
 - For Kotlin/Arrow parallels, see the `arrow-resource` skill.
-- Install this skill with `npx skills add https://github.com/alexandru/skills --skill cats-effect-resource`.

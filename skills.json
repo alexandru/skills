@@ -1,6 +1,6 @@
 {
   "name": "alexandru-skills",
-  "version": "13.4.4",
+  "version": "13.4.5",
   "description": "Collection of reusable code skills",
   "repository": {
     "type": "git",
@@ -152,7 +152,7 @@
     },
     {
       "name": "orchestrate",
-      "path": "skills/engineering/orchestrate",
+      "path": "skills/tools/orchestrate",
       "description": "Reduces cost and context use by delegating searches, research, build and test runs, and mechanical edits to a lower-cost subagent, so the main agent can focus on engineering decisions.",
       "tags": ["orchestration", "delegation", "user-invocable"]
     },

@@ -1,6 +1,7 @@
 ---
 name: orchestrate
 description: Reduces cost and context use by delegating searches, research, build and test runs, and mechanical edits to a lower-cost subagent, so the main agent can focus on engineering decisions.
+compatibility: Junior requires the external-research skill for external research.
 disable-model-invocation: true
 ---
 
@@ -112,29 +113,3 @@ Per task type:
 
 - You MUST NOT delegate code reviews unless instructions demand it (user or skill).
 - You MUST give the findings to the user without changes. Give your disagreements separately.
-
-## Communication style
-
-- Keep responses short.
-- Be direct.
-- Do not add filler.
-- Use full sentences and normal grammar.
-- Do not omit relevant facts, findings, uncertainties, or technical information.
-- Keep technical terms, symbols, code, commands, paths, numbers, and errors exact.
-- Use standard technical acronyms, but do not invent abbreviations.
-- Use formatting to improve readability.
-- Avoid long raw output unless the user tells you to.
-- Do not narrate tool use.
-- Give accurate paths and line ranges.
-
-### When writing/editing files...
-
-- You MUST use Simplified Technical English (ASD-STE100).
-- You SHOULD preserve existing wording unless rephrasing is requested or required by the change.
-- You MUST NOT add documentation (markdown files for example) or code comments unless the user or a skill requests them.
-- You MAY update existing documentation or comments that your code changes make incorrect.
-
-## Skills used by Junior
-
-- `npx skills add https://github.com/alexandru/skills -g --skill external-research`
-- `npx skills add https://github.com/VirtusLab/cellar/ -g --skill cellar`

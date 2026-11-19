@@ -28,7 +28,8 @@ Reference: https://platform.claude.com/docs/en/agents-and-tools/agent-skills/bes
 - Skill-local verification scripts must live under `skills/<category>/<skill-name>/scripts/`, because root-level harness files are not distributed with an installed skill.
 - Keep references one level deep from SKILL.md (no nested references).
 - Add a table of contents for reference files longer than ~100 lines.
-- Cross-skill references are allowed, but must include install instructions (e.g., `npx skills add https://github.com/alexandru/skills --skill <skill-name>`).
+- Refer to other skills by name and state when to use them. Keep skill installation commands in setup documentation or installers.
+- List required skills in the `compatibility` field. If only part of the workflow requires a skill, state when it is required.
 - `.claude-plugin/marketplace.json` and `.claude-plugin/plugin.json` package the skills as the `alexandru-skills` plugin for Claude Code and Codex; when adding a skill, add its path to `plugin.json`.
 - Use descriptive filenames and forward-slash paths in skill instructions.
 

@@ -28,7 +28,8 @@ Agent Skills are modular capabilities that extend an AI agent's functionality. E
 - `skills/<skill-name>/references/*.md` holds extended explanations and examples.
 - Keep references one level deep from SKILL.md (no nested references).
 - Add a table of contents for reference files longer than ~100 lines.
-- Cross-skill references are allowed, but must include install instructions (e.g., `npx skills add https://github.com/alexandru/skills --skill <skill-name>`).
+- Refer to other skills by name and state when to use them. Keep skill installation commands in setup documentation or installers.
+- List required skills in the `compatibility` field. If only part of the workflow requires a skill, state when it is required.
 
 ## Guidance quality
 - Prefer the smallest needed typeclass/constraint or API surface.

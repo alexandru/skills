@@ -1,6 +1,7 @@
 ---
 name: cats-effect-io
 description: Helps agents write and review Scala Cats Effect IO code. Use for suspending side effects and non-determinism in IO or F[_], choosing Sync/Async/Temporal/Concurrent/Clock/Random, handling blocking I/O, testing with TestControl, and composing resources, fibers, races, and structured concurrency safely.
+compatibility: Resource-specific workflows use the cats-effect-resource skill.
 ---
 
 # Cats Effect IO (Scala)
@@ -15,7 +16,7 @@ description: Helps agents write and review Scala Cats Effect IO code. Use for su
 - Prefer structured concurrency (`parTraverse`, `parMapN`, `background`, `Supervisor`) over manual fiber management.
 - Do not use `unsafeRun*` (`unsafeRunSync`, `unsafeRunAndForget`, etc.) in app code or tests; for interop with non-Cats-Effect callback APIs, use `Dispatcher`.
 - Read `references/cats-effect-io.md` for concepts, recipes, FAQ guidance, and verified samples.
-- For deeper `Resource` guidance, use the `cats-effect-resource` skill (install: `npx skills add https://github.com/alexandru/skills --skill cats-effect-resource`).
+- For deeper `Resource` guidance, use the `cats-effect-resource` skill.
 
 ## Workflow
 
@@ -61,4 +62,4 @@ description: Helps agents write and review Scala Cats Effect IO code. Use for su
 
 - Load `references/cats-effect-io.md` for documentation summary and patterns.
 - For concrete samples, read `references/cats-effect-io.md`; the representative check is `scripts/verify-examples.scala`.
-- Use the `cats-effect-resource` skill for Resource-specific workflows and patterns (install: `npx skills add https://github.com/alexandru/skills --skill cats-effect-resource`).
+- Use the `cats-effect-resource` skill for Resource-specific workflows and patterns.
